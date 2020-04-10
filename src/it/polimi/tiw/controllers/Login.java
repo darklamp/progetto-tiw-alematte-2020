@@ -55,7 +55,13 @@ public class Login extends HttpServlet {
         String path = "/WEB-INF/login.html";
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-        ctx.setVariable("error", req.getSession().getAttribute("loginResult"));
+        String errorMessage = "";
+        if(req.getSession().getAttribute("loginResult") == null) {
+
+        } else {
+            errorMessage = "Invalid credential";
+        }
+        ctx.setVariable("errorMessage", errorMessage);
         templateEngine.process(path, ctx, resp.getWriter());
     }
 
