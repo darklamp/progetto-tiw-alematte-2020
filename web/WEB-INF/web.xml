@@ -17,15 +17,15 @@
     ***REMOVED***
     <filter>
         <filter-name>Checker</filter-name>
-        <filter-class>it.polimi.tiw.projects.filters.Checker</filter-class>
+        <filter-class>it.polimi.tiw.filters.Checker</filter-class>
     </filter>
     <filter>
         <filter-name>AdminChecker</filter-name>
-        <filter-class>it.polimi.tiw.projects.filters.AdminChecker</filter-class>
+        <filter-class>it.polimi.tiw.filters.AdminChecker</filter-class>
     </filter>
     <filter>
         <filter-name>WorkerChecker</filter-name>
-        <filter-class>it.polimi.tiw.projects.filters.WorkerChecker</filter-class>
+        <filter-class>it.polimi.tiw.filters.WorkerChecker</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>Checker</filter-name>
