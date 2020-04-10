@@ -1,0 +1,52 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <title>Register</title>
+</head>
+<body>
+<div class="register-form-container">
+    <h2>Create a new account</h2>
+    <form class="form register-form">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-6">
+                    <label>Username</label>
+                    <input class="form-control" type="text" name="username" placeholder="Username"/>
+                </div>
+                <div class="col-6">
+                    <label>Role</label>
+                    <select class="form-control" name="role">
+                        <option value="worker">Worker</option>
+                        <option value="manager">Manager</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-12">
+                    <label>E-Mail</label>
+                    <input type="email" class="form-control" name="email" placeholder="E-Mail"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label>Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="Password"/>
+                </div>
+                <div class="col-6">
+                    <label>Confirm password</label>
+                    <input type="password" class="form-control" name="password_cnf" placeholder="Confirm password"/>
+                </div>
+            </div>
+        </div>
+        <input type="button" class="btn btn-primary btn-register" value="Register" />
+
+    </form>
+    <a href="login.html" class="register-link">Login here</a>
+    <br/>
+    <a href="index.html" class="register-link">Back</a>
+
+</div>
+</body>
+</html>
