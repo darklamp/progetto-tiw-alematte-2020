@@ -9,11 +9,11 @@
     </context-param>
     <context-param>
         <param-name>dbUser</param-name>
-        <param-value>matteo</param-value>
+        <param-value></param-value>
     </context-param>
     <context-param>
         <param-name>dbPassword</param-name>
-        <param-value>matmacsystem</param-value>
+        <param-value></param-value>
     </context-param>
     <context-param>
         <param-name>dbDriver</param-name>
