@@ -1,5 +1,12 @@
 package it.polimi.tiw.controllers;
 
+import it.polimi.tiw.beans.User;
+import it.polimi.tiw.dao.UserDAO;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -12,13 +19,21 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@WebServlet("/CheckLogin")
-public class CheckLogin extends HttpServlet {
+@WebServlet("/Login")
+public class Login extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
+    private TemplateEngine templateEngine;
 
     @Override
     public void init() throws ServletException {
+        ServletContext servletContext = getServletContext();
+        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        this.templateEngine = new TemplateEngine();
+        this.templateEngine.setTemplateResolver(templateResolver);
+        templateResolver.setSuffix(".html");
+
         try{
             ServletContext context = getServletContext();
             String driver = context.getInitParameter("dbDriver");
@@ -37,27 +52,32 @@ public class CheckLogin extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
+        String path = "/WEB-INF/login.html";
+        ServletContext servletContext = getServletContext();
+        final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+        ctx.setVariable("error", req.getSession().getAttribute("loginResult"));
+        templateEngine.process(path, ctx, resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String usrn = req.getParameter("username");
-        String pwd = req.getParameter("password");
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
         UserDAO usr = new UserDAO(connection);
         User u = null;
         try {
-            u = usr.checkCredentials(usrn, pwd);
+            u = usr.checkCredentials(username, password);
         } catch (SQLException e) {
             // throw new ServletException(e); for debugging
             resp.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in database credential checking");
         }
         String path = getServletContext().getContextPath();
         if (u == null) {
-            path = getServletContext().getContextPath() + "/index.html";
+            req.getSession().setAttribute("loginResult", false);
+            path = getServletContext().getContextPath() + "/Login";
         } else {
             req.getSession().setAttribute("user", u);
-            String target = (u.getRole().equals("admin")) ? "/GoToHomeAdmin" : "/GoToHomeWorker";
+            String target = (u.getRole().equals("manager")) ? "/ManagerHome" : "/WorkerHome";
             path = path + target;
         }
         resp.sendRedirect(path);
