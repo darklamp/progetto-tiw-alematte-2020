@@ -5,18 +5,51 @@
          version="4.0">
     ***REMOVED***
     ***REMOVED***
-        <param-value>jdbc:mysql://192.168.1.124:3306/TIWProject?serverTimezone=UTC</param-value>
+        <param-value>jdbc:mysql://127.0.0.1:3306/db_prog_tiw</param-value>
     ***REMOVED***
     ***REMOVED***
-    ***REMOVED***
-        <param-value></param-value>
-    ***REMOVED***
-    ***REMOVED***
-    ***REMOVED***
+        <param-name>user_db_tecweb</param-name>
         <param-value></param-value>
     ***REMOVED***
     ***REMOVED***
         <param-name>dbDriver</param-name>
         <param-value>com.mysql.cj.jdbc.Driver</param-value>
     ***REMOVED***
+    <filter>
+        <filter-name>Checker</filter-name>
+        <filter-class>it.polimi.tiw.projects.filters.Checker</filter-class>
+    </filter>
+    <filter>
+        <filter-name>AdminChecker</filter-name>
+        <filter-class>it.polimi.tiw.projects.filters.AdminChecker</filter-class>
+    </filter>
+    <filter>
+        <filter-name>WorkerChecker</filter-name>
+        <filter-class>it.polimi.tiw.projects.filters.WorkerChecker</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Checker</filter-name>
+        <url-pattern>/GoToHomeAdmin</url-pattern>
+        <url-pattern>/GoToProjectManagement</url-pattern>
+        <url-pattern>/Logout</url-pattern>
+        <url-pattern>/CreateProject</url-pattern>
+        <url-pattern>/CreateAssignment</url-pattern>
+        <url-pattern>/GoToHomeWorker</url-pattern>
+        <url-pattern>/CreateReport</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AdminChecker</filter-name>
+        <url-pattern>/GoToHomeAdmin</url-pattern>
+        <url-pattern>/GoToProjectManagement</url-pattern>
+        <url-pattern>/CreateProject</url-pattern>
+        <url-pattern>/CreateAssignment</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>WorkerChecker</filter-name>
+        <url-pattern>/GoToHomeWorker</url-pattern>
+        <url-pattern>/CreateReport</url-pattern>
+    </filter-mapping>
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
 </web-app>
