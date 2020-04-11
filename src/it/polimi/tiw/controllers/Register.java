@@ -26,7 +26,7 @@ public class Register extends HttpServlet {
     private Connection connection = null;
     private TemplateEngine templateEngine;
 
-    @Override
+   /* @Override
     public void init() throws ServletException {
         ServletContext servletContext = getServletContext();
         ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
@@ -49,7 +49,7 @@ public class Register extends HttpServlet {
             throw new UnavailableException("Couldn't get db connection");
         }
 
-    }
+    }*/
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
