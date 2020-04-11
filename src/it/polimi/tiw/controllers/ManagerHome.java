@@ -1,7 +1,9 @@
 package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Alert;
+import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.User;
+import it.polimi.tiw.dao.CampaignDAO;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 @WebServlet("/manager")
 public class ManagerHome extends HttpServlet {
@@ -53,7 +56,17 @@ public class ManagerHome extends HttpServlet {
         String path = "/WEB-INF/managerHome.html";
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-        ctx.setVariable("user", req.getSession().getAttribute("user"));
+        User user = (User) req.getSession().getAttribute("user");
+        CampaignDAO campaignDAO = new CampaignDAO(connection);
+        List<Campaign> campaigns;
+        try{
+            campaigns = campaignDAO.getManagerCampaigns(user.getId());
+        } catch (SQLException e){
+            resp.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in reading data");
+            return;
+        }
+        ctx.setVariable("user", user);
+        ctx.setVariable("campaigns", campaigns);
         templateEngine.process(path, ctx, resp.getWriter());
     }
 
