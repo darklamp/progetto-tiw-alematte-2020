@@ -5,15 +5,15 @@
          version="4.0">
     ***REMOVED***
     ***REMOVED***
-        <param-value>jdbc:mysql://localhost:3306/db_prog_tiw?serverTimezone=Europe/Berlin</param-value>
+        <param-value>jdbc:mysql://192.168.1.124:3306/TIWProject?serverTimezone=UTC</param-value>
     ***REMOVED***
     ***REMOVED***
     ***REMOVED***
-        <param-value>user_db_tecweb</param-value>
     ***REMOVED***
     ***REMOVED***
     ***REMOVED***
-        <param-value></param-value>
+    ***REMOVED***
+    ***REMOVED***
     ***REMOVED***
     ***REMOVED***
         <param-name>dbDriver</param-name>
@@ -33,13 +33,9 @@
     </filter>-->
     <filter-mapping>
         <filter-name>Checker</filter-name>
-        <url-pattern>/ManagerHome</url-pattern>
-        <url-pattern>/GoToProjectManagement</url-pattern>
+        <url-pattern>/manager</url-pattern>
         <url-pattern>/logout</url-pattern>
-        <url-pattern>/CreateProject</url-pattern>
-        <url-pattern>/CreateAssignment</url-pattern>
-        <url-pattern>/WorkerHome</url-pattern>
-        <url-pattern>/CreateReport</url-pattern>
+        <url-pattern>/worker</url-pattern>
     </filter-mapping>
     <!-- <filter-mapping>
          <filter-name>AdminChecker</filter-name>
