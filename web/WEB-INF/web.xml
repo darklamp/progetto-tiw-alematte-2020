@@ -41,11 +41,11 @@
          <filter-name>ManagerChecker</filter-name>
          <url-pattern>/manager</url-pattern>
         <url-pattern>/manager/campaign</url-pattern>
+        <url-pattern>/manager/createCampaign</url-pattern>
      </filter-mapping>
      <filter-mapping>
          <filter-name>WorkerChecker</filter-name>
          <url-pattern>/worker</url-pattern>
-         <url-pattern>/CreateReport</url-pattern>
      </filter-mapping>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

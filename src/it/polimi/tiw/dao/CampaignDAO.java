@@ -3,10 +3,7 @@ package it.polimi.tiw.dao;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,14 +12,19 @@ public class CampaignDAO {
 
     public CampaignDAO(Connection connection){this.connection=connection;}
 
-    public void createCampaign(int managerId, String name, String client) throws SQLException {
+    public long createCampaign(int managerId, String name, String client) throws SQLException {
         String query = "INSERT INTO campaign (managerId, name, client, state) VALUES (?,?,?,'created')";
-        try (PreparedStatement statement = connection.prepareStatement(query);){
+        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);){
             statement.setInt(1, managerId);
             statement.setString(2, name);
             statement.setString(3, client);
             statement.executeUpdate();
+            ResultSet rs = statement.getGeneratedKeys();
+            if(rs.next()){
+                return rs.getLong(1);
+            }
         }
+        return 0;
     }
 
     public List<Campaign> getManagerCampaigns(int managerId) throws SQLException{
@@ -48,4 +50,15 @@ public class CampaignDAO {
         return result;
     }
 
+    public boolean inNameFree(String name) throws SQLException{
+        String query = "SELECT 1 FROM campaign WHERE name=?";
+        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+            pstatement.setString(1, name);
+            try (ResultSet result = pstatement.executeQuery();) {
+                if (!result.isBeforeFirst()) // no results, credential check failed
+                    return true;
+                return false;
+            }
+        }
+    }
 }
