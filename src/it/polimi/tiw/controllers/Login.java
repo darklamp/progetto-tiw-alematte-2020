@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -40,10 +41,7 @@ public class Login extends HttpServlet {
             String url = context.getInitParameter("dbUrl");
             String user = context.getInitParameter("dbUser");
             String password = context.getInitParameter("dbPassword");
-            Class.forName(driver);
             connection = DriverManager.getConnection(url, user, password);
-        } catch (ClassNotFoundException e) {
-            throw new UnavailableException("Can't load database driver");
         } catch (SQLException e) {
             throw new UnavailableException("Couldn't get db connection");
         }
