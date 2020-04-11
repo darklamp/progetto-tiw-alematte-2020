@@ -42,7 +42,7 @@ public class Checker implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        String loginPath = req.getServletContext().getContextPath() + "/login.html";
+        String loginPath = req.getServletContext().getContextPath() + "/login";
 
         HttpSession s = req.getSession();
         if (s.isNew() || s.getAttribute("user") == null) {

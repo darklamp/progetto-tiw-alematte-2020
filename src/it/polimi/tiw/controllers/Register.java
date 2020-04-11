@@ -19,7 +19,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@WebServlet("/Register")
+@WebServlet("/register")
 public class Register extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -81,7 +81,7 @@ public class Register extends HttpServlet {
             alert.setType("danger");
             alert.setContent("Passwords not match");
             alert.show();
-            resp.sendRedirect(getServletContext().getContextPath() + "/Register");
+            resp.sendRedirect(getServletContext().getContextPath() + "/register");
             return;
         }
 
@@ -90,7 +90,7 @@ public class Register extends HttpServlet {
                 alert.setType("danger");
                 alert.setContent("Account already exist");
                 alert.show();
-                resp.sendRedirect(getServletContext().getContextPath() + "/Register");
+                resp.sendRedirect(getServletContext().getContextPath() + "/register");
                 return;
             }
 
@@ -98,7 +98,7 @@ public class Register extends HttpServlet {
                 alert.setType("danger");
                 alert.setContent("This email il already in use");
                 alert.show();
-                resp.sendRedirect(getServletContext().getContextPath() + "/Register");
+                resp.sendRedirect(getServletContext().getContextPath() + "/register");
                 return;
             }
 
@@ -106,7 +106,7 @@ public class Register extends HttpServlet {
                 alert.setType("danger");
                 alert.setContent("This username is already in use");
                 alert.show();
-                resp.sendRedirect(getServletContext().getContextPath() + "/Register");
+                resp.sendRedirect(getServletContext().getContextPath() + "/register");
                 return;
             }
 
@@ -118,16 +118,16 @@ public class Register extends HttpServlet {
             alert.setType("danger");
             alert.setContent("Database or SQL error");
             alert.show();
-            resp.sendRedirect(getServletContext().getContextPath() + "/Register");
+            resp.sendRedirect(getServletContext().getContextPath() + "/register");
             return;
         }
 
         // Send "Account created"
         alert.setType("success");
-        alert.setContent("Account created successfully. Please login <a href=\"/Login\">here</a>");
+        alert.setContent("Account created successfully. Please login <a href=\"/login\">here</a>");
         alert.show();
         alert.dismiss();
-        resp.sendRedirect(getServletContext().getContextPath() + "/Register");
+        resp.sendRedirect(getServletContext().getContextPath() + "/register");
     }
 
     @Override
