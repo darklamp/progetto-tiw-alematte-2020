@@ -15,7 +15,7 @@ public class UserDAO {
     }
 
     public User checkCredentials(String username, String password) throws SQLException {
-        String query = "SELECT  * FROM user  WHERE username = ? AND password =?";
+        String query = "SELECT  * FROM user WHERE username = ? AND password = PASSWORD(?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
             pstatement.setString(2, password);
@@ -62,7 +62,7 @@ public class UserDAO {
 
     /* Statics methods */
     public static void addUser(Connection connection, String username, String email, String password, String role) throws SQLException{
-        String query = "INSERT INTO user (username, email, password, role, level, photo) VALUES (?, ?, ?, ?, null, null)";
+        String query = "INSERT INTO user (username, email, password, role, level, photo) VALUES (?, ?, PASSWORD(?), ?, null, null)";
         try (PreparedStatement statement = connection.prepareStatement(query);){
             statement.setString(1, username);
             statement.setString(2, email);
@@ -73,7 +73,7 @@ public class UserDAO {
     }
 
     public static boolean isUsernameFree(Connection connection, String username) throws SQLException{
-        String query = "SELECT 1 FROM user WHERE username=?";
+        String query = "SELECT 1 FROM user WHERE username= ?";
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
             pstatement.setString(1, username);
             try (ResultSet result = pstatement.executeQuery();) {
@@ -97,7 +97,7 @@ public class UserDAO {
     }
 
     public static boolean alreadyExists(Connection connection, String username, String email) throws SQLException{
-        String query = "SELECT 1 FROM user WHERE username=? AND email=?";
+        String query = "SELECT 1 FROM user WHERE username= ? AND email= ?";
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
             pstatement.setString(1, username);
             pstatement.setString(2, email);
