@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <div class="navbar">
+        <a href="" class="disabled">Manager</a>
+        <a href="managerHome.html" class="active" data-th-href="@{/manager}">Home</a>
+        <a href="managerAccount.html" data-th-href="@{/profile}">Account</a>
+        <div class="navbar-right">
+            <a href="../index.html" data-th-href="@{/logout}">Logout</a>
+        </div>
+    </div>
+    <div class="page-content">
+        <h3>Welcome <span data-th-text="${user.getUsername()}">username</span> </h3>
+
+    </div>
+    <div class="footer">
+        <div class="footer-content">(C) <a href="">Project TIW</a> 2020</div>
+    </div>
+</div>
+</body>
+</html>

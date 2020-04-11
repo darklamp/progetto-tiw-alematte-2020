@@ -101,6 +101,26 @@ p, h1, h2, h3, h4, h5, h6{
     background: linear-gradient(to bottom, #3fa4f0 0%, #0f71ba 100%);
 }
 
+.navbar a.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
+.navbar a.disabled:hover{
+    float: left;
+    padding: 24px 30px 20px 30px;
+    margin-bottom: 4px;
+    margin-right: 3px;
+    border-radius: 10px;
+    border: 0;
+    color: #FFFFFF;
+    text-align: center;
+    text-decoration: none;
+    font-size: 17px;
+    display: block;
+    position: relative;
+}
+
 .navbar a:last-child{
     margin-right: 0px;
 }
