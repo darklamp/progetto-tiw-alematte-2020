@@ -46,7 +46,7 @@
      </filter-mapping>-->
      <filter-mapping>
          <filter-name>WorkerChecker</filter-name>
-         <url-pattern>/GoToHomeWorker</url-pattern>
+         <url-pattern>/worker</url-pattern>
          <url-pattern>/CreateReport</url-pattern>
      </filter-mapping>
     <welcome-file-list>
