@@ -50,6 +50,35 @@ public class CampaignDAO {
         return result;
     }
 
+    public void setState(int campaignId, String state) throws SQLException{
+        String query = "UPDATE campaign SET state = ? WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);){
+            statement.setString(1, state);
+            statement.setInt(2, campaignId);
+            statement.executeUpdate();
+        }
+    }
+
+    public Campaign getCampaignById(int campaignId) throws SQLException{
+        String query = "SELECT * FROM campaign WHERE id = ?";
+        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+            pstatement.setInt(1, campaignId);
+            try (ResultSet result = pstatement.executeQuery();) {
+                if (!result.isBeforeFirst()) // no results, credential check failed
+                    return null;
+                else {
+                    result.next();
+                    Campaign campaign = new Campaign();
+                    campaign.setId(campaignId);
+                    campaign.setName(result.getString("name"));
+                    campaign.setClient(result.getString("client"));
+                    campaign.setState(result.getString("state"));
+                    return campaign;
+                }
+            }
+        }
+    }
+
     public boolean inNameFree(String name) throws SQLException{
         String query = "SELECT 1 FROM campaign WHERE name=?";
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {

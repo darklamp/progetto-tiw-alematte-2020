@@ -1,22 +1,24 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Worker</title>
+    <title>Campaign detail</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}">
+    <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="container">
     <div class="navbar">
-        <a href="" class="disabled">Worker</a>
-        <a href="workerHome.html" class="active" data-th-href="@{/worker}">Home</a>
+        <a href="" class="disabled">Manager</a>
+        <a href="managerHome.html" data-th-href="@{/manager}">Home</a>
         <a href="managerAccount.html" data-th-href="@{/profile}">Account</a>
         <div class="navbar-right">
             <a href="../index.html" data-th-href="@{/logout}">Logout</a>
         </div>
     </div>
     <div class="page-content">
-        <h3>Welcome <span data-th-text="${user.getUsername()}">username</span> </h3>
+        <h1>Campaign: <span data-th-text="${campaign.getName()}"></span></h1>
     </div>
     <div class="footer">
         <div class="footer-content">(C) <a href="https://github.com/darklamp/progetto-tiw-alematte-2020">Project TIW</a> 2020</div>
