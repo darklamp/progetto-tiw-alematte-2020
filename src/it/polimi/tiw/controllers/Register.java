@@ -124,7 +124,7 @@ public class Register extends HttpServlet {
 
         // Send "Account created"
         alert.setType("success");
-        alert.setContent("Account created successfully. Please login <a href=\"/login\">here</a>");
+        alert.setContent("Account created successfully. Please login <a href=\"login\">here</a>");
         alert.show();
         alert.dismiss();
         resp.sendRedirect(getServletContext().getContextPath() + "/register");
