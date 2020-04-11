@@ -8,14 +8,14 @@
 <div class="login-form-container">
     <h2>Login to your account</h2>
     <div class="alert alert-danger" th:class="${'alert alert-' + errorMessage.getType()}" th:if="${errorMessage.isVisible()}" th:text="${errorMessage.getContent()}">Invalid login</div>
-    <form class="form login-form" method="POST" action="login.html" th:action="@{/Login}">
+    <form class="form login-form" method="POST" action="login.html" th:action="@{/login}">
         <div class="form-group">
             <input class="form-control" type="text" name="username" placeholder="Username" />
             <input class="form-control" type="password" name="password" placeholder="Password" />
         </div>
         <input type="submit" class="btn btn-primary btn-login" value="Login" />
     </form>
-    <p>Do not have an account? <a href="register.html" th:href="@{/Register}" class="login-link">Register here!</a></p>
+    <p>Do not have an account? <a href="register.html" th:href="@{/register}" class="login-link">Register here!</a></p>
     <a class="login-link" href="index.html">Go back</a>
 </div>
 </body>

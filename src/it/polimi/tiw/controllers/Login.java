@@ -20,7 +20,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@WebServlet("/Login")
+@WebServlet("/login")
 public class Login extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
@@ -85,7 +85,7 @@ public class Login extends HttpServlet {
         String path = getServletContext().getContextPath();
         if (u == null) {
             req.getSession().setAttribute("loginResult", false);
-            path = getServletContext().getContextPath() + "/Login";
+            path = getServletContext().getContextPath() + "/login";
         } else {
             req.getSession().setAttribute("user", u);
             req.getSession().setAttribute("loginResult", true);
