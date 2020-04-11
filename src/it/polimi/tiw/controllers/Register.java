@@ -84,11 +84,18 @@ public class Register extends HttpServlet {
             resp.sendRedirect(getServletContext().getContextPath() + "/register");
             return;
         }
+        else if(!role.equals("Manager") && !role.equals("Worker")){
+            alert.setType("danger");
+            alert.setContent("Invalid user role. Please select a valid one.");
+            alert.show();
+            resp.sendRedirect(getServletContext().getContextPath() + "/register");
+            return;
+        }
 
         try {
             if(UserDAO.alreadyExists(connection, username, email)){
                 alert.setType("danger");
-                alert.setContent("Account already exist");
+                alert.setContent("Account already exists.");
                 alert.show();
                 resp.sendRedirect(getServletContext().getContextPath() + "/register");
                 return;
@@ -96,7 +103,7 @@ public class Register extends HttpServlet {
 
             if (!UserDAO.isEmailFree(connection, email)) {
                 alert.setType("danger");
-                alert.setContent("This email il already in use");
+                alert.setContent("This email is already in use.");
                 alert.show();
                 resp.sendRedirect(getServletContext().getContextPath() + "/register");
                 return;
@@ -104,7 +111,7 @@ public class Register extends HttpServlet {
 
             if(!UserDAO.isUsernameFree(connection, username)){
                 alert.setType("danger");
-                alert.setContent("This username is already in use");
+                alert.setContent("This username is already in use.");
                 alert.show();
                 resp.sendRedirect(getServletContext().getContextPath() + "/register");
                 return;
