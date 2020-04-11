@@ -8,12 +8,12 @@
 <div class="login-form-container">
     <h2>Login to your account</h2>
     <div class="alert alert-danger" th:if="${errorMessage != ''}" th:text="${errorMessage}">Invalid login</div>
-    <form class="form login-form" method="POST" action="CheckLogin" th:action="@{CheckLogin}">
+    <form class="form login-form" method="POST" action="login.html" th:action="@{/Login}">
         <div class="form-group">
             <input class="form-control" type="text" name="username" placeholder="Username" />
             <input class="form-control" type="password" name="password" placeholder="Password" />
         </div>
-        <input type="button" class="btn btn-primary btn-login" value="Login" />
+        <input type="submit" class="btn btn-primary btn-login" value="Login" />
     </form>
     <p>Do not have an account? <a href="register.html" th:href="@{/Register}" class="login-link">Register here!</a></p>
     <a class="login-link" href="../index.html">Go back</a>
