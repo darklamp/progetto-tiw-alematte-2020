@@ -23,36 +23,30 @@
         <filter-name>Checker</filter-name>
         <filter-class>it.polimi.tiw.filters.Checker</filter-class>
     </filter>
-    <!--<filter>
-        <filter-name>AdminChecker</filter-name>
-        <filter-class>it.polimi.tiw.filters.AdminChecker</filter-class>
+    <filter>
+        <filter-name>ManagerChecker</filter-name>
+        <filter-class>it.polimi.tiw.filters.ManagerChecker</filter-class>
     </filter>
     <filter>
         <filter-name>WorkerChecker</filter-name>
         <filter-class>it.polimi.tiw.filters.WorkerChecker</filter-class>
-    </filter>-->
+    </filter>
     <filter-mapping>
         <filter-name>Checker</filter-name>
-        <url-pattern>/ManagerHome</url-pattern>
-        <url-pattern>/GoToProjectManagement</url-pattern>
+        <url-pattern>/manager</url-pattern>
         <url-pattern>/logout</url-pattern>
-        <url-pattern>/CreateProject</url-pattern>
-        <url-pattern>/CreateAssignment</url-pattern>
-        <url-pattern>/WorkerHome</url-pattern>
-        <url-pattern>/CreateReport</url-pattern>
+        <url-pattern>/worker</url-pattern>
+
     </filter-mapping>
-   <!-- <filter-mapping>
-        <filter-name>AdminChecker</filter-name>
-        <url-pattern>/GoToHomeAdmin</url-pattern>
-        <url-pattern>/GoToProjectManagement</url-pattern>
-        <url-pattern>/CreateProject</url-pattern>
-        <url-pattern>/CreateAssignment</url-pattern>
+    <filter-mapping>
+        <filter-name>ManagerChecker</filter-name>
+        <url-pattern>/manager</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>WorkerChecker</filter-name>
-        <url-pattern>/GoToHomeWorker</url-pattern>
-        <url-pattern>/CreateReport</url-pattern>
-    </filter-mapping>-->
+        <url-pattern>/worker</url-pattern>
+
+    </filter-mapping>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>

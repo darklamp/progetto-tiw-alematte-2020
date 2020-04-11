@@ -51,6 +51,16 @@ public class UserDAO {
         }
     }
 
+    public void updateUserPassword(int userId, String newPassword) throws SQLException{
+        String query = "UPDATE user SET password=? WHERE id=?";
+        try (PreparedStatement statement = con.prepareStatement(query);){
+            statement.setString(1, newPassword);
+            statement.setInt(2, userId);
+            statement.executeUpdate();
+        }
+    }
+
+    /* Statics methods */
     public static void addUser(Connection connection, String username, String email, String password, String role) throws SQLException{
         String query = "INSERT INTO user (username, email, password, role, level, photo) VALUES (?, ?, ?, ?, null, null)";
         try (PreparedStatement statement = connection.prepareStatement(query);){
