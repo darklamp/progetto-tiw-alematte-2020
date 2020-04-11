@@ -7,6 +7,10 @@
         <element id="directory" name="classes">
           <element id="module-output" name="Progetto TIW" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.thymeleaf:thymeleaf:Release" />
+          <element id="library" level="project" name="mysql-connector-java-8.0.19" />
+        </element>
       </element>
     </root>
   </artifact>

@@ -19,7 +19,7 @@
         <param-name>dbDriver</param-name>
         <param-value>com.mysql.cj.jdbc.Driver</param-value>
     ***REMOVED***
-    <filter>
+   <!-- <filter>
         <filter-name>Checker</filter-name>
         <filter-class>it.polimi.tiw.filters.Checker</filter-class>
     </filter>
@@ -52,7 +52,7 @@
         <filter-name>WorkerChecker</filter-name>
         <url-pattern>/GoToHomeWorker</url-pattern>
         <url-pattern>/CreateReport</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>

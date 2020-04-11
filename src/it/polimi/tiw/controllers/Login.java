@@ -57,7 +57,11 @@ public class Login extends HttpServlet {
         final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
         String errorMessage = "";
         if(req.getSession().getAttribute("loginResult") == null) {
-
+            errorMessage = "";
+        } else if((boolean)req.getSession().getAttribute("loginResult")) {
+            User u = (User) req.getSession().getAttribute("user");
+            String target = getServletContext().getContextPath() + ((u.getRole().equals("manager")) ? "/ManagerHome" : "/WorkerHome");
+            resp.sendRedirect(target);
         } else {
             errorMessage = "Invalid credential";
         }
@@ -83,6 +87,7 @@ public class Login extends HttpServlet {
             path = getServletContext().getContextPath() + "/Login";
         } else {
             req.getSession().setAttribute("user", u);
+            req.getSession().setAttribute("loginResult", true);
             String target = (u.getRole().equals("manager")) ? "/ManagerHome" : "/WorkerHome";
             path = path + target;
         }
