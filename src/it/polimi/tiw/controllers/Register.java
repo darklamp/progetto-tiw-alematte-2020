@@ -81,7 +81,7 @@ public class Register extends HttpServlet {
             alert.setType("danger");
             alert.setContent("Passwords not match");
             alert.show();
-            resp.sendRedirect(getServletContext().getContextPath() + "/register");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
         else if(!role.equals("Manager") && !role.equals("Worker")){
