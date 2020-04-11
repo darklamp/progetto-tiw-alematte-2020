@@ -81,14 +81,14 @@ public class Register extends HttpServlet {
             alert.setType("danger");
             alert.setContent("Passwords not match");
             alert.show();
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            resp.sendRedirect(getServletContext().getContextPath() + "/register");
             return;
         }
         else if(!role.equals("Manager") && !role.equals("Worker")){
             alert.setType("danger");
             alert.setContent("Invalid user role. Please select a valid one.");
             alert.show();
-            resp.sendRedirect(getServletContext().getContextPath() + "/register");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
