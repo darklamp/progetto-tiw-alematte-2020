@@ -2,6 +2,21 @@
 <head>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <title>Register</title>
+    <script type="text/javascript">
+        function workerShow(userType)
+        {
+            console.log(userType);
+            if (userType) {
+                if ("worker" === userType.value) {
+                    document.getElementById("workerUpload").style.display = "block";
+                } else {
+                    document.getElementById("workerUpload").style.display = "none";
+                }
+            } else {
+                document.getElementById("workerUpload").style.display = "none";
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="register-form-container">
@@ -16,7 +31,7 @@
                 </div>
                 <div class="col-6">
                     <label>Role</label>
-                    <select class="form-control" name="role">
+                    <select class="form-control" name="role" onchange="workerShow(this);">
                         <option value="worker">Worker</option>
                         <option value="manager">Manager</option>
                     </select>
@@ -38,6 +53,23 @@
                 <div class="col-6">
                     <label>Confirm password</label>
                     <input type="password" class="form-control" name="password_cnf" placeholder="Confirm password"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" id="workerUpload">
+            <div class="row">
+                <div class="col-6">
+                    <label>Photo</label>
+                    <input type="file" name="photo" multiple="multiple"/>
+                    <input type="submit" value="upload" />
+                </div>
+                <div class="col-6">
+                    <label>Experience</label>
+                    <select class="form-control" name="experience">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
                 </div>
             </div>
         </div>
