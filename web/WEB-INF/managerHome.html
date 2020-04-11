@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Manager</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}">
+    <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="container">
@@ -20,24 +22,33 @@
         <h3>Welcome <span data-th-text="${user.getUsername()}">username</span> </h3>
         <div class="row">
             <div class="col-8">
-                <h2>Your campaign</h2>
+                <h2>Your campaigns</h2>
                 <table class="table table-gray">
                     <thead>
                     <th>Name</th>
                     <th>Client</th>
                     <th>State</th>
+                    <th>Details</th>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>Prova 1</td>
-                        <td>Prova 1</td>
-                        <td><p class="badge badge-warning">Created</p></td>
+                    <tr data-th-each="c:${campaigns}">
+                        <td data-th-text="${c.getName()}"></td>
+                        <td data-th-text="${c.getClient()}"></td>
+                        <td><p class="badge badge-warning" data-th-class="${'badge badge-' + c.getBadge()}" data-th-text="${c.getState().toUpperCase()}"></p></td>
+                        <td><a href="campaignDetail.html" data-th-href="@{/manager/campaign(id=${c.getId()})}" class="btn btn-outline-primary"><i class="fas fa-search"></i></i></a></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <div class="col-4">
-
+                <h2>Add new campaign</h2>
+                <form class="form" method="POST" action="" data-th-action="@{createCampaign}">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="campaignName"/>
+                    <label>Client</label>
+                    <input type="text" class="form-control" name="campaignClient"/>
+                    <input type="submit" class="btn btn-success" value="Create"/>
+                </form>
             </div>
         </div>
     </div>

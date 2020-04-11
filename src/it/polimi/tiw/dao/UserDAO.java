@@ -15,7 +15,7 @@ public class UserDAO {
     }
 
     public User checkCredentials(String username, String password) throws SQLException {
-        String query = "SELECT  * FROM user WHERE username = ? AND password = PASSWORD(?)";
+        String query = "SELECT  * FROM user WHERE username = ? AND password = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
             pstatement.setString(2, password);
@@ -62,7 +62,7 @@ public class UserDAO {
 
     /* Statics methods */
     public static void addUser(Connection connection, String username, String email, String password, String role) throws SQLException{
-        String query = "INSERT INTO user (username, email, password, role, level, photo) VALUES (?, ?, PASSWORD(?), ?, null, null)";
+        String query = "INSERT INTO user (username, email, password, role, level, photo) VALUES (?, ?, ?, ?, null, null)";
         try (PreparedStatement statement = connection.prepareStatement(query);){
             statement.setString(1, username);
             statement.setString(2, email);

@@ -701,9 +701,9 @@ table.table-gray thead th {
     border-right: 1px solid var(--color-gray);
 }
 
-table.table-gray tr:nth-child(even) {
+/*table.table-gray tr:nth-child(even) {
     background: var(--color-secondary-t);
-}
+}*/
 
 table.table-gray tfoot .links a {
     display: inline-block;
