@@ -1,7 +1,6 @@
 package it.polimi.tiw.controllers;
 
-import it.polimi.tiw.beans.Alerts;
-import it.polimi.tiw.beans.User;
+import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.dao.UserDAO;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -57,11 +56,11 @@ public class Register extends HttpServlet {
         String path = "/WEB-INF/register.html";
         ServletContext servletContext = getServletContext();
         final WebContext webContext = new WebContext(req, resp, servletContext, req.getLocale());
-        Alerts alert;
+        Alert alert;
         if(req.getSession().getAttribute("registerResult")==null){
-            alert = new Alerts(false, "", "");
+            alert = new Alert(false, "", "");
         } else {
-            alert = (Alerts) req.getSession().getAttribute("registerResult");
+            alert = (Alert) req.getSession().getAttribute("registerResult");
         }
 
         req.getSession().setAttribute("registerResult", alert);
@@ -77,7 +76,7 @@ public class Register extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         String password_cnf = req.getParameter("password_cnf");
-        Alerts alert = (Alerts) req.getSession().getAttribute("registerResult");
+        Alert alert = (Alert) req.getSession().getAttribute("registerResult");
         if(!password.equals(password_cnf)){
             alert.setType("danger");
             alert.setContent("Passwords not match");
