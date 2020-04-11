@@ -34,6 +34,20 @@ public class Register extends HttpServlet {
         this.templateEngine = new TemplateEngine();
         this.templateEngine.setTemplateResolver(templateResolver);
         templateResolver.setSuffix(".html");
+
+        try{
+            String driver = servletContext.getInitParameter("dbDriver");
+            String url = servletContext.getInitParameter("dbUrl");
+            String user = servletContext.getInitParameter("dbUser");
+            String password = servletContext.getInitParameter("dbPassword");
+            Class.forName(driver);
+            connection = DriverManager.getConnection(url, user, password);
+        } catch (ClassNotFoundException e) {
+            throw new UnavailableException("Can't load database driver");
+        } catch (SQLException e) {
+            throw new UnavailableException("Couldn't get db connection");
+        }
+
     }
 
     @Override
