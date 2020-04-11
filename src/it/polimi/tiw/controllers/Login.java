@@ -55,7 +55,7 @@ public class Login extends HttpServlet {
         String path = "/WEB-INF/login.html";
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-        Alert errorMessage = new Alert(false, "danger", "");
+        Alert errorMessage = new Alert(false, Alert.DANGER, "");
         if(req.getSession().getAttribute("loginResult") == null) {
             errorMessage.hide();
         } else if((boolean)req.getSession().getAttribute("loginResult")) {
