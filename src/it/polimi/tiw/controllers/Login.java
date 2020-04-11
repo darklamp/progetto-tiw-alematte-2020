@@ -1,6 +1,6 @@
 package it.polimi.tiw.controllers;
 
-import it.polimi.tiw.beans.Alerts;
+import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.UserDAO;
 import org.thymeleaf.TemplateEngine;
@@ -55,7 +55,7 @@ public class Login extends HttpServlet {
         String path = "/WEB-INF/login.html";
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-        Alerts errorMessage = new Alerts(false, "danger", "");
+        Alert errorMessage = new Alert(false, "danger", "");
         if(req.getSession().getAttribute("loginResult") == null) {
             errorMessage.hide();
         } else if((boolean)req.getSession().getAttribute("loginResult")) {

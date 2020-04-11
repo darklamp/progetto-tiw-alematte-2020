@@ -1,12 +1,12 @@
 package it.polimi.tiw.beans;
 
-public class Alerts {
+public class Alert {
     private boolean show;
     private boolean dismissible = false;
     private String type;
     private String content;
 
-    public Alerts(boolean show, String type, String content) {
+    public Alert(boolean show, String type, String content) {
         this.show = show;
         this.type = type;
         this.content = content;
