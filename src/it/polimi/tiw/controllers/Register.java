@@ -1,6 +1,7 @@
 package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Alert;
+import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.UserDAO;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -75,6 +76,7 @@ public class Register extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         String password_cnf = req.getParameter("password_cnf");
+        UserDAO userDAO = new UserDAO(connection);
         Alert alert = (Alert) req.getSession().getAttribute("registerResult");
         if(!password.equals(password_cnf)){
             alert.setType(Alert.DANGER);
@@ -89,7 +91,7 @@ public class Register extends HttpServlet {
         }
 
         try {
-            if(UserDAO.alreadyExists(connection, username, email)){
+            if(userDAO.alreadyExists(username, email)){
                 alert.setType(Alert.DANGER);
                 alert.setContent("Account already exists.");
                 alert.show();
@@ -97,7 +99,7 @@ public class Register extends HttpServlet {
                 return;
             }
 
-            if (!UserDAO.isEmailFree(connection, email)) {
+            if (!userDAO.isEmailFree(email)) {
                 alert.setType(Alert.DANGER);
                 alert.setContent("This email is already in use.");
                 alert.show();
@@ -105,7 +107,7 @@ public class Register extends HttpServlet {
                 return;
             }
 
-            if(!UserDAO.isUsernameFree(connection, username)){
+            if(!userDAO.isUsernameFree(username)){
                 alert.setType(Alert.DANGER);
                 alert.setContent("This username is already in use.");
                 alert.show();
@@ -115,7 +117,7 @@ public class Register extends HttpServlet {
 
 
 
-            UserDAO.addUser(connection, username, email, password, role);
+            userDAO.addUser(username, email, password, role);
 
         } catch (SQLException e){
             alert.setType(Alert.DANGER);

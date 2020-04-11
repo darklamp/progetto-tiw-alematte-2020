@@ -60,10 +60,10 @@ public class UserDAO {
         }
     }
 
-    /* Statics methods */
-    public static void addUser(Connection connection, String username, String email, String password, String role) throws SQLException{
+
+    public void addUser(String username, String email, String password, String role) throws SQLException{
         String query = "INSERT INTO user (username, email, password, role, level, photo) VALUES (?, ?, ?, ?, null, null)";
-        try (PreparedStatement statement = connection.prepareStatement(query);){
+        try (PreparedStatement statement = con.prepareStatement(query);){
             statement.setString(1, username);
             statement.setString(2, email);
             statement.setString(3, password);
@@ -72,9 +72,9 @@ public class UserDAO {
         }
     }
 
-    public static boolean isUsernameFree(Connection connection, String username) throws SQLException{
+    public boolean isUsernameFree(String username) throws SQLException{
         String query = "SELECT 1 FROM user WHERE username= ?";
-        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+        try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
@@ -84,9 +84,9 @@ public class UserDAO {
         }
     }
 
-    public static boolean isEmailFree(Connection connection, String email) throws SQLException{
+    public boolean isEmailFree(String email) throws SQLException{
         String query = "SELECT 1 FROM user WHERE email=?";
-        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+        try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, email);
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
@@ -96,9 +96,9 @@ public class UserDAO {
         }
     }
 
-    public static boolean alreadyExists(Connection connection, String username, String email) throws SQLException{
+    public boolean alreadyExists(String username, String email) throws SQLException{
         String query = "SELECT 1 FROM user WHERE username= ? AND email= ?";
-        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+        try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
             pstatement.setString(2, email);
             try (ResultSet result = pstatement.executeQuery();) {
