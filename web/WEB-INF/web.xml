@@ -26,11 +26,11 @@
     <!--<filter>
         <filter-name>AdminChecker</filter-name>
         <filter-class>it.polimi.tiw.filters.AdminChecker</filter-class>
-    </filter>
+    </filter>-->
     <filter>
         <filter-name>WorkerChecker</filter-name>
         <filter-class>it.polimi.tiw.filters.WorkerChecker</filter-class>
-    </filter>-->
+    </filter>
     <filter-mapping>
         <filter-name>Checker</filter-name>
         <url-pattern>/ManagerHome</url-pattern>
@@ -47,12 +47,12 @@
          <url-pattern>/GoToProjectManagement</url-pattern>
          <url-pattern>/CreateProject</url-pattern>
          <url-pattern>/CreateAssignment</url-pattern>
-     </filter-mapping>
+     </filter-mapping>-->
      <filter-mapping>
          <filter-name>WorkerChecker</filter-name>
          <url-pattern>/GoToHomeWorker</url-pattern>
          <url-pattern>/CreateReport</url-pattern>
-     </filter-mapping>-->
+     </filter-mapping>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
