@@ -1,5 +1,6 @@
 package it.polimi.tiw.controllers;
 
+import it.polimi.tiw.beans.Alerts;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.UserDAO;
 import org.thymeleaf.TemplateEngine;
@@ -54,15 +55,16 @@ public class Login extends HttpServlet {
         String path = "/WEB-INF/login.html";
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-        String errorMessage = "";
+        Alerts errorMessage = new Alerts(false, "danger", "");
         if(req.getSession().getAttribute("loginResult") == null) {
-            errorMessage = "";
+            errorMessage.hide();
         } else if((boolean)req.getSession().getAttribute("loginResult")) {
             User u = (User) req.getSession().getAttribute("user");
             String target = getServletContext().getContextPath() + ((u.getRole().equals("manager")) ? "/ManagerHome" : "/WorkerHome");
             resp.sendRedirect(target);
         } else {
-            errorMessage = "Invalid credential";
+            errorMessage.setContent("Invalid credential");
+            errorMessage.show();
         }
         ctx.setVariable("errorMessage", errorMessage);
         templateEngine.process(path, ctx, resp.getWriter());

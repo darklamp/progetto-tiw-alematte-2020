@@ -7,9 +7,8 @@
 <body>
 <div class="register-form-container">
     <h2>Create a new account</h2>
-    <div class="alert alert-danger" th:if="${errorMessage != ''}" th:text="${errorMessage}">Invalid login</div>
-    <div class="alert alert-success" th:if="${errorMessage == ''}">Account created successfully, please login <a href="login.html" th:href="@{/Login}">Here</a></div>
-    <form class="form register-form">
+    <div class="alert alert-danger" th:class="${'alert alert-' + errorMessage.getType()}" th:if="${errorMessage.isVisible()}" th:utext="${errorMessage.getContent()}">Invalid login</div>
+    <form class="form register-form" method="POST" action="register.html" th:action="@{/Register}">
         <div class="form-group">
             <div class="row">
                 <div class="col-6">
@@ -43,10 +42,10 @@
                 </div>
             </div>
         </div>
-        <input type="button" class="btn btn-primary btn-register" value="Register" />
+        <input type="submit" class="btn btn-primary btn-register" value="Register" />
 
     </form>
-    <a href="login.html" class="register-link">Login here</a>
+    <a href="login.html" th:href="@{/Login}" class="register-link">Login here</a>
     <br/>
     <a href="index.html" class="register-link">Back</a>
 

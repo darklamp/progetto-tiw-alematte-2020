@@ -1,5 +1,6 @@
 package it.polimi.tiw.controllers;
 
+import it.polimi.tiw.beans.Alerts;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.UserDAO;
 import org.thymeleaf.TemplateEngine;
@@ -56,14 +57,17 @@ public class Register extends HttpServlet {
         String path = "/WEB-INF/register.html";
         ServletContext servletContext = getServletContext();
         final WebContext webContext = new WebContext(req, resp, servletContext, req.getLocale());
-        String errorMessage = "";
-        if(req.getSession().getAttribute("registerResult") == null) {
-            errorMessage = "";
+        Alerts alert;
+        if(req.getSession().getAttribute("registerResult")==null){
+            alert = new Alerts(false, "", "");
         } else {
-            errorMessage = "An error occurred";
+            alert = (Alerts) req.getSession().getAttribute("registerResult");
         }
-        webContext.setVariable("errorMessage", errorMessage);
+
+        req.getSession().setAttribute("registerResult", alert);
+        webContext.setVariable("errorMessage", req.getSession().getAttribute("registerResult"));
         templateEngine.process(path, webContext, resp.getWriter());
+        if(alert.isDismissible()) alert.hide();
     }
 
     @Override
@@ -73,34 +77,58 @@ public class Register extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         String password_cnf = req.getParameter("password_cnf");
-
+        Alerts alert = (Alerts) req.getSession().getAttribute("registerResult");
         if(!password.equals(password_cnf)){
-            // Send "password not match"
+            alert.setType("danger");
+            alert.setContent("Passwords not match");
+            alert.show();
+            resp.sendRedirect(getServletContext().getContextPath() + "/Register");
+            return;
         }
 
         try {
             if(UserDAO.alreadyExists(connection, username, email)){
-                // Send "Account exists"
+                alert.setType("danger");
+                alert.setContent("Account already exist");
+                alert.show();
+                resp.sendRedirect(getServletContext().getContextPath() + "/Register");
+                return;
             }
 
             if (!UserDAO.isEmailFree(connection, email)) {
-                //Send "email not free"
+                alert.setType("danger");
+                alert.setContent("This email il already in use");
+                alert.show();
+                resp.sendRedirect(getServletContext().getContextPath() + "/Register");
+                return;
             }
 
             if(!UserDAO.isUsernameFree(connection, username)){
-               //Send "username not free"
+                alert.setType("danger");
+                alert.setContent("This username is already in use");
+                alert.show();
+                resp.sendRedirect(getServletContext().getContextPath() + "/Register");
+                return;
             }
 
-            //All data are correct -> register user
+
 
             UserDAO.addUser(connection, username, email, password, role);
 
         } catch (SQLException e){
-            resp.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Database error");
+            alert.setType("danger");
+            alert.setContent("Database or SQL error");
+            alert.show();
+            resp.sendRedirect(getServletContext().getContextPath() + "/Register");
+            return;
         }
 
-        // Send boolean flag for account created
-
+        // Send "Account created"
+        alert.setType("success");
+        alert.setContent("Account created successfully. Please login <a href=\"/Login\">here</a>");
+        alert.show();
+        alert.dismiss();
+        resp.sendRedirect(getServletContext().getContextPath() + "/Register");
     }
 
     @Override
