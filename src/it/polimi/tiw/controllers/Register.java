@@ -19,22 +19,24 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@WebServlet("/Login")
-public class Login extends HttpServlet {
+@WebServlet("/Register")
+public class Register extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
     private TemplateEngine templateEngine;
 
     @Override
     public void init() throws ServletException {
-        ServletContext context = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(context);
+        ServletContext servletContext = getServletContext();
+        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
         templateResolver.setTemplateMode(TemplateMode.HTML);
         this.templateEngine = new TemplateEngine();
         this.templateEngine.setTemplateResolver(templateResolver);
         templateResolver.setSuffix(".html");
 
         try{
+            ServletContext context = getServletContext();
             String driver = context.getInitParameter("dbDriver");
             String url = context.getInitParameter("dbUrl");
             String user = context.getInitParameter("dbUser");
@@ -51,46 +53,54 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path = "/WEB-INF/login.html";
+        String path = "/WEB-INF/register.html";
         ServletContext servletContext = getServletContext();
-        final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+        final WebContext webContext = new WebContext(req, resp, servletContext, req.getLocale());
         String errorMessage = "";
-        if(req.getSession().getAttribute("loginResult") == null) {
+        if(req.getSession().getAttribute("registerResult") == null) {
             errorMessage = "";
-        } else if((boolean)req.getSession().getAttribute("loginResult")) {
-            User u = (User) req.getSession().getAttribute("user");
-            String target = getServletContext().getContextPath() + ((u.getRole().equals("manager")) ? "/ManagerHome" : "/WorkerHome");
-            resp.sendRedirect(target);
         } else {
-            errorMessage = "Invalid credential";
+            errorMessage = "An error occurred";
         }
-        ctx.setVariable("errorMessage", errorMessage);
-        templateEngine.process(path, ctx, resp.getWriter());
+        webContext.setVariable("errorMessage", errorMessage);
+        templateEngine.process(path, webContext, resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
+        String role = req.getParameter("role");
+        String email = req.getParameter("email");
         String password = req.getParameter("password");
-        UserDAO usr = new UserDAO(connection);
-        User u = null;
+        String password_cnf = req.getParameter("password_cnf");
+
+        if(!password.equals(password_cnf)){
+            // Send "password not match"
+        }
+
         try {
-            u = usr.checkCredentials(username, password);
-        } catch (SQLException e) {
-            // throw new ServletException(e); for debugging
-            resp.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in database credential checking");
+            if(UserDAO.alreadyExists(connection, username, email)){
+                // Send "Account exists"
+            }
+
+            if (!UserDAO.isEmailFree(connection, email)) {
+                //Send "email not free"
+            }
+
+            if(!UserDAO.isUsernameFree(connection, username)){
+               //Send "username not free"
+            }
+
+            //All data are correct -> register user
+
+            UserDAO.addUser(connection, username, email, password, role);
+
+        } catch (SQLException e){
+            resp.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Database error");
         }
-        String path = getServletContext().getContextPath();
-        if (u == null) {
-            req.getSession().setAttribute("loginResult", false);
-            path = getServletContext().getContextPath() + "/Login";
-        } else {
-            req.getSession().setAttribute("user", u);
-            req.getSession().setAttribute("loginResult", true);
-            String target = (u.getRole().equals("manager")) ? "/ManagerHome" : "/WorkerHome";
-            path = path + target;
-        }
-        resp.sendRedirect(path);
+
+        // Send boolean flag for account created
+
     }
 
     @Override
