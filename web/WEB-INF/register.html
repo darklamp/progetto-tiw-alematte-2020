@@ -1,6 +1,6 @@
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{css/style.css}">
     <title>Register</title>
     <script type="text/javascript">
         function workerShow(userType)
@@ -22,7 +22,7 @@
 <div class="register-form-container">
     <h2>Create a new account</h2>
     <div class="alert alert-danger" data-th-class="${'alert alert-' + errorMessage.getType()}" data-th-if="${errorMessage.isVisible()}" data-th-utext="${errorMessage.getContent()}">Invalid login</div>
-    <form class="form register-form" method="POST" action="register.html" data-th-action="@{/register}">
+    <form class="form register-form" method="POST" action="register.html" data-th-action="@{/register}" enctype="multipart/form-data">
         <div class="form-group">
             <div class="row">
                 <div class="col-6">
@@ -60,8 +60,7 @@
             <div class="row">
                 <div class="col-6">
                     <label>Photo</label>
-                    <input type="file" name="photo" multiple="multiple"/>
-                    <input type="submit" value="upload" />
+                    <input type="file" name="photo" class="form-control"/>
                 </div>
                 <div class="col-6">
                     <label>Experience</label>
