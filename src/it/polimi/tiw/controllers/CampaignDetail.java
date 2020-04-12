@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -59,6 +60,14 @@ public class CampaignDetail extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int campaignId = Integer.parseInt(req.getParameter("id"));
 
+
+        String applicationPath = req.getServletContext().getContextPath();
+        String uploadFilePath = applicationPath + File.separator + "uploads/campaignImages";
+        File uploadFolder = new File(uploadFilePath);
+        if (!uploadFolder.exists()) {
+            uploadFolder.mkdirs();
+        }
+
         String path = "/WEB-INF/campaignDetail.html";
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
@@ -80,13 +89,15 @@ public class CampaignDetail extends HttpServlet {
         }
         if(images == null){
             ctx.setVariable("isImageAvailable", false);
+            images = new ArrayList<>();
         } else {
             ctx.setVariable("isImageAvailable", true);
-            images = new ArrayList<>();
+
         }
 
         ctx.setVariable("campaign", campaign);
         ctx.setVariable("images", images);
+        ctx.setVariable("imagePath", uploadFolder.getAbsolutePath()+File.separator);
         templateEngine.process(path, ctx, resp.getWriter());
     }
 }

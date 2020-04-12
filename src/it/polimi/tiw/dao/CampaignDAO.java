@@ -119,4 +119,32 @@ public class CampaignDAO {
             }
         }
     }
+
+    public void insertNewImage(int campaignId, Image image) throws SQLException{
+        String query = "INSERT INTO image (date, latitude, longitude, resolution, source, region, town, url) values (NOW(),?,?,?,?,?,?,?)";
+        String secondQuery = "INSERT INTO imageCampaign (campaignId, imageId) VALUES (?,?)";
+        int imageId = 0;
+        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);){
+            statement.setFloat(1,image.getLatitude());
+            statement.setFloat(2,image.getLongitude());
+            statement.setString(3, image.getResolution());
+            statement.setString(4, image.getSource());
+            statement.setString(5, image.getRegion());
+            statement.setString(6, image.getTown());
+            statement.setString(7, image.getUrl());
+            statement.executeUpdate();
+            ResultSet rs = statement.getGeneratedKeys();
+            if(rs.next()){
+                imageId = (int) rs.getLong(1);
+            } else {
+                throw new SQLException();
+            }
+        }
+        try(PreparedStatement stmt = connection.prepareStatement(secondQuery)){
+            stmt.setInt(1, campaignId);
+            stmt.setInt(2, imageId);
+            stmt.executeUpdate();
+        }
+
+    }
 }
