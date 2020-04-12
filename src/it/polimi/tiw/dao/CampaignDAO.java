@@ -51,6 +51,52 @@ public class CampaignDAO {
         return result;
     }
 
+    public List<Campaign> getWorkerCampaigns(int workerId) throws SQLException{
+        List<Campaign> result = new ArrayList<>();
+        String query = "SELECT * FROM campaign join workerCampaign on campaign.id = workerCampaign.campaignId WHERE workerId = ?";
+        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+            pstatement.setInt(1, workerId);
+            try (ResultSet resultSet = pstatement.executeQuery();) {
+                if (!resultSet.isBeforeFirst()) // no results
+                    return null;
+                else {
+                    while(resultSet.next()) {
+                        Campaign campaign = new Campaign();
+                        campaign.setId(resultSet.getInt("id"));
+                        campaign.setName(resultSet.getString("name"));
+                        campaign.setClient(resultSet.getString("client"));
+                        campaign.setState(resultSet.getString("state"));
+                        result.add(campaign);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<Campaign> getWorkerAvailableCampaigns(int workerId) throws SQLException{
+        List<Campaign> result = new ArrayList<>();
+        String query = "SELECT id,managerId,name,client,state FROM campaign EXCEPT select id,managerId,name,client,state FROM campaign join workerCampaign on campaign.id = workerCampaign.campaignId WHERE workerId = ?";
+        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+            pstatement.setInt(1, workerId);
+            try (ResultSet resultSet = pstatement.executeQuery();) {
+                if (!resultSet.isBeforeFirst()) // no results
+                    return null;
+                else {
+                    while(resultSet.next()) {
+                        Campaign campaign = new Campaign();
+                        campaign.setId(resultSet.getInt("id"));
+                        campaign.setName(resultSet.getString("name"));
+                        campaign.setClient(resultSet.getString("client"));
+                        campaign.setState(resultSet.getString("state"));
+                        result.add(campaign);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     public void setState(int campaignId, String state) throws SQLException{
         String query = "UPDATE campaign SET state = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);){
