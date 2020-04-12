@@ -57,7 +57,6 @@ public class ImageUploader extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CampaignDAO campaignDAO = new CampaignDAO(connection);
         ImageDAO imageDAO = new ImageDAO(connection);
 
         // gets absolute path of the web application
