@@ -2,6 +2,7 @@ package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.User;
+import it.polimi.tiw.dao.UserDAO;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -77,11 +78,117 @@ public class Profile extends HttpServlet {
         ctx.setVariable("profileAlert", req.getSession().getAttribute("profileAlert"));
         ctx.setVariable("user", user);
         templateEngine.process(path, ctx, resp.getWriter());
+        if(profileAlert.isDismissible()) profileAlert.hide();
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        //Update information and then resp.sendRedirect(getServletContext().getContextPath()+"/profile");
+        if(!req.getParameterMap().containsKey("action") || !req.getParameterMap().containsKey("userId") || req.getParameter("action").isEmpty() || req.getParameter("userId").isEmpty()){
+           resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+           return;
+        }
+        int userId;
+        String action = req.getParameter("action");
+        try {
+            userId = Integer.parseInt(req.getParameter("userId"));
+        } catch (NumberFormatException e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return;
+        }
+        //If someone chenge userId in request
+        User user = (User)req.getSession().getAttribute("user");
+        if(user.getId()!=userId){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user");
+            return;
+        }
+        UserDAO userDAO = new UserDAO(connection);
+        if(user.getRole().equals("manager")){
+
+            if(action.equals("updateData")){
+                String username = req.getParameter("username");
+                String email = req.getParameter("email");
+                //Invalid param -> impossible from a webpage
+                if(username.isEmpty() || email.isEmpty()){
+                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid param");
+                    return;
+                }
+                try{
+                    if((userDAO.isUsernameFree(username) || username.equals(user.getUsername())) && (userDAO.isEmailFree(email) || email.equals(user.getEmail()))){
+                        user.setEmail(email);
+                        user.setUsername(username);
+                        userDAO.updateUser(user);
+                    } else {
+                        Alert alert = (Alert) req.getSession().getAttribute("profileAlert");
+                        alert.setType(Alert.DANGER);
+                        alert.setContent("Username or Email already used by an other user");
+                        alert.show();
+                        alert.dismiss();
+                        resp.sendRedirect(getServletContext().getContextPath()+"/profile");
+                        return;
+                    }
+                } catch (SQLException e){
+                    resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SQL query error");
+                    return;
+                }
+
+
+            } else if(action.equals("updatePassword")){
+                String oldPassword = req.getParameter("oldPassword");
+                String newPassword = req.getParameter("newPassword");
+                String newPasswordCnf = req.getParameter("newPasswordCnf");
+                if(oldPassword.isEmpty() || newPassword.isEmpty() || newPasswordCnf.isEmpty()){
+                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid param");
+                    return;
+                }
+                try{
+                    if(userDAO.checkCredentials(user.getUsername(), oldPassword) == null){
+                        Alert alert = (Alert) req.getSession().getAttribute("profileAlert");
+                        alert.setType(Alert.DANGER);
+                        alert.setContent("Invalid old password");
+                        alert.show();
+                        alert.dismiss();
+                        resp.sendRedirect(getServletContext().getContextPath()+"/profile");
+                        return;
+                    }
+
+                    if(!newPassword.equals(newPasswordCnf)){
+                        Alert alert = (Alert) req.getSession().getAttribute("profileAlert");
+                        alert.setType(Alert.DANGER);
+                        alert.setContent("Password not match");
+                        alert.show();
+                        alert.dismiss();
+                        resp.sendRedirect(getServletContext().getContextPath()+"/profile");
+                        return;
+                    }
+
+                    userDAO.updateUserPassword(userId, newPassword);
+                    Alert alert = (Alert) req.getSession().getAttribute("profileAlert");
+                    alert.setType(Alert.SUCCESS);
+                    alert.setContent("Password changed correctly");
+                    alert.show();
+                    alert.dismiss();
+
+                } catch (SQLException e){
+                    resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SQL query error");
+                    return;
+                }
+
+
+            } else {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
+                return;
+            }
+
+        } else if(user.getRole().equals("worker")){
+
+        } else {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user role");
+            return;
+        }
+
+        resp.sendRedirect(getServletContext().getContextPath()+"/profile");
+
     }
 
     @Override

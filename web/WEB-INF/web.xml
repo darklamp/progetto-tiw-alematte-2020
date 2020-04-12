@@ -5,15 +5,15 @@
          version="4.0">
     ***REMOVED***
     ***REMOVED***
-        <param-value>jdbc:mysql://127.0.0.1:3306/db_prog_tiw?serverTimezone=Europe/Berlin</param-value>
+        <param-value>jdbc:mysql://192.168.1.124:3306/TIWProject?serverTimezone=UTC</param-value>
     ***REMOVED***
     ***REMOVED***
     ***REMOVED***
-        <param-value>user_db_tecweb</param-value>
     ***REMOVED***
     ***REMOVED***
     ***REMOVED***
-        <param-value></param-value>
+    ***REMOVED***
+    ***REMOVED***
     ***REMOVED***
     ***REMOVED***
         <param-name>dbDriver</param-name>
@@ -40,6 +40,7 @@
         <url-pattern>/manager/createCampaign</url-pattern>
         <url-pattern>/imageUploader</url-pattern>
         <url-pattern>/manager/campaignActions</url-pattern>
+        <url-pattern>/profile</url-pattern>
     </filter-mapping>
     <filter-mapping>
          <filter-name>ManagerChecker</filter-name>
@@ -48,6 +49,7 @@
         <url-pattern>/manager/createCampaign</url-pattern>
         <url-pattern>/imageUploader</url-pattern>
         <url-pattern>/manager/campaignActions</url-pattern>
+        <url-pattern>/manager/campaignReport</url-pattern>
      </filter-mapping>
      <filter-mapping>
          <filter-name>WorkerChecker</filter-name>

@@ -181,6 +181,12 @@ p, h1, h2, h3, h4, h5, h6{
     width: 62%;
 }
 
+.col-10{
+    padding: 1%;
+    float: left;
+    width: 82%;
+}
+
 .col-12{
     padding: 1%;
     float: left;
