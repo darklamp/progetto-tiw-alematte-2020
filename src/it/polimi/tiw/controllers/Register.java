@@ -2,6 +2,7 @@ package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.dao.UserDAO;
+import it.polimi.tiw.utility.Parser;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -147,7 +148,7 @@ public class Register extends HttpServlet {
                     //File exists
                     String fileName = part.getSubmittedFileName();
                     String contentType = part.getContentType();
-                    String savedFileName = username + getFileExtension(fileName);
+                    String savedFileName = username + "." + Parser.getFileExtension(fileName);
                     // allows only JPEG and PNG files to be uploaded
                     if (!contentType.equalsIgnoreCase("image/jpeg") && !contentType.equalsIgnoreCase("image/png")) {
                         alert.setType(Alert.DANGER);
@@ -191,9 +192,4 @@ public class Register extends HttpServlet {
         }
     }
 
-    private static String getFileExtension(String fileName) {
-        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
-            return fileName.substring(fileName.lastIndexOf(".")+1);
-        else return "";
-    }
 }

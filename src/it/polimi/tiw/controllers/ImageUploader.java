@@ -4,6 +4,7 @@ import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.CampaignDAO;
+import it.polimi.tiw.utility.Parser;
 import org.thymeleaf.TemplateEngine;
 
 import javax.servlet.ServletContext;
@@ -73,8 +74,8 @@ public class ImageUploader extends HttpServlet {
         Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
         Image image = new Image();
         String path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
-        String latitudeStr = req.getParameter("latitude");
-        String longitudeStr = req.getParameter("longitude");
+        String latitudeStr = req.getParameter("latitude").replace(',', '.');
+        String longitudeStr = req.getParameter("longitude").replace(',','.');
         String resolution = req.getParameter("resolution");
         String source = req.getParameter("source");
         String region = req.getParameter("region");
@@ -101,9 +102,20 @@ public class ImageUploader extends HttpServlet {
         }
         //Insert image on database
         //File exists
+        int lastImageIndex;
+        try{
+            lastImageIndex = campaignDAO.getLastImageIndex(campaignId);
+        } catch (SQLException e){
+            System.out.println("SQL Exeption on getting image index");
+            alert.setContent("SQL error");
+            alert.setType(Alert.DANGER);
+            alert.show();
+            resp.sendRedirect(path);
+            return;
+        }
         String fileName = part.getSubmittedFileName();
         String contentType = part.getContentType();
-        String savedFileName = "campaign"+ campaignId + "_" + fileName;
+        String savedFileName = "campaign"+ campaignId + "_" + "image" + (lastImageIndex+1) + "." + Parser.getFileExtension(fileName);
         // allows only JPEG and PNG files to be uploaded
         if (!contentType.equalsIgnoreCase("image/jpeg") && !contentType.equalsIgnoreCase("image/png")) {
             alert.setType(Alert.DANGER);

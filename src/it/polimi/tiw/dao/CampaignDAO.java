@@ -166,6 +166,19 @@ public class CampaignDAO {
         }
     }
 
+    public int getLastImageIndex(int campaignId) throws SQLException{
+        int index = 0;
+        String query = "SELECT count(*) AS 'lastindex' FROM imageCampaign WHERE campaignId=?";
+        try (PreparedStatement statement = connection.prepareStatement(query)){
+            statement.setInt(1,campaignId);
+            try (ResultSet result = statement.executeQuery();) {
+                result.next();
+                   index = result.getInt(1);
+                }
+            }
+        return index;
+    }
+
     public void insertNewImage(int campaignId, Image image) throws SQLException{
         String query = "INSERT INTO image (date, latitude, longitude, resolution, source, region, town, url) values (NOW(),?,?,?,?,?,?,?)";
         String secondQuery = "INSERT INTO imageCampaign (campaignId, imageId) VALUES (?,?)";
