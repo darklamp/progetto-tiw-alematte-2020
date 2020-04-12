@@ -4,6 +4,7 @@ import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.CampaignDAO;
+import it.polimi.tiw.dao.ImageDAO;
 import it.polimi.tiw.utility.Parser;
 import org.thymeleaf.TemplateEngine;
 
@@ -57,6 +58,7 @@ public class ImageUploader extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         CampaignDAO campaignDAO = new CampaignDAO(connection);
+        ImageDAO imageDAO = new ImageDAO(connection);
 
         // gets absolute path of the web application
         String applicationPath = req.getServletContext().getRealPath("");
@@ -106,7 +108,7 @@ public class ImageUploader extends HttpServlet {
         //File exists
         int lastImageIndex;
         try{
-            lastImageIndex = campaignDAO.getLastImageIndex(campaignId);
+            lastImageIndex = imageDAO.getLastImageIndex(campaignId);
         } catch (SQLException e){
             System.out.println("SQL Exeption on getting image index");
             alert.setContent("SQL error");
@@ -138,7 +140,7 @@ public class ImageUploader extends HttpServlet {
         image.setLongitude(longitude);
         image.setLatitude(latitude);
         try{
-            campaignDAO.insertNewImage(campaignId, image);
+            imageDAO.insertNewImage(campaignId, image);
         } catch (SQLException e){
             alert.setContent("An error occurred while saving image");
             alert.setType(Alert.DANGER);

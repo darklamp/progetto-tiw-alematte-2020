@@ -1,6 +1,11 @@
 package it.polimi.tiw.beans;
 
 public class Campaign {
+    public static final String CREATED = "created";
+    public static final String STARTED = "started";
+    public static final String CLOSED = "closed";
+
+
     private int id;
     private String name;
     private String client;
@@ -38,11 +43,11 @@ public class Campaign {
     public void setState(String state) {
         this.state = state;
 
-        if(state.equals("created")){
+        if(state.equals(Campaign.CREATED)){
             this.badge = "warning";
-        } else if (state.equals("started")){
+        } else if (state.equals(Campaign.STARTED)){
             this.badge = "success";
-        } else if (state.equals("closed")){
+        } else if (state.equals(Campaign.CLOSED)){
             this.badge = "danger";
         } else {
             this.badge = "secondary";
