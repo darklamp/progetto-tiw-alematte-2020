@@ -15,7 +15,7 @@ public class UserDAO {
     }
 
     public User checkCredentials(String username, String password) throws SQLException {
-        String query = "SELECT  * FROM user WHERE username = ? AND password = PASSWORD(?)";
+        String query = "SELECT  * FROM user WHERE username = ? AND password = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
             pstatement.setString(2, password);
@@ -52,7 +52,7 @@ public class UserDAO {
     }
 
     public void updateUserPassword(int userId, String newPassword) throws SQLException{
-        String query = "UPDATE user SET password=PASSWORD(?) WHERE id=?";
+        String query = "UPDATE user SET password=? WHERE id=?";
         try (PreparedStatement statement = con.prepareStatement(query);){
             statement.setString(1, newPassword);
             statement.setInt(2, userId);
@@ -61,13 +61,26 @@ public class UserDAO {
     }
 
 
-    public void addUser(String username, String email, String password, String role) throws SQLException{
-        String query = "INSERT INTO user (username, email, password, role, level, photo) VALUES (?, ?, PASSWORD(?), ?, null, null)";
+    public void addManagerUser(String username, String email, String password, String role) throws SQLException{
+        String query = "INSERT INTO user (username, email, password, role, level, photo) VALUES (?, ?, ?, ?, null, null)";
         try (PreparedStatement statement = con.prepareStatement(query);){
             statement.setString(1, username);
             statement.setString(2, email);
             statement.setString(3, password);
             statement.setString(4, role);
+            statement.executeUpdate();
+        }
+    }
+
+    public void addWorkerUser(String username, String email, String password, String role, String experience, String photo) throws SQLException{
+        String query = "INSERT INTO user (username, email, password, role, level, photo) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = con.prepareStatement(query);){
+            statement.setString(1, username);
+            statement.setString(2, email);
+            statement.setString(3, password);
+            statement.setString(4, role);
+            statement.setString(5, experience);
+            statement.setString(6, photo);
             statement.executeUpdate();
         }
     }
