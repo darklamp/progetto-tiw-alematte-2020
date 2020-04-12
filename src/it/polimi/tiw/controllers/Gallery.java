@@ -4,6 +4,7 @@ import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.CampaignDAO;
+import it.polimi.tiw.dao.ImageDAO;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -57,6 +58,7 @@ public class Gallery extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int campaignId;
+        /* integer parsing */
         try{
             campaignId = Integer.parseInt(req.getParameter("id"));
         } catch (Exception e){
@@ -64,6 +66,7 @@ public class Gallery extends HttpServlet {
             return;
         }
         Alert campaignAlert;
+
         if(req.getSession().getAttribute("campaignAlert")==null){
             campaignAlert = new Alert(false, Alert.DANGER, "");
             req.getSession().setAttribute("campaignAlert", campaignAlert);
@@ -72,22 +75,18 @@ public class Gallery extends HttpServlet {
         }
 
         String applicationPath = req.getServletContext().getContextPath();
-        String uploadFilePath = applicationPath + File.separator + "uploads/campaignImages";
-        File uploadFolder = new File(uploadFilePath);
-        if (!uploadFolder.exists()) {
-            uploadFolder.mkdirs();
-        }
 
-        String path = "/WEB-INF/campaignDetail.html";
+        String path = "/WEB-INF/gallery.html";
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
 
         CampaignDAO campaignDAO = new CampaignDAO(connection);
+        ImageDAO imageDAO = new ImageDAO(connection);
         Campaign campaign = null;
         List<Image> images = null;
         try{
             campaign = campaignDAO.getCampaignById(campaignId);
-            images = campaignDAO.getCampaignImages(campaignId);
+            images = imageDAO.getCampaignImages(campaignId);
         } catch (SQLException e){
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
@@ -107,7 +106,6 @@ public class Gallery extends HttpServlet {
 
         ctx.setVariable("campaign", campaign);
         ctx.setVariable("images", images);
-        ctx.setVariable("imagePath", uploadFolder.getAbsolutePath()+File.separator);
         ctx.setVariable("campaignAlert", req.getSession().getAttribute("campaignAlert"));
         templateEngine.process(path, ctx, resp.getWriter());
         if(campaignAlert.isDismissible()) campaignAlert.hide();

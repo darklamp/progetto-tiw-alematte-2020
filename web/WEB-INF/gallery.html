@@ -10,46 +10,28 @@
 <div class="container">
     <div class="navbar">
         <a href="" class="disabled">Manager</a>
-        <a href="managerHome.html" class="active" data-th-href="@{/worker}">Home</a>
-        <a href="workerHome.html" data-th-href="@{/profile}">Account</a>
+        <a href="workerHome.html" class="active" data-th-href="@{/worker}">Home</a>
+        <a href="workerAccount.html" data-th-href="@{/profile}">Account</a>
         <div class="navbar-right">
             <a href="../index.html" data-th-href="@{/logout}">Logout</a>
         </div>
     </div>
     <div class="page-content">
         <h3>Campaign: <span data-th-text="${campaign.getName()}">campaignName</span> </h3>
-        <div class="row">
-            <div class="col-8">
-                <h2>Your campaigns</h2>
-                <table class="table table-gray">
-                    <thead>
-                    <th>Name</th>
-                    <th>Client</th>
-                    <th>State</th>
-                    <th>Details</th>
-                    </thead>
-                    <tbody>
-                    <tr data-th-each="c:${campaigns}">
-                        <td data-th-text="${c.getName()}"></td>
-                        <td data-th-text="${c.getClient()}"></td>
-                        <td><p class="badge badge-warning" data-th-class="${'badge badge-' + c.getBadge()}" data-th-text="${c.getState().toUpperCase()}"></p></td>
-                        <td><a href="campaignDetail.html" data-th-href="@{/manager/campaign(id=${c.getId()})}" class="btn btn-outline-primary"><i class="fas fa-search"></i></i></a></td>
-                    </tr>
-                    </tbody>
-                </table>
+        <table>
+            <div class="row">
+                <div data-th-each="i:${images}">
+                    <div data-th-switch="${galleryCounter()}">
+                        <div data-th-case="0">
+                            <p data-th-text="asd">HEllo!</p>
+                          <!--  <img src="placeholder.jpeg" data-th-src="${i.getUrl()}"> -->
+                        </div>
+                        <div data-th-case="1">User is a manager</div>
+                        <div data-th-case="2"></div>
+                    </div>
+                </div>
             </div>
-            <div class="col-4">
-                <h2>Add new campaign</h2>
-                <div class="alert alert-danger" data-th-class="${'alert alert-' + campaignAlert.getType()}" data-th-if="${campaignAlert.isVisible()}" data-th-utext="${campaignAlert.getContent()}">General error</div>
-                <form class="form" method="POST" action="" data-th-action="@{manager/createCampaign}">
-                    <label>Name</label>
-                    <input type="text" class="form-control" name="campaignName"/>
-                    <label>Client</label>
-                    <input type="text" class="form-control" name="campaignClient"/>
-                    <input type="submit" class="btn btn-success" value="Create"/>
-                </form>
-            </div>
-        </div>
+        </table>
     </div>
     <div class="footer">
         <div class="footer-content">(C) <a href="https://github.com/darklamp/progetto-tiw-alematte-2020">Project TIW</a> 2020</div>
