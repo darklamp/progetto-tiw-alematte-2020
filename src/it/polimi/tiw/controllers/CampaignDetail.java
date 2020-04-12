@@ -1,6 +1,7 @@
 package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Campaign;
+import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.CampaignDAO;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -18,6 +19,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @WebServlet("/manager/campaign/*")
 public class CampaignDetail extends HttpServlet {
@@ -60,8 +65,10 @@ public class CampaignDetail extends HttpServlet {
 
         CampaignDAO campaignDAO = new CampaignDAO(connection);
         Campaign campaign = null;
+        List<Image> images = null;
         try{
             campaign = campaignDAO.getCampaignById(campaignId);
+            images = campaignDAO.getCampaignImages(campaignId);
         } catch (SQLException e){
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
@@ -71,10 +78,15 @@ public class CampaignDetail extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
-
-        //Classes are not null
+        if(images == null){
+            ctx.setVariable("isImageAvailable", false);
+        } else {
+            ctx.setVariable("isImageAvailable", true);
+            images = new ArrayList<>();
+        }
 
         ctx.setVariable("campaign", campaign);
+        ctx.setVariable("images", images);
         templateEngine.process(path, ctx, resp.getWriter());
     }
 }

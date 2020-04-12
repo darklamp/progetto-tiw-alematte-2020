@@ -1,6 +1,7 @@
 package it.polimi.tiw.dao;
 
 import it.polimi.tiw.beans.Campaign;
+import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.beans.User;
 
 import java.sql.*;
@@ -87,6 +88,34 @@ public class CampaignDAO {
                 if (!result.isBeforeFirst()) // no results, credential check failed
                     return true;
                 return false;
+            }
+        }
+    }
+
+    public List<Image> getCampaignImages(int campaignId) throws SQLException{
+        List<Image> images = new ArrayList<>();
+        String query = "SELECT i.id, i.date, i.latitude, i.longitude, i.resolution, i.source, i.region, i.town, i.url FROM image AS i JOIN imageCampaign AS iC ON iC.imageId = i.id WHERE iC.campaignId = ?";
+        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+            pstatement.setInt(1, campaignId);
+            try (ResultSet result = pstatement.executeQuery();) {
+                if (!result.isBeforeFirst()) // no results, credential check failed
+                    return null;
+                else {
+                    while(result.next()) {
+                        Image image = new Image();
+                        image.setId(result.getInt("id"));
+                        image.setDate(result.getDate("date"));
+                        image.setLatitude(result.getFloat("latitude"));
+                        image.setLongitude(result.getFloat("longitude"));
+                        image.setResolution(result.getString("resolution"));
+                        image.setSource(result.getString("source"));
+                        image.setRegion(result.getString("region"));
+                        image.setTown(result.getString("town"));
+                        image.setUrl(result.getString("url"));
+                        images.add(image);
+                    }
+                    return images;
+                }
             }
         }
     }
