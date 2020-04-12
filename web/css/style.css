@@ -247,6 +247,26 @@ p, h1, h2, h3, h4, h5, h6{
     overflow: hidden;
 }
 
+.form-control-bg-dark
+{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    outline: none;
+    display: block;
+    width: 100%;
+    padding: 7px;
+    border: none;
+    background: var(--color-secondary-t);
+    margin-bottom: 10px;
+    font: 16px Arial, Helvetica, sans-serif;
+    height: 45px;
+}
+.form-control-bg-dark textarea{
+    resize:none;
+    overflow: hidden;
+}
+
 
 /* Login form */
 .login-form-container{

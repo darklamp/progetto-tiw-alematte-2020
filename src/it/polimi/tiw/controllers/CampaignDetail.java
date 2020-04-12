@@ -4,6 +4,7 @@ import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.CampaignDAO;
+import it.polimi.tiw.dao.ImageDAO;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -86,11 +87,12 @@ public class CampaignDetail extends HttpServlet {
         final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
 
         CampaignDAO campaignDAO = new CampaignDAO(connection);
+        ImageDAO imageDAO = new ImageDAO(connection);
         Campaign campaign = null;
         List<Image> images = null;
         try{
             campaign = campaignDAO.getCampaignById(campaignId);
-            images = campaignDAO.getCampaignImages(campaignId);
+            images = imageDAO.getCampaignImages(campaignId);
         } catch (SQLException e){
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
