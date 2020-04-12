@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -31,11 +32,11 @@
                         <div class="row">
                             <div class="col-4">
                                 <label>Campaign name</label>
-                                <input type="text" class="form-control-bg-dark" name="campaignName" data-th-value="${campaign.getName()}"/>
+                                <input type="text" class="form-control-bg-dark" name="campaignName" data-th-value="${campaign.getName()}" required/>
                             </div>
                             <div class="col-4">
                                 <label>Campaign client</label>
-                                <input type="text" class="form-control-bg-dark" name="campaignClient" data-th-value="${campaign.getClient()}"/>
+                                <input type="text" class="form-control-bg-dark" name="campaignClient" data-th-value="${campaign.getClient()}" required/>
                             </div>
                             <div class="col-4">
                                 <br/>
@@ -161,8 +162,6 @@
         }
     }
 
-
-
     function showForm() {
         const infoForm = document.getElementById("infoForm");
         const infoText = document.getElementById("infoText");
@@ -180,6 +179,5 @@
 
 
 </script>
-
 </body>
 </html>
