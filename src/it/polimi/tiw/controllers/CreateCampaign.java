@@ -25,7 +25,6 @@ import java.util.List;
 public class CreateCampaign extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
-    private TemplateEngine templateEngine;
 
     @Override
     public void init() throws ServletException {

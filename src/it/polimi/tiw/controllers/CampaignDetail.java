@@ -1,5 +1,6 @@
 package it.polimi.tiw.controllers;
 
+import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.CampaignDAO;
@@ -59,8 +60,8 @@ public class CampaignDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int campaignId = Integer.parseInt(req.getParameter("id"));
-
-
+        Alert campaignAlert = new Alert(false, Alert.DANGER, "");
+        req.getSession().setAttribute("campaignAlert", campaignAlert);
         String applicationPath = req.getServletContext().getContextPath();
         String uploadFilePath = applicationPath + File.separator + "uploads/campaignImages";
         File uploadFolder = new File(uploadFilePath);
@@ -98,6 +99,8 @@ public class CampaignDetail extends HttpServlet {
         ctx.setVariable("campaign", campaign);
         ctx.setVariable("images", images);
         ctx.setVariable("imagePath", uploadFolder.getAbsolutePath()+File.separator);
+        ctx.setVariable("campaignAlert", req.getSession().getAttribute("campaignAlert"));
         templateEngine.process(path, ctx, resp.getWriter());
+        ((Alert)req.getSession().getAttribute("campaignAlert")).hide();
     }
 }
