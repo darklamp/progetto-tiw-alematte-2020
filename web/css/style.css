@@ -517,6 +517,30 @@ p, h1, h2, h3, h4, h5, h6{
     color: #FFFFFF;
 }
 
+.btn-info{
+    background: var(--color-info);
+    border: 1px solid var(--color-info);
+    color: #FFFFFF;
+}
+
+.btn-info:hover{
+    background:#ffffff;
+    color: var(--color-info);
+    border: 2px solid var(--color-info);
+}
+
+.btn-outline-info{
+    background:#ffffff;
+    color: var(--color-info);
+    border: 2px solid var(--color-info);
+}
+
+.btn-outline-info:hover{
+    background: var(--color-info);
+    border: 1px solid var(--color-info);
+    color: #FFFFFF;
+}
+
 /* Alerts */
 .alert{
     padding-top:10px;

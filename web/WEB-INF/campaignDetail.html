@@ -33,26 +33,112 @@
                 <h2>Campaign images</h2>
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">Nothing to show</div>
                 <div class="gallery" data-th-each="image : ${images}">
-                    <a hraf=""><img src="../images/test1.jpg" data-th-src="" alt=""></a>
+                    <a hraf=""><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}" alt=""></a>
                 </div>
 
             </div>
             <div class="col-4">
                 <h2>Actions</h2>
-                <button class="btn btn-outline-primary btn-full">Add new image</button>
-                <button class="btn btn-outline-primary btn-full">Show images in map</button>
+                <a class="btn btn-outline-primary btn-full" id="newImageModalBtn" data-th-disabled="${campaign.getState().equals('closed')}">Add new image</a> <br/>
+                <a class="btn btn-outline-primary btn-full">Show images in map</a>
                 <hr/>
-
+                <a href="" class="btn btn-outline-success btn-full" data-th-href="@{/manager/campaign(id=${campaign.getId()}, action='setStart')}" data-th-if="${campaign.getState().equals('created') && isImageAvailable}">Start campaign</a>
+                <a href="" class="btn btn-outline-danger btn-full" data-th-href="@{/manager/campaign(id=${campaign.getId()}, action='setClose')}" data-th-if="${campaign.getState().equals('started')}">Close campaign</a><br/>
+                <a href="" class="btn btn-outline-info btn-full" data-th-href="@{/manager/campaign(action='setStart')}" data-th-if="${campaign.getState().equals('created')}">Show report</a>
             </div>
         </div>
     </div>
 
     <!-- New image modal -->
-    
+    <div id="newImageModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Upload a new image</h2>
+            </div>
+            <div class="modal-body">
+                <form class="form" method="POST" action="" data-th-action="">
+                    <div class="form-group">
+                        <div class="row">
+                        <label>Image file</label>
+                            <input type="file" class="form-control" name="image" required/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Latitude</label>
+                                <input type="text" class="form-control" name="latitude" required/>
+                            </div>
+                            <div class="col-6">
+                                <label>Longitude</label>
+                                <input type="text" class="form-control" name="longitude" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Resolution</label>
+                                <input type="text" class="form-control" name="resolution" required/>
+                            </div>
+                            <div class="col-6">
+                                <label>Source</label>
+                                <input type="text" class="form-control" name="source" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Region</label>
+                                <input type="text" class="form-control" name="region" required/>
+                            </div>
+                            <div class="col-6">
+                                <label>Town</label>
+                                <input type="text" class="form-control" name="town" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-success" value="Upload"/>
+                </form>
+            </div>
+        </div>
+    </div> <!-- End new image modal-->
 
     <div class="footer">
         <div class="footer-content">(C) <a href="https://github.com/darklamp/progetto-tiw-alematte-2020">Project TIW</a> 2020</div>
     </div>
 </div>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById("newImageModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("newImageModalBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
 </body>
 </html>
