@@ -53,6 +53,14 @@ public class ManagerHome extends HttpServlet {
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Alert campaignAlert;
+        if(req.getSession().getAttribute("campaignAlert")==null){
+            campaignAlert = new Alert(false, Alert.DANGER, "");
+            req.getSession().setAttribute("campaignAlert", campaignAlert);
+        } else {
+            campaignAlert = (Alert) req.getSession().getAttribute("campaignAlert");
+        }
+
         String path = "/WEB-INF/managerHome.html";
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
@@ -67,7 +75,9 @@ public class ManagerHome extends HttpServlet {
         }
         ctx.setVariable("user", user);
         ctx.setVariable("campaigns", campaigns);
+        ctx.setVariable("campaignAlert", req.getSession().getAttribute("campaignAlert"));
         templateEngine.process(path, ctx, resp.getWriter());
+        if(campaignAlert.isDismissible()) campaignAlert.hide();
     }
 
     @Override
