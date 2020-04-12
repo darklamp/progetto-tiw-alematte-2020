@@ -19,7 +19,37 @@
     </div>
     <div class="page-content">
         <h1><a href="managerHome.html" data-th-href="@{/manager}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left"></i></a> Campaign: <span data-th-text="${campaign.getName()}"></span></h1>
+        <div class="row">
+            <div class="col-12">
+                <div class="highlight">
+                    <p><strong>Campaign name: </strong><span data-th-text="${campaign.getName()}"></span></p>
+                    <p><strong>Campaign client: </strong><span data-th-text="${campaign.getClient()}"></span></p>
+                    <p><strong>Campaign status: </strong><span class="badge badge-warning" data-th-class="${'badge badge-' + campaign.getBadge()}" data-th-text="${campaign.getState().toUpperCase()}"></span></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <h2>Campaign images</h2>
+                <div class="alert alert-primary" data-th-if="${not isImageAvailable}">Nothing to show</div>
+                <div class="gallery" data-th-each="image : ${images}">
+                    <a hraf=""><img src="../images/test1.jpg" data-th-src="" alt=""></a>
+                </div>
+
+            </div>
+            <div class="col-4">
+                <h2>Actions</h2>
+                <button class="btn btn-outline-primary btn-full">Add new image</button>
+                <button class="btn btn-outline-primary btn-full">Show images in map</button>
+                <hr/>
+
+            </div>
+        </div>
     </div>
+
+    <!-- New image modal -->
+    
+
     <div class="footer">
         <div class="footer-content">(C) <a href="https://github.com/darklamp/progetto-tiw-alematte-2020">Project TIW</a> 2020</div>
     </div>
