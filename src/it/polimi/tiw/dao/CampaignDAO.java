@@ -64,7 +64,7 @@ public class CampaignDAO {
 
     public List<Campaign> getWorkerCampaigns(int workerId) throws SQLException{
         List<Campaign> result = new ArrayList<>();
-        String query = "SELECT * FROM campaign join workerCampaign on campaign.id = workerCampaign.campaignId WHERE workerId = ? and campaign.state = 'started'";
+        String query = "SELECT * FROM campaign AS c JOIN workerCampaign AS wC ON c.id = wC.campaignId WHERE wC.workerId = ?";
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
             pstatement.setInt(1, workerId);
             try (ResultSet resultSet = pstatement.executeQuery();) {
@@ -87,7 +87,7 @@ public class CampaignDAO {
 
     public List<Campaign> getWorkerAvailableCampaigns(int workerId) throws SQLException{
         List<Campaign> result = new ArrayList<>();
-        String query = "SELECT id,managerId,name,client,state FROM campaign EXCEPT select id,managerId,name,client,state FROM campaign join workerCampaign on campaign.id = workerCampaign.campaignId WHERE workerId = ?";
+        String query = "SELECT * FROM campaign as c WHERE state='started' AND c.id NOT IN (SELECT wC.campaignId FROM workerCampaign as wC WHERE wC.workerId=?)";
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
             pstatement.setInt(1, workerId);
             try (ResultSet resultSet = pstatement.executeQuery();) {
