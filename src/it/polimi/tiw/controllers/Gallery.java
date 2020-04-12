@@ -1,7 +1,8 @@
 package it.polimi.tiw.controllers;
 
+import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.Campaign;
-import it.polimi.tiw.beans.User;
+import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.CampaignDAO;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -15,15 +16,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/worker")
-public class WorkerHome extends HttpServlet {
-
+@WebServlet("/worker/campaign/*")
+public class Gallery extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
     private TemplateEngine templateEngine;
@@ -54,39 +56,65 @@ public class WorkerHome extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path = "/WEB-INF/workerHome.html";
-        ServletContext servletContext = getServletContext();
-        final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-        User user = (User) req.getSession().getAttribute("user");
-        CampaignDAO campaignDAO = new CampaignDAO(connection);
-        List<Campaign> userJoinedCampaigns, userAvailableCampaigns;
+        int campaignId;
         try{
-            userJoinedCampaigns = campaignDAO.getWorkerCampaigns(user.getId());
-            userAvailableCampaigns = campaignDAO.getWorkerAvailableCampaigns(user.getId());
-        } catch (SQLException e){
-            resp.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in reading data");
+            campaignId = Integer.parseInt(req.getParameter("id"));
+        } catch (Exception e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
-        ctx.setVariable("user", user);
-        ctx.setVariable("userJoinedCampaigns", userJoinedCampaigns);
-        ctx.setVariable("userAvailableCampaigns", userAvailableCampaigns);
+        Alert campaignAlert;
+        if(req.getSession().getAttribute("campaignAlert")==null){
+            campaignAlert = new Alert(false, Alert.DANGER, "");
+            req.getSession().setAttribute("campaignAlert", campaignAlert);
+        } else {
+            campaignAlert = (Alert) req.getSession().getAttribute("campaignAlert");
+        }
+
+        String applicationPath = req.getServletContext().getContextPath();
+        String uploadFilePath = applicationPath + File.separator + "uploads/campaignImages";
+        File uploadFolder = new File(uploadFilePath);
+        if (!uploadFolder.exists()) {
+            uploadFolder.mkdirs();
+        }
+
+        String path = "/WEB-INF/campaignDetail.html";
+        ServletContext servletContext = getServletContext();
+        final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+
+        CampaignDAO campaignDAO = new CampaignDAO(connection);
+        Campaign campaign = null;
+        List<Image> images = null;
+        try{
+            campaign = campaignDAO.getCampaignById(campaignId);
+            images = campaignDAO.getCampaignImages(campaignId);
+        } catch (SQLException e){
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+
+        if(campaign==null){
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        if(images == null){
+            ctx.setVariable("isImageAvailable", false);
+            images = new ArrayList<>();
+        } else {
+            ctx.setVariable("isImageAvailable", true);
+
+        }
+
+        ctx.setVariable("campaign", campaign);
+        ctx.setVariable("images", images);
+        ctx.setVariable("imagePath", uploadFolder.getAbsolutePath()+File.separator);
+        ctx.setVariable("campaignAlert", req.getSession().getAttribute("campaignAlert"));
         templateEngine.process(path, ctx, resp.getWriter());
+        if(campaignAlert.isDismissible()) campaignAlert.hide();
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }
-
-    @Override
-    public void destroy() {
-        super.destroy();
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException sqle) {
-        }
-    }
-
 }
