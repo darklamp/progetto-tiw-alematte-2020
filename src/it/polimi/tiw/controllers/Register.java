@@ -156,7 +156,7 @@ public class Register extends HttpServlet {
                         resp.sendRedirect(getServletContext().getContextPath() + "/register");
                         return;
                     }
-                    part.write(uploadFilePath + File.separator + fileName);
+                    part.write(uploadFilePath + File.separator + savedFileName);
                     userDAO.addWorkerUser(username, email, password, role, experience, savedFileName);
                 } else {
                     userDAO.addWorkerUser(username, email, password, role, experience, null);

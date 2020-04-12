@@ -28,6 +28,7 @@
                 </div>
             </div>
         </div>
+        <div class="row"><div class="col-12"><div class="alert alert-danger" data-th-class="${'alert alert-' + campaignAlert.getType()}" data-th-if="${campaignAlert.isVisible()}" data-th-utext="${campaignAlert.getContent()}">General error</div></div></div>
         <div class="row">
             <div class="col-8">
                 <h2>Campaign images</h2>
@@ -39,12 +40,12 @@
             </div>
             <div class="col-4">
                 <h2>Actions</h2>
-                <a class="btn btn-outline-primary btn-full" id="newImageModalBtn" data-th-disabled="${campaign.getState().equals('closed')}">Add new image</a> <br/>
+                <a class="btn btn-outline-primary btn-full" id="newImageModalBtn" data-th-if="${not campaign.getState().equals('closed')}">Add new image</a> <br/>
                 <a class="btn btn-outline-primary btn-full">Show images in map</a>
                 <hr/>
-                <a href="" class="btn btn-outline-success btn-full" data-th-href="@{/manager/campaign(id=${campaign.getId()}, action='setStart')}" data-th-if="${campaign.getState().equals('created') && isImageAvailable}">Start campaign</a>
-                <a href="" class="btn btn-outline-danger btn-full" data-th-href="@{/manager/campaign(id=${campaign.getId()}, action='setClose')}" data-th-if="${campaign.getState().equals('started')}">Close campaign</a><br/>
-                <a href="" class="btn btn-outline-info btn-full" data-th-href="@{/manager/campaign(action='setStart')}" data-th-if="${campaign.getState().equals('created')}">Show report</a>
+                <a href="campaignDetail.html" class="btn btn-outline-success btn-full" data-th-href="@{/manager/campaign(id=${campaign.getId()}, action='setStart')}" data-th-if="${campaign.getState().equals('created') && isImageAvailable}">Start campaign</a>
+                <a href="campaignDetail.html" class="btn btn-outline-danger btn-full" data-th-href="@{/manager/campaign(id=${campaign.getId()}, action='setClose')}" data-th-if="${campaign.getState().equals('started')}">Close campaign</a><br/>
+                <a href="campaignDetail.html" class="btn btn-outline-info btn-full" data-th-href="@{/manager/campaign(action='setStart')}">Show report</a>
             </div>
         </div>
     </div>
@@ -58,7 +59,8 @@
                 <h2>Upload a new image</h2>
             </div>
             <div class="modal-body">
-                <form class="form" method="POST" action="" data-th-action="">
+                <form class="form" method="POST" action="" data-th-action="@{/imageUploader}" enctype="multipart/form-data">
+                    <input type="hidden" name="campaignId" value="" data-th-value="${campaign.getId()}"/>
                     <div class="form-group">
                         <div class="row">
                         <label>Image file</label>
