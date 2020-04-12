@@ -101,6 +101,6 @@ public class CampaignDetail extends HttpServlet {
         ctx.setVariable("imagePath", uploadFolder.getAbsolutePath()+File.separator);
         ctx.setVariable("campaignAlert", req.getSession().getAttribute("campaignAlert"));
         templateEngine.process(path, ctx, resp.getWriter());
-        ((Alert)req.getSession().getAttribute("campaignAlert")).hide();
+
     }
 }
