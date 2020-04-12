@@ -1,5 +1,8 @@
 package it.polimi.tiw.controllers;
 
+import it.polimi.tiw.beans.Campaign;
+import it.polimi.tiw.beans.User;
+import it.polimi.tiw.dao.CampaignDAO;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -16,6 +19,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 @WebServlet("/worker")
 public class WorkerHome extends HttpServlet {
@@ -53,8 +57,18 @@ public class WorkerHome extends HttpServlet {
         String path = "/WEB-INF/workerHome.html";
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-        ctx.setVariable("user", req.getSession().getAttribute("user"));
+        User user = (User) req.getSession().getAttribute("user");
+        ctx.setVariable("user", user);
         templateEngine.process(path, ctx, resp.getWriter());
+        CampaignDAO campaignDAO = new CampaignDAO(connection);
+        List<Campaign> userJoinedCampaigns, userAvailableCampaigns;
+        try{
+            userJoinedCampaigns = campaignDAO.getWorkerCampaigns(user.getId());
+            userAvailableCampaigns = campaignDAO.getWorkerAvailableCampaigns(user.getId());
+        } catch (SQLException e){
+            resp.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in reading data");
+            return;
+        }
     }
 
     @Override
