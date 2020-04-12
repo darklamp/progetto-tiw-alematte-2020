@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Manager</title>
+    <title>Campaign Gallery</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}">
     <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
 </head>
@@ -10,15 +10,14 @@
 <div class="container">
     <div class="navbar">
         <a href="" class="disabled">Manager</a>
-        <a href="managerHome.html" class="active" data-th-href="@{/manager}">Home</a>
-        <a href="managerAccount.html" data-th-href="@{/profile}">Account</a>
+        <a href="managerHome.html" class="active" data-th-href="@{/worker}">Home</a>
+        <a href="workerHome.html" data-th-href="@{/profile}">Account</a>
         <div class="navbar-right">
             <a href="../index.html" data-th-href="@{/logout}">Logout</a>
         </div>
     </div>
     <div class="page-content">
-        <h1>Manager homepage</h1>
-        <h3>Welcome <span data-th-text="${user.getUsername()}">username</span> </h3>
+        <h3>Campaign: <span data-th-text="${campaign.getName()}">campaignName</span> </h3>
         <div class="row">
             <div class="col-8">
                 <h2>Your campaigns</h2>
