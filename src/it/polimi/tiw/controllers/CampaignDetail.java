@@ -59,9 +59,21 @@ public class CampaignDetail extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int campaignId = Integer.parseInt(req.getParameter("id"));
-        Alert campaignAlert = new Alert(false, Alert.DANGER, "");
-        req.getSession().setAttribute("campaignAlert", campaignAlert);
+        int campaignId;
+        try{
+            campaignId = Integer.parseInt(req.getParameter("id"));
+        } catch (Exception e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return;
+        }
+        Alert campaignAlert;
+        if(req.getSession().getAttribute("campaignAlert")==null){
+           campaignAlert = new Alert(false, Alert.DANGER, "");
+           req.getSession().setAttribute("campaignAlert", campaignAlert);
+        } else {
+            campaignAlert = (Alert) req.getSession().getAttribute("campaignAlert");
+        }
+
         String applicationPath = req.getServletContext().getContextPath();
         String uploadFilePath = applicationPath + File.separator + "uploads/campaignImages";
         File uploadFolder = new File(uploadFilePath);
@@ -101,6 +113,11 @@ public class CampaignDetail extends HttpServlet {
         ctx.setVariable("imagePath", uploadFolder.getAbsolutePath()+File.separator);
         ctx.setVariable("campaignAlert", req.getSession().getAttribute("campaignAlert"));
         templateEngine.process(path, ctx, resp.getWriter());
+        if(campaignAlert.isDismissible()) campaignAlert.hide();
+    }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
     }
 }

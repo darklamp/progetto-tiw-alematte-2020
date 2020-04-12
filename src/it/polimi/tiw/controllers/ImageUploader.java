@@ -84,6 +84,7 @@ public class ImageUploader extends HttpServlet {
             alert.setContent("Please fill all form data");
             alert.setType(Alert.DANGER);
             alert.show();
+            alert.dismiss();
             resp.sendRedirect(path);
             return;
         }
@@ -97,6 +98,7 @@ public class ImageUploader extends HttpServlet {
             alert.setContent("NumberFormatException in latitude or longitude");
             alert.setType(Alert.DANGER);
             alert.show();
+            alert.dismiss();
             resp.sendRedirect(path);
             return;
         }
@@ -110,6 +112,7 @@ public class ImageUploader extends HttpServlet {
             alert.setContent("SQL error");
             alert.setType(Alert.DANGER);
             alert.show();
+            alert.dismiss();
             resp.sendRedirect(path);
             return;
         }
@@ -121,6 +124,7 @@ public class ImageUploader extends HttpServlet {
             alert.setType(Alert.DANGER);
             alert.setContent("Wrong file type");
             alert.show();
+            alert.dismiss();
             resp.sendRedirect(path);
             return;
         }
@@ -139,6 +143,7 @@ public class ImageUploader extends HttpServlet {
             alert.setContent("An error occurred while saving image");
             alert.setType(Alert.DANGER);
             alert.show();
+            alert.dismiss();
             resp.sendRedirect(path);
             return;
         }

@@ -1,5 +1,6 @@
 package it.polimi.tiw.controllers;
 
+import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.CampaignDAO;
@@ -51,6 +52,7 @@ public class CreateCampaign extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("user");
+        Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
         CampaignDAO campaignDAO = new CampaignDAO(connection);
         String name = req.getParameter("campaignName");
         String client = req.getParameter("campaignClient");
@@ -59,7 +61,11 @@ public class CreateCampaign extends HttpServlet {
             if(campaignDAO.inNameFree(name)){
                 id = campaignDAO.createCampaign(user.getId(), name, client);
             } else {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Name already in use");
+                alert.setContent("Name already in use");
+                alert.setType(Alert.DANGER);
+                alert.show();
+                alert.dismiss();
+                resp.sendRedirect(getServletContext().getContextPath()+"/manager");
                 return;
             }
         } catch (SQLException e){
