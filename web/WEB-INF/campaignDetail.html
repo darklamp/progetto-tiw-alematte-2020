@@ -159,6 +159,9 @@
                     </div>
                     <div class="col-6">
                         <div class="alert alert-primary" id="annotationsEmptyAlert">No annotations for this image</div>
+                        <div class="annotations-container" id="annotationContainer">
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -236,15 +239,42 @@
                 var annotationsObject = jsonObject.annotations;
                 if(annotationsObject == 0){
                     document.getElementById("annotationsEmptyAlert").style.display="block";
+                    document.getElementById("annotationContainer").innerHTML = "";
                     return;
                 }
                 document.getElementById("annotationsEmptyAlert").style.display="none";
                 //Annotations exists
+                var annotations = "";
                 for(var i=0; i<annotationsObject.length; i++){
                     var userObject = annotationsObject[i].user;
                     var annotationObjet = annotationsObject[i].annotation;
+                    annotations += "<div class='card mx-auto'><div class='card-header'>";
+                            if(annotationObjet.validity === '1'){
+                                annotations += "<span class='icon icon-success'><i class='fas fa-thumbs-up'></i></span>";
+                            } else {
+                                annotations += "<span class='icon icon-danger'><i class='fas fa-thumbs-down'></i></span>";
+                            }
+
+                        annotations += "<p><strong>Creator: </strong>"+userObject.username +" (" + userObject.email +")"+"</p>";
+                            if(userObject.experience === "high"){
+                                annotations += "<p><strong>Experience: </strong><span class='text-success text-uppercase text-bold'>High</span></p>";
+                            } else if(userObject.experience === "medium"){
+                                annotations += "<p><strong>Experience: </strong><span class='text-warning text-uppercase text-bold'>Medium</span></p>";
+                            } else{
+                                annotations += "<p><strong>Experience: </strong><span class='text-danger text-uppercase text-bold'>Low</span></p>";
+                            }
+                        annotations += "</div><div class='card-body'><p><strong>Data: </strong>"+ annotationObjet.date +"</p>";
+                            if(annotationObjet.trust ==="high"){
+                                annotations += "<p><strong>Trust: </strong><span class='text-success text-uppercase text-bold'>high</span></p>";
+                            } else if(annotationObjet.trust ==="medium"){
+                                annotations += "<p><strong>Trust: </strong><span class='text-warning text-uppercase text-bold'>medium</span></p>";
+                            } else {
+                                annotations += "<p><strong>Trust: </strong><span class='text-danger text-uppercase text-bold'>low</span></p>";
+                            }
+                        annotations += "<p><strong>Nota: </strong>"+annotationObjet.note+"</p></div></div>";
 
                 }
+                document.getElementById("annotationContainer").innerHTML = annotations;
             },
             error: function () {
                 alert("Error");

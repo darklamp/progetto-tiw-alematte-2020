@@ -71,6 +71,9 @@ public class User implements JsonSupport {
         result += "\"username\":\""+username+"\",";
         result += "\"email\":\""+email+"\",";
         result += "\"role\":\""+role+"\",";
+        if(level != null){
+            result += "\"experience\":\""+level+"\",";
+        }
         result += "\"photo\":\""+imageURL+"\"";
         result += "}";
         return result;
