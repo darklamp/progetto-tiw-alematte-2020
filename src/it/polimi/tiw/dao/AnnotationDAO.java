@@ -27,7 +27,7 @@ public class AnnotationDAO {
             pstatement.setInt(1, workerId);
             pstatement.setInt(2, imageId);
             try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst()) // no results, credential check failed
+                if (!result.isBeforeFirst()) // no results
                     return null;
                 else {
                     result.next();
@@ -50,17 +50,21 @@ public class AnnotationDAO {
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
             pstatement.setInt(1, imageId);
             try (ResultSet result = pstatement.executeQuery();) {
-                while(result.next()){
-                    Annotation annotation = new Annotation();
-                    annotation.setWorkerId(result.getInt("workerId"));
-                    annotation.setImageId(imageId);
-                    annotation.setDate(result.getDate("date"));
-                    annotation.setValidity(result.getInt("validity"));
-                    annotation.setTrust(result.getString("trust"));
-                    annotation.setNote(result.getString("note"));
-                    annotations.add(annotation);
+                if (!result.isBeforeFirst()) // no results
+                    return null;
+                else {
+                    while (result.next()) {
+                        Annotation annotation = new Annotation();
+                        annotation.setWorkerId(result.getInt("workerId"));
+                        annotation.setImageId(imageId);
+                        annotation.setDate(result.getDate("date"));
+                        annotation.setValidity(result.getInt("validity"));
+                        annotation.setTrust(result.getString("trust"));
+                        annotation.setNote(result.getString("note"));
+                        annotations.add(annotation);
+                    }
+                    return annotations;
                 }
-                return annotations;
             }
         }
     }
