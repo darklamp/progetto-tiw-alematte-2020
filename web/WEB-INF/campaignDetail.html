@@ -90,11 +90,11 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-6-alt">
                                 <label>Latitude</label>
                                 <input type="text" class="form-control" name="latitude" required/>
                             </div>
-                            <div class="col-6">
+                            <div class="col-6-alt">
                                 <label>Longitude</label>
                                 <input type="text" class="form-control" name="longitude" required/>
                             </div>
@@ -102,11 +102,11 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-6-alt">
                                 <label>Resolution</label>
                                 <input type="text" class="form-control" name="resolution" required/>
                             </div>
-                            <div class="col-6">
+                            <div class="col-6-alt">
                                 <label>Source</label>
                                 <input type="text" class="form-control" name="source" required/>
                             </div>
@@ -114,11 +114,11 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-6-alt">
                                 <label>Region</label>
                                 <input type="text" class="form-control" name="region" required/>
                             </div>
-                            <div class="col-6">
+                            <div class="col-6-alt">
                                 <label>Town</label>
                                 <input type="text" class="form-control" name="town" required/>
                             </div>
@@ -138,11 +138,10 @@
                 <span class="close" id="closeDetail">&times;</span>
                 <h2>Image detail</h2>
             </div>
-            <div class="modal-body" style="max-height: 600px; ">
+            <div class="modal-body">
                 <div class="row">
-                    <div class="col-6">
-
-                                <img src="../images/test1.jpg" id="modalImage" style="width: 100%; height: auto;"/>
+                    <div class="col-6-alt">
+                                <img src="../images/test1.jpg" id="modalImage" style="width: 100%; height: auto; max-height: 600px; "/>
                                 <div class="newspaper-2">
                                     <p><strong>Date: </strong><span id="imgDate"></span></p>
                                     <p><strong>Latitude: </strong><span id="imgLatitude"></span></p>
@@ -154,7 +153,7 @@
                                 </div>
 
                     </div>
-                    <div class="col-6" >
+                    <div class="col-6-alt" >
                         <div class="alert alert-primary" id="annotationsEmptyAlert">No annotations for this image</div>
                         <div class="scrollable-container" id="annotationContainer"></div>
                     </div>

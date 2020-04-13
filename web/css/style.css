@@ -172,6 +172,12 @@ p, h1, h2, h3, h4, h5, h6{
     padding: 1%;
     float: left;
     width: 48%;
+}
+
+.col-6-alt{
+    padding: 1%;
+    float: left;
+    width: 48%;
     height: 100%;
 }
 

@@ -89,10 +89,7 @@ public class Register extends HttpServlet {
         UserDAO userDAO = new UserDAO(connection);
         Alert alert = (Alert) req.getSession().getAttribute("registerResult");
         if(!password.equals(password_cnf)){
-            alert.setType(Alert.DANGER);
-            alert.setContent("Passwords not match");
-            alert.show();
-            resp.sendRedirect(getServletContext().getContextPath() + "/register");
+            setAlert(req,resp,Alert.DANGER,"Passwords do not match","/register");
             return;
         }
         else if(!role.equals("manager") && !role.equals("worker")){
@@ -102,34 +99,22 @@ public class Register extends HttpServlet {
 
         try {
             if(userDAO.alreadyExists(username, email)){
-                alert.setType(Alert.DANGER);
-                alert.setContent("Account already exists.");
-                alert.show();
-                resp.sendRedirect(getServletContext().getContextPath() + "/register");
+                setAlert(req,resp,Alert.DANGER,"Account already exists.","/register");
                 return;
             }
 
             if (!userDAO.isEmailFree(email)) {
-                alert.setType(Alert.DANGER);
-                alert.setContent("This email is already in use.");
-                alert.show();
-                resp.sendRedirect(getServletContext().getContextPath() + "/register");
+                setAlert(req,resp,Alert.DANGER,"This email is already in use.","/register");
                 return;
             }
 
             if(!userDAO.isUsernameFree(username)){
-                alert.setType(Alert.DANGER);
-                alert.setContent("This username is already in use.");
-                alert.show();
-                resp.sendRedirect(getServletContext().getContextPath() + "/register");
+                setAlert(req,resp,Alert.DANGER,"This username is already in use.","/register");
                 return;
             }
 
             if(!isValidMailAddress(email)){
-                alert.setType(Alert.DANGER);
-                alert.setContent("Invalid mail address.");
-                alert.show();
-                resp.sendRedirect(getServletContext().getContextPath() + "/register");
+                setAlert(req,resp,Alert.DANGER,"Invalid mail address.","/register");
                 return;
             }
 
@@ -161,10 +146,7 @@ public class Register extends HttpServlet {
                     String savedFileName = username + "." + Parser.getFileExtension(fileName);
                     // allows only JPEG and PNG files to be uploaded
                     if (!contentType.equalsIgnoreCase("image/jpeg") && !contentType.equalsIgnoreCase("image/png")) {
-                        alert.setType(Alert.DANGER);
-                        alert.setContent("Wrong file type");
-                        alert.show();
-                        resp.sendRedirect(getServletContext().getContextPath() + "/register");
+                        setAlert(req,resp,Alert.DANGER,"Wrong file type","/register");
                         return;
                     }
                     part.write(uploadFilePath + File.separator + savedFileName);
@@ -176,19 +158,12 @@ public class Register extends HttpServlet {
             }
 
         } catch (SQLException e){
-            alert.setType(Alert.DANGER);
-            alert.setContent("Database or SQL error" + e.getMessage());
-            alert.show();
-            resp.sendRedirect(getServletContext().getContextPath() + "/register");
+            setAlert(req,resp,Alert.DANGER,"Database or SQL error" + e.getMessage(),"/register");
             return;
         }
 
         // Send "Account created"
-        alert.setType(Alert.SUCCESS);
-        alert.setContent("Account created successfully. Please login <a href=\"login\">here</a>");
-        alert.show();
-        alert.dismiss();
-        resp.sendRedirect(getServletContext().getContextPath() + "/register");
+        setAlert(req,resp,Alert.SUCCESS,"Account created successfully. Please login <a href=\"login\">here</a>","/register");
     }
 
     @Override
@@ -199,6 +174,17 @@ public class Register extends HttpServlet {
                 connection.close();
             }
         } catch (SQLException sqle) {
+        }
+    }
+
+    void setAlert(HttpServletRequest req, HttpServletResponse resp, String alertType, String alertContent, String redirectPath) throws IOException {
+        Alert alert = (Alert) req.getSession().getAttribute("profileAlert");
+        alert.setType(alertType);
+        alert.setContent(alertContent);
+        alert.show();
+        alert.dismiss();
+        if (redirectPath != null){
+            resp.sendRedirect(getServletContext().getContextPath()+redirectPath);
         }
     }
 
