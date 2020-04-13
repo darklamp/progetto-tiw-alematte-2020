@@ -84,6 +84,9 @@ public class Login extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Login");
             return;
         }
+        catch (NoSuchElementException e){
+            u = null;
+        }
         String path = getServletContext().getContextPath();
         if (u == null) {
             req.getSession().setAttribute("loginResult", false);

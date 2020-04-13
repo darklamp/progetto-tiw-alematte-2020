@@ -59,7 +59,7 @@ public class UserDAO {
         try{
             salt = getUserSalt(username);
         } catch (NoSuchElementException e){
-            return;
+            throw new NoSuchElementException();
         }
         String query = "SELECT  * FROM user WHERE username = ? AND password = ?";
         String hash = Crypto.pwHash(password,salt.getBytes(StandardCharsets.UTF_8));
