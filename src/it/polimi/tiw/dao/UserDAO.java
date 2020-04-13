@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
@@ -24,12 +25,12 @@ public class UserDAO {
         this.con = connection;
     }
 
-    private String getUserSalt(String username) throws SQLException{
+    private String getUserSalt(String username) throws NoSuchElementException, SQLException {
         String query = "SELECT salt FROM user WHERE username = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
             try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst()) throw new SQLException();
+                if (!result.isBeforeFirst()) throw new NoSuchElementException();
                 else {
                     result.next();
                     return result.getString("salt");
@@ -38,12 +39,12 @@ public class UserDAO {
 
         }
     }
-    private String getUserSalt(int userId) throws SQLException{
+    private String getUserSalt(int userId) throws SQLException, NoSuchElementException{
         String query = "SELECT salt FROM user WHERE id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setInt(1, userId);
             try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst()) throw new SQLException();
+                if (!result.isBeforeFirst()) throw new NoSuchElementException();
                 else {
                     result.next();
                     return result.getString("salt");
@@ -54,7 +55,12 @@ public class UserDAO {
     }
 
     public User checkCredentials(String username, String password) throws SQLException {
-        String salt = getUserSalt(username);
+        String salt;
+        try{
+            salt = getUserSalt(username);
+        } catch (NoSuchElementException e){
+            return null;
+        }
         String query = "SELECT  * FROM user WHERE username = ? AND password = ?";
         String hash = Crypto.pwHash(password,salt.getBytes(StandardCharsets.UTF_8));
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
