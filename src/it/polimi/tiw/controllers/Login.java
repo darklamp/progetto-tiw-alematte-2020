@@ -79,8 +79,8 @@ public class Login extends HttpServlet {
         try {
             u = usr.checkCredentials(username, password);
         } catch (SQLException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in database credential checking");
-            return;
+            /*resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Login");
+            return;*/
         }
         String path = getServletContext().getContextPath();
         if (u == null) {

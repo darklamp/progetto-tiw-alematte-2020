@@ -18,6 +18,8 @@ import static de.mkammerer.argon2.Argon2Factory.*;
 public class UserDAO {
     private Connection con;
 
+    /* TODO: fare sanitization di molti input */
+
     public UserDAO(Connection connection) {
         this.con = connection;
     }
