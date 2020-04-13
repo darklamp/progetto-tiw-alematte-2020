@@ -9,7 +9,7 @@
 <body>
 <div class="container">
     <div class="navbar">
-        <a href="" class="disabled">Manager</a>
+        <a href="" class="disabled">Worker</a>
         <a href="workerHome.html" class="active" data-th-href="@{/worker}">Home</a>
         <a href="workerAccount.html" data-th-href="@{/profile}">Account</a>
         <div class="navbar-right">
@@ -17,21 +17,16 @@
         </div>
     </div>
     <div class="page-content">
-        <h3>Campaign: <span data-th-text="${campaign.getName()}">campaignName</span> </h3>
-        <table>
-            <div class="row">
-                <div data-th-each="i:${images}">
-                    <div data-th-switch="${galleryCounter()}">
-                        <div data-th-case="0">
-                            <p data-th-text="asd">HEllo!</p>
-                          <!--  <img src="placeholder.jpeg" data-th-src="${i.getUrl()}"> -->
-                        </div>
-                        <div data-th-case="1">User is a manager</div>
-                        <div data-th-case="2"></div>
-                    </div>
+        <h1><p style="text-align:center" data-th-text="${campaign.getName()}">campaignName</p></h1>
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-primary" data-th-if="${not isImageAvailable}">Nothing to show</div>
+                <div class="gallery" data-th-each="image : ${images}">
+                    <a onclick="openDetail(0);" data-th-onclick="'openDetail('+${image.getId()}+');'"><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}" alt=""></a>
                 </div>
             </div>
-        </table>
+        </div>
+
     </div>
     <div class="footer">
         <div class="footer-content">(C) <a href="https://github.com/darklamp/progetto-tiw-alematte-2020">Project TIW</a> 2020</div>
