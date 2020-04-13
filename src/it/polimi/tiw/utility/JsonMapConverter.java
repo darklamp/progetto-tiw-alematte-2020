@@ -5,7 +5,7 @@ import java.util.Map;
 public class JsonMapConverter implements JsonConverter<Map<String,String>>{
     @Override
     public String convertToJson(Map<String, String> obj) {
-        String result = "{";
+        StringBuilder result = new StringBuilder("{");
         for(String key: obj.keySet()){
             String internalObj = "\""+key+"\":";
             if(obj.get(key).startsWith("{") || obj.get(key).startsWith("[")){
@@ -13,10 +13,11 @@ public class JsonMapConverter implements JsonConverter<Map<String,String>>{
             } else {
                 internalObj += "\""+obj.get(key)+"\",";
             }
+            result.append(internalObj);
         }
-        result = removeLastCharacter(result);
-        result += "}";
-        return result;
+        result = new StringBuilder(removeLastCharacter(result.toString()));
+        result.append("}");
+        return result.toString();
     }
 
     private String removeLastCharacter(String str) {

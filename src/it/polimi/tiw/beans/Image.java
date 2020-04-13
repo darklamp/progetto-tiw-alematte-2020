@@ -105,8 +105,4 @@ public class Image implements JsonSupport {
         return result;
     }
 
-    @Override
-    public void createFromJSON(String json) {
-
-    }
 }

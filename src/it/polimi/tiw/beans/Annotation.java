@@ -75,8 +75,4 @@ public class Annotation implements JsonSupport {
         return result;
     }
 
-    @Override
-    public void createFromJSON(String json) {
-
-    }
 }
