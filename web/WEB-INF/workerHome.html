@@ -8,7 +8,6 @@
 <body>
 <div class="container">
     <div class="navbar">
-        <a href="" class="disabled">Worker</a>
         <a href="workerHome.html" class="active" data-th-href="@{/worker}">Home</a>
         <a href="workerAccount.html" data-th-href="@{/profile}">Account</a>
         <div class="navbar-right">
@@ -16,7 +15,7 @@
         </div>
     </div>
     <div class="page-content">
-        <h3>Welcome <span data-th-text="${user.getUsername()}">username</span> </h3>
+        <h1 align="center">Welcome <span data-th-text="${user.getUsername()}">username</span></h1>
         <div class="row">
             <div class="col-6">
                 <h2>Available campaigns</h2>
