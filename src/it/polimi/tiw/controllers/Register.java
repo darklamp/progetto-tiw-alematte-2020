@@ -23,6 +23,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import static it.polimi.tiw.utility.Parser.isValidMailAddress;
+
 @WebServlet("/register")
 @MultipartConfig(fileSizeThreshold = 6291456, // 6 MB
         maxFileSize = 10485760L, // 10 MB
@@ -118,6 +120,14 @@ public class Register extends HttpServlet {
             if(!userDAO.isUsernameFree(username)){
                 alert.setType(Alert.DANGER);
                 alert.setContent("This username is already in use.");
+                alert.show();
+                resp.sendRedirect(getServletContext().getContextPath() + "/register");
+                return;
+            }
+
+            if(!isValidMailAddress(email)){
+                alert.setType(Alert.DANGER);
+                alert.setContent("Invalid mail address.");
                 alert.show();
                 resp.sendRedirect(getServletContext().getContextPath() + "/register");
                 return;

@@ -19,8 +19,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.NoSuchElementException;
+
+import static it.polimi.tiw.utility.Parser.isValidMailAddress;
 
 @WebServlet("/profile")
 public class Profile extends HttpServlet {
@@ -116,16 +117,15 @@ public class Profile extends HttpServlet {
                 }
                 try{
                     if((userDAO.isUsernameFree(username) || username.equals(user.getUsername())) && (userDAO.isEmailFree(email) || email.equals(user.getEmail()))){
+                        if (!isValidMailAddress(email)){
+                            setAlert(req,resp,Alert.DANGER,"Invalid mail address.","/profile");
+                            return;
+                        }
                         user.setEmail(email);
                         user.setUsername(username);
                         userDAO.updateUser(user);
                     } else {
-                        Alert alert = (Alert) req.getSession().getAttribute("profileAlert");
-                        alert.setType(Alert.DANGER);
-                        alert.setContent("Username or Email already used by an other user");
-                        alert.show();
-                        alert.dismiss();
-                        resp.sendRedirect(getServletContext().getContextPath()+"/profile");
+                        setAlert(req,resp,Alert.DANGER,"Username or Email already used by an other user.","/profile");
                         return;
                     }
                 } catch (SQLException e){
@@ -146,12 +146,7 @@ public class Profile extends HttpServlet {
                     try{
                         userDAO.checkCredentials(user.getUsername(), oldPassword);
                     } catch(NoSuchElementException e){
-                        Alert alert = (Alert) req.getSession().getAttribute("profileAlert");
-                        alert.setType(Alert.DANGER);
-                        alert.setContent("Invalid old password");
-                        alert.show();
-                        alert.dismiss();
-                        resp.sendRedirect(getServletContext().getContextPath()+"/profile");
+                        setAlert(req,resp,Alert.DANGER,"Invalid old password.","/profile");
                         return;
                     }
 
@@ -184,6 +179,69 @@ public class Profile extends HttpServlet {
             }
 
         } else if(user.getRole().equals("worker")){
+            if(action.equals("updateData")){
+                String username = req.getParameter("username");
+                String email = req.getParameter("email");
+                //Invalid param -> impossible from a webpage
+                if(username.isEmpty() || email.isEmpty()){
+                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid param");
+                    return;
+                }
+                try{
+                    if((userDAO.isUsernameFree(username) || username.equals(user.getUsername())) && (userDAO.isEmailFree(email) || email.equals(user.getEmail()))){
+                        if (!isValidMailAddress(email)){
+                            setAlert(req,resp,Alert.DANGER,"Invalid mail address.","/profile");
+                            return;
+                        }
+                        else {
+                            user.setEmail(email);
+                            user.setUsername(username);
+                            userDAO.updateUser(user);
+                        }
+                    } else {
+                        setAlert(req,resp,Alert.DANGER,"Username or Email already used by an other user","/profile");
+                        return;
+                    }
+                } catch (SQLException e){
+                    resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SQL query error");
+                    return;
+                }
+
+
+            } else if(action.equals("updatePassword")){
+                String oldPassword = req.getParameter("oldPassword");
+                String newPassword = req.getParameter("newPassword");
+                String newPasswordCnf = req.getParameter("newPasswordCnf");
+                if(oldPassword.isEmpty() || newPassword.isEmpty() || newPasswordCnf.isEmpty()){
+                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid param");
+                    return;
+                }
+                try{
+                    try{
+                        userDAO.checkCredentials(user.getUsername(), oldPassword);
+                    } catch(NoSuchElementException e){
+                        setAlert(req,resp,Alert.DANGER,"Invalid old password.","/profile");
+                        return;
+                    }
+
+                    if(!newPassword.equals(newPasswordCnf)){
+                        setAlert(req,resp,Alert.DANGER,"Passwords do not match.","/profile");
+                        return;
+                    }
+
+                    userDAO.updateUserPassword(userId, newPassword);
+                    setAlert(req,resp,Alert.SUCCESS,"Password changed correctly!",null);
+
+                } catch (SQLException e){
+                    resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SQL query error");
+                    return;
+                }
+
+
+            } else {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
+                return;
+            }
 
         } else {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user role");
@@ -202,6 +260,17 @@ public class Profile extends HttpServlet {
                 connection.close();
             }
         } catch (SQLException sqle) {
+        }
+    }
+
+    void setAlert(HttpServletRequest req, HttpServletResponse resp, String alertType, String alertContent, String redirectPath) throws IOException {
+        Alert alert = (Alert) req.getSession().getAttribute("profileAlert");
+        alert.setType(alertType);
+        alert.setContent(alertContent);
+        alert.show();
+        alert.dismiss();
+        if (redirectPath != null){
+            resp.sendRedirect(getServletContext().getContextPath()+redirectPath);
         }
     }
 }
