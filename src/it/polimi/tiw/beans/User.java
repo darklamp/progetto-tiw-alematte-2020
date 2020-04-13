@@ -76,8 +76,4 @@ public class User implements JsonSupport {
         return result;
     }
 
-    @Override
-    public void createFromJSON(String json) {
-
-    }
 }
