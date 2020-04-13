@@ -1,6 +1,10 @@
 package it.polimi.tiw.beans;
 
-public class User {
+import it.polimi.tiw.utility.JsonSupport;
+
+import java.util.HashMap;
+
+public class User implements JsonSupport {
     private int id;
     private String username;
     private String email;
@@ -58,5 +62,22 @@ public class User {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    @Override
+    public String convertToJSON() {
+        String result ="{";
+        result += "\"id\":\""+id+"\",";
+        result += "\"username\":\""+username+"\",";
+        result += "\"email\":\""+email+"\",";
+        result += "\"role\":\""+role+"\",";
+        result += "\"photo\":\""+imageURL+"\"";
+        result += "}";
+        return result;
+    }
+
+    @Override
+    public void createFromJSON(String json) {
+
     }
 }

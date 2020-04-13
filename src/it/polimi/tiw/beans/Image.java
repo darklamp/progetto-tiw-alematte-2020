@@ -1,8 +1,10 @@
 package it.polimi.tiw.beans;
 
+import it.polimi.tiw.utility.JsonSupport;
+
 import java.util.Date;
 
-public class Image {
+public class Image implements JsonSupport {
     private int id;
     private Date date;
     private float latitude;
@@ -87,4 +89,24 @@ public class Image {
         this.url = url;
     }
 
+    @Override
+    public String convertToJSON() {
+        String result ="{";
+        result += "\"id\":\""+id+"\",";
+        result += "\"date\":\""+date.toString()+"\",";
+        result += "\"latitude\":\""+latitude+"\",";
+        result += "\"longitude\":\""+longitude+"\",";
+        result += "\"resolution\":\""+resolution+"\",";
+        result += "\"source\":\""+source+"\",";
+        result += "\"region\":\""+region+"\",";
+        result += "\"town\":\""+town+"\",";
+        result += "\"url\":\""+url+"\"";
+        result += "}";
+        return result;
+    }
+
+    @Override
+    public void createFromJSON(String json) {
+
+    }
 }
