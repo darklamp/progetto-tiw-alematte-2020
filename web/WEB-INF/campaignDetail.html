@@ -8,6 +8,7 @@
     <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
 </head>
 <body>
+<script src="../js/jquery-3.5.0.min.js" data-th-src="@{/js/jquery-3.5.0.min.js}"></script>
 <div class="container">
     <div class="navbar">
         <a href="" class="disabled">Manager</a>
@@ -55,7 +56,7 @@
                 <h2>Campaign images</h2>
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">Nothing to show</div>
                 <div class="gallery" data-th-each="image : ${images}">
-                    <a hraf=""><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}" alt=""></a>
+                    <a onclick="openDetail(0);" data-th-onclick="'openDetail('+${image.getId()}+');'"><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}" alt=""></a>
                 </div>
 
             </div>
@@ -130,36 +131,60 @@
         </div>
     </div> <!-- End new image modal-->
 
+    <!-- Image detail modal -->
+    <div id="imageDetailModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" id="closeDetail">&times;</span>
+                <h2>Image detail</h2>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-12">
+                                <img src="" id="modalImage" style="width: 100%; height: auto;"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="alert alert-primary" id="annotationsEmptyAlert">No annotations for this image</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End image detail modal-->
+
     <div class="footer">
         <div class="footer-content">(C) <a href="https://github.com/darklamp/progetto-tiw-alematte-2020">Project TIW</a> 2020</div>
     </div>
 </div>
 
-<script>
+<script data-th-if="${campaign.getState().equals('created')}">
     // Get the modal
     var modal = document.getElementById("newImageModal");
-
-    // Get the button that opens the modal
     var btn = document.getElementById("newImageModalBtn");
-
-    // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks the button, open the modal
     btn.onclick = function() {
         modal.style.display = "block";
     }
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
         }
+    }
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    </script>
+<script data-th-inline="javascript">
+
+    var detailModal = document.getElementById("imageDetailModal");
+    var closeDetail = document.getElementById("closeDetail");
+    closeDetail.onclick = function(){
+        detailModal.style.display = "none";
     }
 
     function showForm() {
@@ -177,6 +202,40 @@
         }
     }
 
+    function openDetail(imageId){
+        detailModal.style.display = "block";
+        $.ajax({
+            type: "POST",
+            url: /*[[@{/manager/getCampaignImageData}]]*/,
+            data: "imageId="+imageId,
+            dataType: "json",
+            success: function (jsonContent) {
+                var jsonObject = jsonContent;
+                var imageObject = jsonObject.image;
+                //fill image fields
+                var imagePath = /*[[${imagePath}]]*/;
+                document.getElementById("modalImage").src = imagePath + imageObject.url;
+                var annotationsObject = jsonObject.annotations;
+                if(annotationsObject == 0){
+                    document.getElementById("annotationsEmptyAlert").style.display="block";
+                    return;
+                }
+                document.getElementById("annotationsEmptyAlert").style.display="none";
+                //Annotations exists
+                for(var i=0; i<annotationsObject.length; i++){
+                    var userObject = annotationsObject[i].user;
+                    var annotationObjet = annotationsObject[i].annotation;
+
+                }
+            },
+            error: function () {
+                alert("Error");
+            },
+            async: true,
+        });
+
+
+    }
 
 </script>
 </body>

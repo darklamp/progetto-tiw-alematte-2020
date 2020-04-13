@@ -109,7 +109,7 @@ public class CampaignDetail extends HttpServlet {
             ctx.setVariable("isImageAvailable", true);
 
         }
-
+        ctx.setVariable("context", getServletContext().getContextPath());
         ctx.setVariable("campaign", campaign);
         ctx.setVariable("images", images);
         ctx.setVariable("imagePath", uploadFolder.getAbsolutePath()+File.separator);

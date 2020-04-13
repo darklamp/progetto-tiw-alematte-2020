@@ -80,10 +80,6 @@ public class GetCampaignImageData extends HttpServlet {
         try{
             Image image = imageDAO.getImage(imageId);
             List<Annotation> annotations = annotationDAO.getAnnotations(imageId);
-            if(annotations==null){
-                out.print(0);
-                return;
-            }
 
             if(image==null){
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid image");
@@ -91,13 +87,18 @@ public class GetCampaignImageData extends HttpServlet {
             }
 
             resultMap.put("image", image.convertToJSON());
+            if(annotations==null){
+                resultMap.put("annotations", "0");
+                out.print(jsonMapConverter.convertToJson(resultMap));
+                return;
+            }
             for(Annotation annotation : annotations){
                 Map<String, String > annotationMap = new LinkedHashMap<>();
                 User aUser = userDAO.getUser(annotation.getWorkerId());
                 if(aUser != null) {
                     annotationMap.put("user", aUser.convertToJSON());
                 } else {
-                    annotationMap.put("user", "");
+                    annotationMap.put("user", "0");
                 }
                 annotationMap.put("annotation", annotation.convertToJSON());
                 annotationsStr.add(jsonMapConverter.convertToJson(annotationMap));
