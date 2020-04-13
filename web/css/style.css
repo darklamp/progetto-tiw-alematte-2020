@@ -172,7 +172,7 @@ p, h1, h2, h3, h4, h5, h6{
     padding: 1%;
     float: left;
     width: 48%;
-    height: 100% auto;
+    height: 100%;
 }
 
 .col-8 {
@@ -191,6 +191,10 @@ p, h1, h2, h3, h4, h5, h6{
     padding: 1%;
     float: left;
     width: 100%;
+}
+
+.col-scrollable{
+    overflow: scroll;
 }
 
 /* Centering cols*/
@@ -782,18 +786,17 @@ table.table-gray tfoot .links a {
     display: none;
     position: fixed;
     z-index: 1;
-    padding-top: 100px;
+    padding-top: 10px;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
 }
 
 .modal-content {
-    position: relative;
+    /*position: relative;*/
     background-color: #ffffff;
     margin: auto;
     padding: 0;
@@ -804,7 +807,7 @@ table.table-gray tfoot .links a {
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
-    animation-duration: 0.4s
+    animation-duration: 0.4s;
 }
 
 @-webkit-keyframes animatetop {
@@ -839,7 +842,9 @@ table.table-gray tfoot .links a {
     border-top-right-radius: 10px;
 }
 
-.modal-body {padding: 2px 16px;}
+.modal-body {padding: 2px 16px;
+
+}
 
 .modal-footer {
     padding: 2px 16px;
@@ -949,7 +954,8 @@ div.desc {
     align-content: flex-start;
 }
 
-/* Annotation container */
-.annotations-container{
+/* Scrollable container */
+.scrollable-container{
+    max-height: 520px;
     overflow: scroll;
 }
