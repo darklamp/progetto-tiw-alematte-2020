@@ -55,7 +55,7 @@
                 <h2>Campaign images</h2>
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">Nothing to show</div>
                 <div class="gallery" data-th-each="image : ${images}">
-                    <a onclick="openDetail(0);" data-th-onclick="'openDetail('+${image.getId()}+');'"><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}" alt=""></a>
+                    <a onclick="openDetail(0);" data-th-onclick="'gallery('+${image.getId()}+');'"><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}" alt=""></a>
                 </div>
 
             </div>
@@ -213,7 +213,7 @@
         }
     }
 
-    function openDetail(imageId){
+    function gallery(imageId){
         detailModal.style.display = "block";
         $.ajax({
             type: "POST",

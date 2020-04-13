@@ -3,6 +3,7 @@ package it.polimi.tiw.controllers;
 import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.UserDAO;
+import it.polimi.tiw.utility.UserNotFoundException;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -78,9 +79,11 @@ public class Login extends HttpServlet {
         User u = null;
         try {
             u = usr.checkCredentials(username, password);
-        } catch (SQLException e) {
-            /*resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Login");
-            return;*/
+        } catch (UserNotFoundException ignored) {
+        }
+        catch (SQLException e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Login");
+            return;
         }
         String path = getServletContext().getContextPath();
         if (u == null) {

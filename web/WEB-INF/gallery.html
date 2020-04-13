@@ -7,6 +7,8 @@
     <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
 </head>
 <body>
+<script src="../js/jquery-3.5.0.min.js" data-th-src="@{/js/jquery-3.5.0.min.js}"></script>
+<script src="../js/gallery.js" data-th-src="@{/js/gallery.js}"></script>
 <div class="container">
     <div class="navbar">
         <a href="" class="disabled">Worker</a>
@@ -22,7 +24,7 @@
             <div class="col-12">
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">Nothing to show</div>
                 <div class="gallery" data-th-each="image : ${images}">
-                    <a onclick="openDetail(0);" data-th-onclick="'openDetail('+${image.getId()}+');'"><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}" alt=""></a>
+                    <a onclick="gallery(0);" data-th-onclick="'gallery('+${image.getId()}+');'"><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}" alt=""></a>
                 </div>
             </div>
         </div>
