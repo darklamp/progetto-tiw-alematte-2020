@@ -85,18 +85,17 @@ public class Login extends HttpServlet {
             return;
         }
         catch (NoSuchElementException e){
-            u = null;
-        }
-        String path = getServletContext().getContextPath();
-        if (u == null) {
             req.getSession().setAttribute("loginResult", false);
-            path = getServletContext().getContextPath() + "/login";
-        } else {
-            req.getSession().setAttribute("user", u);
-            req.getSession().setAttribute("loginResult", true);
-            String target = (u.getRole().equals("manager")) ? "/manager" : "/worker";
-            path = path + target;
+            resp.sendRedirect(getServletContext().getContextPath() + "/login");
+            return;
         }
+
+        String path = getServletContext().getContextPath();
+        req.getSession().setAttribute("user", u);
+        req.getSession().setAttribute("loginResult", true);
+        String target = (u.getRole().equals("manager")) ? "/manager" : "/worker";
+        path = path + target;
+
         resp.sendRedirect(path);
     }
 
