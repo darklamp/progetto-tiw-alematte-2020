@@ -23,10 +23,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/worker/campaign/*")
 public class Gallery extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
     private TemplateEngine templateEngine;
@@ -58,7 +61,6 @@ public class Gallery extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int campaignId;
-        /* integer parsing */
         try{
             campaignId = Integer.parseInt(req.getParameter("id"));
         } catch (Exception e){
@@ -66,7 +68,6 @@ public class Gallery extends HttpServlet {
             return;
         }
         Alert campaignAlert;
-
         if(req.getSession().getAttribute("campaignAlert")==null){
             campaignAlert = new Alert(false, Alert.DANGER, "");
             req.getSession().setAttribute("campaignAlert", campaignAlert);
@@ -74,8 +75,7 @@ public class Gallery extends HttpServlet {
             campaignAlert = (Alert) req.getSession().getAttribute("campaignAlert");
         }
 
-        String applicationPath = req.getServletContext().getContextPath();
-
+        String imagePath = req.getServletContext().getContextPath() + File.separator + "uploads/campaignImages";
         String path = "/WEB-INF/gallery.html";
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
@@ -103,9 +103,10 @@ public class Gallery extends HttpServlet {
             ctx.setVariable("isImageAvailable", true);
 
         }
-
+        ctx.setVariable("context", getServletContext().getContextPath());
         ctx.setVariable("campaign", campaign);
         ctx.setVariable("images", images);
+        ctx.setVariable("imagePath", imagePath+File.separator);
         ctx.setVariable("campaignAlert", req.getSession().getAttribute("campaignAlert"));
         templateEngine.process(path, ctx, resp.getWriter());
         if(campaignAlert.isDismissible()) campaignAlert.hide();
