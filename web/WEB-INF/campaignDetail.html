@@ -138,12 +138,11 @@
                 <span class="close" id="closeDetail">&times;</span>
                 <h2>Image detail</h2>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: 600px; ">
                 <div class="row">
                     <div class="col-6">
-                        <div class="row">
-                            <div class="col-12">
-                                <img src="" id="modalImage" style="width: 100%; height: auto;"/>
+
+                                <img src="../images/test1.jpg" id="modalImage" style="width: 100%; height: auto;"/>
                                 <div class="newspaper-2">
                                     <p><strong>Date: </strong><span id="imgDate"></span></p>
                                     <p><strong>Latitude: </strong><span id="imgLatitude"></span></p>
@@ -153,14 +152,11 @@
                                     <p><strong>Region: </strong><span id="imgRegion"></span></p>
                                     <p><strong>Town: </strong><span id="imgTown"></span></p>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="alert alert-primary" id="annotationsEmptyAlert">No annotations for this image</div>
-                        <div class="annotations-container" id="annotationContainer">
 
-                        </div>
+                    </div>
+                    <div class="col-6" >
+                        <div class="alert alert-primary" id="annotationsEmptyAlert">No annotations for this image</div>
+                        <div class="scrollable-container" id="annotationContainer"></div>
                     </div>
                 </div>
             </div>
@@ -217,14 +213,14 @@
         detailModal.style.display = "block";
         $.ajax({
             type: "POST",
-            url: /*[[@{/manager/getCampaignImageData}]]*/,
+            url: /*[[@{/manager/getCampaignImageData}]]*/ "test",
             data: "imageId="+imageId,
             dataType: "json",
             success: function (jsonContent) {
                 var jsonObject = jsonContent;
                 var imageObject = jsonObject.image;
                 //fill image fields
-                var imagePath = /*[[${imagePath}]]*/;
+                var imagePath = /*[[${imagePath}]]*/ "";
                 document.getElementById("modalImage").src = imagePath + imageObject.url;
 
                 document.getElementById("imgDate").innerText = imageObject.date;
