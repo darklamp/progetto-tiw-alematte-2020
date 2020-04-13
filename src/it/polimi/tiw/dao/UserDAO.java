@@ -30,7 +30,7 @@ public class UserDAO {
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
             try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst()) throw new SQLException();
+                if (!result.isBeforeFirst()) throw new NoSuchElementException();
                 else {
                     result.next();
                     return result.getString("salt");
@@ -44,7 +44,7 @@ public class UserDAO {
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setInt(1, userId);
             try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst()) throw new SQLException();
+                if (!result.isBeforeFirst()) throw new NoSuchElementException();
                 else {
                     result.next();
                     return result.getString("salt");
@@ -58,7 +58,7 @@ public class UserDAO {
         String salt;
         try{
             salt = getUserSalt(username);
-        } catch (SQLException e){
+        } catch (NoSuchElementException e){
             throw new NoSuchElementException();
         }
         String query = "SELECT  * FROM user WHERE username = ? AND password = ?";

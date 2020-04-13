@@ -79,11 +79,13 @@ public class Login extends HttpServlet {
         User u = null;
         try {
             u = usr.checkCredentials(username, password);
-        } catch (NoSuchElementException ignored) {
         }
         catch (SQLException e){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Login");
             return;
+        }
+        catch (NoSuchElementException e){
+            u = null;
         }
         String path = getServletContext().getContextPath();
         if (u == null) {
