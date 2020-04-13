@@ -392,6 +392,14 @@ p, h1, h2, h3, h4, h5, h6{
     color: #000000;
 }
 
+.text-uppercase{
+    text-transform: uppercase;
+}
+
+.text-bold{
+    font-weight: bold;
+}
+
 /* Buttons */
 .btn{
     border-radius: 10px;
@@ -864,4 +872,84 @@ div.gallery img {
 div.desc {
     padding: 15px;
     text-align: center;
+}
+
+/* Icon */
+.icon{
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+
+.icon-success{
+    color: #FFFFFF;
+    background: var(--color-success);
+}
+
+.icon-danger{
+    color: #FFFFFF;
+    background: var(--color-danger);
+}
+
+.icon-warning{
+    color: #FFFFFF;
+    background: var(--color-warning);
+}
+
+.icon-primary{
+    color: #FFFFFF;
+    background: var(--color-primary);
+}
+
+.icon-secondary{
+    color: #FFFFFF;
+    background: var(--color-secondary);
+}
+
+.icon-info{
+    color: #FFFFFF;
+    background: var(--color-info);
+}
+
+/* Card */
+.card{
+    border: 1px solid var(--color-gray);
+    border-radius: 10px;
+    width: 95%;
+    margin-top: 10px;
+
+}
+
+.card-header{
+    padding: 2px 16px;
+    background-color: #F7F7F7;
+    color: var(--color-secondary);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    align-content: flex-start;
+}
+
+.card-body{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #ffffff;
+    padding: 5px 16px;
+    border-radius: 10px;
+}
+
+.card-footer{
+    padding: 16px 16px;
+    background-color: #F7F7F7;
+    color: var(--color-secondary);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    align-content: flex-start;
+}
+
+/* Annotation container */
+.annotations-container{
+    overflow: scroll;
 }
