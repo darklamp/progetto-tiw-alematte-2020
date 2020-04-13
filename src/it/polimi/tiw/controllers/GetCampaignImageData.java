@@ -96,9 +96,11 @@ public class GetCampaignImageData extends HttpServlet {
                 User aUser = userDAO.getUser(annotation.getWorkerId());
                 if(aUser != null) {
                     annotationMap.put("user", aUser.convertToJSON());
-                    annotationMap.put("annotation", annotation.convertToJSON());
-                    annotationsStr.add(jsonMapConverter.convertToJson(annotationMap));
+                } else {
+                    annotationMap.put("user", "");
                 }
+                annotationMap.put("annotation", annotation.convertToJSON());
+                annotationsStr.add(jsonMapConverter.convertToJson(annotationMap));
             }
         }catch (SQLException e){
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());

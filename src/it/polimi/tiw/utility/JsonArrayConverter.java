@@ -5,14 +5,14 @@ import java.util.List;
 public class JsonArrayConverter implements JsonConverter<List<String>> {
     @Override
     public String convertToJson(List<String> obj) {
-        String result = "[";
+        StringBuilder result = new StringBuilder("[");
         for(int i=0; i<obj.size(); i++){
-            result += obj;
+            result.append(obj.get(i));
             if(i!=obj.size()-1){
-                result += ",";
+                result.append(",");
             }
         }
-        result += "]";
-        return result;
+        result.append("]");
+        return result.toString();
     }
 }
