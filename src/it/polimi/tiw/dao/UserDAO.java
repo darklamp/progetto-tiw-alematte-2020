@@ -11,6 +11,7 @@ import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.utility.Crypto;
+import it.polimi.tiw.utility.UserNotFoundException;
 import org.thymeleaf.model.IStandaloneElementTag;
 
 import static de.mkammerer.argon2.Argon2Factory.*;
@@ -53,8 +54,14 @@ public class UserDAO {
         }
     }
 
-    public User checkCredentials(String username, String password) throws SQLException {
-        String salt = getUserSalt(username);
+    public User checkCredentials(String username, String password) throws SQLException, UserNotFoundException {
+        String salt = null;
+        try{
+            salt = getUserSalt(username);
+        }
+        catch(SQLException e){
+            throw new UserNotFoundException();
+        }
         String query = "SELECT  * FROM user WHERE username = ? AND password = ?";
         String hash = Crypto.pwHash(password,salt.getBytes(StandardCharsets.UTF_8));
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
