@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.NoSuchElementException;
 
 @WebServlet("/login")
 public class Login extends HttpServlet {
@@ -79,7 +80,7 @@ public class Login extends HttpServlet {
         User u = null;
         try {
             u = usr.checkCredentials(username, password);
-        } catch (UserNotFoundException ignored) {
+        } catch (NoSuchElementException ignored) {
         }
         catch (SQLException e){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Login");
