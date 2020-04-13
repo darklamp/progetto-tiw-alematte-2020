@@ -39,6 +39,30 @@ public class UserDAO {
         }
     }
 
+    public User getUser(int userId) throws SQLException {
+        String query = "SELECT  * FROM user WHERE id = ?";
+        try (PreparedStatement pstatement = con.prepareStatement(query);) {
+            pstatement.setInt(1, userId);
+            try (ResultSet result = pstatement.executeQuery();) {
+                if (!result.isBeforeFirst()) // no results, credential check failed
+                    return null;
+                else {
+                    result.next();
+                    User user = new User();
+                    if(result.getString("role").equals("worker")){
+                        user.setImageURL(result.getString("photo"));
+                        user.setLevel(result.getString("level"));
+                    }
+                    user.setId(result.getInt("id"));
+                    user.setRole(result.getString("role"));
+                    user.setUsername(result.getString("username"));
+                    user.setEmail(result.getString("email"));
+                    return user;
+                }
+            }
+        }
+    }
+
     public void updateUser(User user) throws SQLException{
         String query = "UPDATE user SET username=?, email=?, level=?, photo=? WHERE id=?";
         try (PreparedStatement statement = con.prepareStatement(query);){

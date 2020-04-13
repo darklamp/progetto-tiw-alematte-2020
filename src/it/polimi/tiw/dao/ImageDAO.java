@@ -54,6 +54,31 @@ public class ImageDAO {
         return index;
     }
 
+    public Image getImage(int imageId) throws SQLException{
+        String query = "SELECT * FROM image WHERE id=?";
+        try (PreparedStatement pstatement = connection.prepareStatement(query)) {
+            pstatement.setInt(1, imageId);
+            try (ResultSet result = pstatement.executeQuery();) {
+                if (!result.isBeforeFirst()) // no results
+                    return null;
+                else {
+                    result.next();
+                    Image image = new Image();
+                    image.setId(result.getInt("id"));
+                    image.setDate(result.getDate("date"));
+                    image.setLatitude(result.getFloat("latitude"));
+                    image.setLongitude(result.getFloat("longitude"));
+                    image.setResolution(result.getString("resolution"));
+                    image.setSource(result.getString("source"));
+                    image.setRegion(result.getString("region"));
+                    image.setTown(result.getString("town"));
+                    image.setUrl(result.getString("url"));
+                    return image;
+                }
+            }
+        }
+    }
+
     public void insertNewImage(int campaignId, Image image) throws SQLException{
         String query = "INSERT INTO image (date, latitude, longitude, resolution, source, region, town, url) values (NOW(),?,?,?,?,?,?,?)";
         String secondQuery = "INSERT INTO imageCampaign (campaignId, imageId) VALUES (?,?)";
