@@ -1,11 +1,19 @@
 package it.polimi.tiw.dao;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import it.polimi.tiw.beans.User;
+import it.polimi.tiw.utility.Crypto;
 import org.thymeleaf.model.IStandaloneElementTag;
+
+import static de.mkammerer.argon2.Argon2Factory.*;
 
 public class UserDAO {
     private Connection con;
@@ -14,11 +22,42 @@ public class UserDAO {
         this.con = connection;
     }
 
-    public User checkCredentials(String username, String password) throws SQLException {
-        String query = "SELECT  * FROM user WHERE username = ? AND password = ?";
+    private String getUserSalt(String username) throws SQLException{
+        String query = "SELECT salt FROM user WHERE username = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
-            pstatement.setString(2, password);
+            try (ResultSet result = pstatement.executeQuery();) {
+                if (!result.isBeforeFirst()) throw new SQLException();
+                else {
+                    result.next();
+                    return result.getString("salt");
+                }
+            }
+
+        }
+    }
+    private String getUserSalt(int userId) throws SQLException{
+        String query = "SELECT salt FROM user WHERE id = ?";
+        try (PreparedStatement pstatement = con.prepareStatement(query);) {
+            pstatement.setInt(1, userId);
+            try (ResultSet result = pstatement.executeQuery();) {
+                if (!result.isBeforeFirst()) throw new SQLException();
+                else {
+                    result.next();
+                    return result.getString("salt");
+                }
+            }
+
+        }
+    }
+
+    public User checkCredentials(String username, String password) throws SQLException {
+        String salt = getUserSalt(username);
+        String query = "SELECT  * FROM user WHERE username = ? AND password = ?";
+        String hash = Crypto.pwHash(password,salt.getBytes(StandardCharsets.UTF_8));
+        try (PreparedStatement pstatement = con.prepareStatement(query);) {
+            pstatement.setString(1, username);
+            pstatement.setString(2, hash);
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
                     return null;
@@ -75,36 +114,44 @@ public class UserDAO {
         }
     }
 
-    public void updateUserPassword(int userId, String newPassword) throws SQLException{
+    public void updateUserPassword(int id, String newPassword) throws SQLException{
         String query = "UPDATE user SET password=? WHERE id=?";
+        String salt = getUserSalt(id);
+        String hash = Crypto.pwHash(newPassword,salt.getBytes(StandardCharsets.UTF_8));
         try (PreparedStatement statement = con.prepareStatement(query);){
-            statement.setString(1, newPassword);
-            statement.setInt(2, userId);
+            statement.setString(1, hash);
+            statement.setInt(2, id);
             statement.executeUpdate();
         }
     }
 
 
     public void addManagerUser(String username, String email, String password, String role) throws SQLException{
-        String query = "INSERT INTO user (username, email, password, role, level, photo) VALUES (?, ?, ?, ?, null, null)";
+        String query = "INSERT INTO user (username, email, password, role, level, photo, salt) VALUES (?, ?, ?, ?, null, null, ?)";
+        String salt = Crypto.createSalt();
+        String hash = Crypto.pwHash(password,salt.getBytes(StandardCharsets.UTF_8));
         try (PreparedStatement statement = con.prepareStatement(query);){
             statement.setString(1, username);
             statement.setString(2, email);
-            statement.setString(3, password);
+            statement.setString(3, hash);
             statement.setString(4, role);
+            statement.setString(5, salt);
             statement.executeUpdate();
         }
     }
 
     public void addWorkerUser(String username, String email, String password, String role, String experience, String photo) throws SQLException{
-        String query = "INSERT INTO user (username, email, password, role, level, photo) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO user (username, email, password, role, level, photo) VALUES (?, ?, ?, ?, ?, ?,?)";
+        String salt = Crypto.createSalt();
+        String hash = Crypto.pwHash(password,salt.getBytes(StandardCharsets.UTF_8));
         try (PreparedStatement statement = con.prepareStatement(query);){
             statement.setString(1, username);
             statement.setString(2, email);
-            statement.setString(3, password);
+            statement.setString(3, hash);
             statement.setString(4, role);
             statement.setString(5, experience);
             statement.setString(6, photo);
+            statement.setString(7, salt);
             statement.executeUpdate();
         }
     }
