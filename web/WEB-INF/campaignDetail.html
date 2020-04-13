@@ -145,6 +145,15 @@
                         <div class="row">
                             <div class="col-12">
                                 <img src="" id="modalImage" style="width: 100%; height: auto;"/>
+                                <div class="newspaper-2">
+                                    <p><strong>Date: </strong><span id="imgDate"></span></p>
+                                    <p><strong>Latitude: </strong><span id="imgLatitude"></span></p>
+                                    <p><strong>Longitude: </strong><span id="imgLongitude"></span></p>
+                                    <p><strong>Resolution: </strong><span id="imgResolution"></span></p>
+                                    <p><strong>Source: </strong><span id="imgSource"></span></p>
+                                    <p><strong>Region: </strong><span id="imgRegion"></span></p>
+                                    <p><strong>Town: </strong><span id="imgTown"></span></p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -215,6 +224,15 @@
                 //fill image fields
                 var imagePath = /*[[${imagePath}]]*/;
                 document.getElementById("modalImage").src = imagePath + imageObject.url;
+
+                document.getElementById("imgDate").innerText = imageObject.date;
+                document.getElementById("imgLatitude").innerText = imageObject.latitude;
+                document.getElementById("imgLongitude").innerText = imageObject.longitude;
+                document.getElementById("imgResolution").innerText = imageObject.resolution;
+                document.getElementById("imgSource").innerText = imageObject.source;
+                document.getElementById("imgRegion").innerText = imageObject.region;
+                document.getElementById("imgTown").innerText = imageObject.town;
+
                 var annotationsObject = jsonObject.annotations;
                 if(annotationsObject == 0){
                     document.getElementById("annotationsEmptyAlert").style.display="block";
