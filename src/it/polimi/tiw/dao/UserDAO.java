@@ -25,7 +25,7 @@ public class UserDAO {
         this.con = connection;
     }
 
-    private String getUserSalt(String username) throws SQLException {
+    private String getUserSalt(String username) throws SQLException, NoSuchElementException {
         String query = "SELECT salt FROM user WHERE username = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
@@ -39,7 +39,7 @@ public class UserDAO {
 
         }
     }
-    private String getUserSalt(int userId) throws SQLException{
+    private String getUserSalt(int userId) throws SQLException, NoSuchElementException{
         String query = "SELECT salt FROM user WHERE id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setInt(1, userId);
@@ -55,12 +55,8 @@ public class UserDAO {
     }
 
     public User checkCredentials(String username, String password) throws SQLException,NoSuchElementException {
-        String salt;
-        try{
-            salt = getUserSalt(username);
-        } catch (NoSuchElementException e){
-            throw new NoSuchElementException();
-        }
+
+        String salt = getUserSalt(username);
         String query = "SELECT  * FROM user WHERE username = ? AND password = ?";
         String hash = Crypto.pwHash(password,salt.getBytes(StandardCharsets.UTF_8));
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
@@ -68,7 +64,7 @@ public class UserDAO {
             pstatement.setString(2, hash);
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
-                    return null;
+                    throw new NoSuchElementException();
                 else {
                     result.next();
                     User user = new User();
@@ -86,13 +82,13 @@ public class UserDAO {
         }
     }
 
-    public User getUser(int userId) throws SQLException {
+    public User getUser(int userId) throws SQLException, NoSuchElementException {
         String query = "SELECT  * FROM user WHERE id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setInt(1, userId);
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
-                    return null;
+                    throw new NoSuchElementException();
                 else {
                     result.next();
                     User user = new User();

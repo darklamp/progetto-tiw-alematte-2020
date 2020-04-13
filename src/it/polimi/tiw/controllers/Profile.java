@@ -20,6 +20,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @WebServlet("/profile")
 public class Profile extends HttpServlet {
@@ -142,7 +143,9 @@ public class Profile extends HttpServlet {
                     return;
                 }
                 try{
-                    if(userDAO.checkCredentials(user.getUsername(), oldPassword) == null){
+                    try{
+                        userDAO.checkCredentials(user.getUsername(), oldPassword);
+                    } catch(NoSuchElementException e){
                         Alert alert = (Alert) req.getSession().getAttribute("profileAlert");
                         alert.setType(Alert.DANGER);
                         alert.setContent("Invalid old password");
