@@ -130,7 +130,6 @@ public class ImageUploader extends HttpServlet {
             return;
         }
         part.write(uploadFilePath + File.separator + savedFileName);
-
         image.setUrl(savedFileName);
         image.setTown(town);
         image.setRegion(region);
