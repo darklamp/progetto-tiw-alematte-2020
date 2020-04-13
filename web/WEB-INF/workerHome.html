@@ -24,7 +24,6 @@
                     <tr>
                         <th>Name</th>
                         <th>Client</th>
-                        <th>State</th>
                         <th>Details</th>
                     </tr>
                     </thead>
@@ -32,7 +31,6 @@
                     <tr data-th-each="c:${userAvailableCampaigns}">
                         <td data-th-text="${c.getName()}"></td>
                         <td data-th-text="${c.getClient()}"></td>
-                        <td><p class="badge badge-warning" data-th-class="${'badge badge-' + c.getBadge()}" data-th-text="${c.getState().toUpperCase()}"></p></td>
                         <td><a href="gallery.html" data-th-href="@{/worker/campaign(id=${c.getId()})}" class="btn btn-outline-primary"><i class="fas fa-search"></i></i></a></td>
                     </tr>
                     </tbody>
