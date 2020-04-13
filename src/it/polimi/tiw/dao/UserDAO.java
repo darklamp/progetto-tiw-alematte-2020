@@ -141,7 +141,7 @@ public class UserDAO {
     }
 
     public void addWorkerUser(String username, String email, String password, String role, String experience, String photo) throws SQLException{
-        String query = "INSERT INTO user (username, email, password, role, level, photo) VALUES (?, ?, ?, ?, ?, ?,?)";
+        String query = "INSERT INTO user (username, email, password, role, level, photo, salt) VALUES (?, ?, ?, ?, ?, ?, ?)";
         String salt = Crypto.createSalt();
         String hash = Crypto.pwHash(password,salt.getBytes(StandardCharsets.UTF_8));
         try (PreparedStatement statement = con.prepareStatement(query);){
