@@ -168,6 +168,14 @@ p, h1, h2, h3, h4, h5, h6{
     width: 31%;
 }
 
+.col-4-profile{
+    padding: 0.5%;
+    float: left;
+    width: 31%;
+    font-size: 1.8vw;
+    text-align: center;
+}
+
 .col-6{
     padding: 1%;
     float: left;
@@ -964,4 +972,10 @@ div.desc {
 .scrollable-container{
     max-height: 520px;
     overflow: scroll;
+}
+
+.profile-image{
+    width: 100%;
+    padding-top: 25px;
+    object-fit: cover;
 }
