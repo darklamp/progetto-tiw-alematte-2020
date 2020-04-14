@@ -21,6 +21,16 @@
         <div class="row">
                 <div class="col-4">
                     <img src="/images/test1.jpg" data-th-src="${imageURL != null} ? ${imageURL} : ${../../images/test1.jpg}" alt="Profile Image" class="profile-image">
+                    <div class="form-group" style="text-align: center">
+                        <form class="form" action="workerProfile.html" method="POST" data-th-action="@{/profile}" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <input type="hidden" name="userId" data-th-value="${user.getId()}"/>
+                                <input type="hidden" name="action" data-th-value="updateImage"/>
+                                <label for="newPhoto" class="btn btn-success" style="text-align: center; alignment: center">Click here to change profile picture</label>
+                                <input onchange="this.form.submit()" style="visibility: hidden; padding-top: 5px" type="file" name="photo" id="newPhoto" class="form-control" accept="image/jpeg,image/png"/>
+                            </div>
+                             </form>
+                    </div>
                 </div>
                 <div class="col-4-profile">
                     <h2>Your information <span onclick="showForm();"><i class="fas fa-pencil-alt" id="modifyProfileIcon"></i></span></h2>
@@ -31,23 +41,21 @@
                         <p>Role: <span class="badge badge-success">Worker</span></p>
                     </div>
                     <div id="infoForm" style="display: none;">
-                        <form class="form" method="POST" data-th-action="@{/profile}" enctype="multipart/form-data">
+                        <form class="form" method="POST" data-th-action="@{/profile}">
                             <div class="form-group">
+                                <input type="hidden" name="userId" data-th-value="${user.getId()}"/>
+                                <input type="hidden" name="action" data-th-value="updateData"/>
                                 <label>Username</label>
                                 <input type="text" class="form-control" name="username" data-th-value="${user.getUsername()}" required/>
                                 <label>E-Mail</label>
                                 <input type="email" class="form-control" name="email" data-th-value="${user.getEmail()}" required/>
                                 <label>Experience</label>
-                                <select class="form-control" name="experience" data-th-value="${user.getLevel()}" required>
+                                <select class="form-control" name="experience" required>
+                                    <option value="" data-th-value="${user.getLevel()}" selected disabled hidden>Choose here</option>
                                     <option value="low">Low</option>
                                     <option value="medium">Medium</option>
                                     <option value="high">High</option>
                                 </select>
-                                <label>Image</label>
-                                <input type="file" name="photo" class="form-control"/>                            </div>
-                            <div class="form-group">
-                                <input type="hidden" name="userId" data-th-value="${user.getId()}"/>
-                                <input type="hidden" name="action" data-th-value="updateData"/>
                             </div>
                                 <input type="submit" class="btn btn-success" value="Update information"/>
                         </form>

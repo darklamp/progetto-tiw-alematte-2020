@@ -1,9 +1,12 @@
 package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Alert;
+import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.beans.User;
+import it.polimi.tiw.dao.ImageDAO;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utility.Utility;
+import jdk.jshell.execution.Util;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -12,6 +15,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +31,7 @@ import java.util.NoSuchElementException;
 import static it.polimi.tiw.utility.Utility.isValidMailAddress;
 
 @WebServlet("/profile")
+@MultipartConfig
 public class Profile extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
@@ -108,6 +113,7 @@ public class Profile extends HttpServlet {
             return;
         }
         UserDAO userDAO = new UserDAO(connection);
+        ImageDAO imageDAO = new ImageDAO(connection);
         if(user.getRole().equals("manager")){
 
             if(action.equals("updateData")){
@@ -186,9 +192,6 @@ public class Profile extends HttpServlet {
                 String username = req.getParameter("username");
                 String email = req.getParameter("email");
                 String experience = req.getParameter("experience");
-                Part photo = req.getPart("photo");
-                boolean modified = false;
-                //Invalid param -> impossible from a webpage
                 if(username.isEmpty() || email.isEmpty()){
                     resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid param");
                     return;
@@ -209,23 +212,22 @@ public class Profile extends HttpServlet {
                         return;
                     }
 
-                    if(photo != null && photo.getSize()>0){
-                        String applicationPath = req.getServletContext().getRealPath("");
-                        String uploadFilePath = applicationPath + File.separator + "uploads/profileImages";
-                        String fileName = photo.getSubmittedFileName();
-                        String contentType = photo.getContentType();
-                        String savedFileName = username + "." + Utility.getFileExtension(fileName);
-                        // allows only JPEG and PNG files to be uploaded
-                        if (!contentType.equalsIgnoreCase("image/jpeg") && !contentType.equalsIgnoreCase("image/png")) {
-                            setAlert(req,resp,Alert.DANGER,"Wrong file type","/profile");
-                            return;
-                        }
-                        photo.write(uploadFilePath + File.separator + savedFileName);
+                    String oldImageURL = user.getImageURL();
+                    String newImageURL = user.getUsername() + File.separator + Utility.getFileExtension(oldImageURL);
+                    String applicationPath = req.getServletContext().getRealPath("");
+                    String uploadFilePath = applicationPath + File.separator + "uploads/profileImages";
+                    File oldImage = new File(uploadFilePath + File.separator + oldImageURL);
+                    if (!oldImage.renameTo(new File(uploadFilePath + File.separator + newImageURL))){
+                        setAlert(req, resp, Alert.DANGER, "Error changing data. Please try again.", "/profile");
+                        return;
                     }
+                    user.setImageURL(newImageURL);
                     user.setEmail(email);
                     user.setUsername(username);
                     user.setLevel(experience);
                     userDAO.updateUser(user);
+                    setAlert(req,resp,Alert.SUCCESS,"Success! Your informations have been modified.","/profile");
+                    return;
 
                 } catch (SQLException e){
                     resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SQL query error");
@@ -263,7 +265,47 @@ public class Profile extends HttpServlet {
                 }
 
 
-            } else {
+            }
+            else if(action.equals("updateImage")){
+                Part photo = req.getPart("photo");
+                if(photo != null && photo.getSize()>0) {
+                    String applicationPath = req.getServletContext().getRealPath("");
+                    String uploadFilePath = applicationPath + File.separator + "uploads/profileImages";
+                    String fileName = photo.getSubmittedFileName();
+                    String contentType = photo.getContentType();
+                    String newFileName = user.getUsername() + "." + Utility.getFileExtension(fileName);
+                    // allows only JPEG and PNG files to be uploaded
+                    if (!contentType.equalsIgnoreCase("image/jpeg") && !contentType.equalsIgnoreCase("image/png")) {
+                        setAlert(req, resp, Alert.DANGER, "Wrong file type", "/profile");
+                        return;
+                    }
+                    File oldPhoto = null;
+                    try {
+                        oldPhoto = new File(uploadFilePath + File.separator + imageDAO.getImage(user.getId()).getUrl());
+                    } catch (SQLException ee) {
+                        setAlert(req, resp, Alert.DANGER, "Error changing picture. Please try again.", "/profile");
+                        return;
+                    }
+                    if (!oldPhoto.delete()){
+                        setAlert(req, resp, Alert.DANGER, "Error changing picture. Please try again.", "/profile");
+                        return;
+                    }
+                    newFileName = uploadFilePath + File.separator + newFileName;
+                    try {
+                        photo.write(uploadFilePath + File.separator + newFileName);
+                    }
+                    catch (IOException e){
+                        setAlert(req, resp, Alert.DANGER, "Error changing picture. Please try again.", "/profile");
+                        return;
+                    }
+                    setAlert(req, resp, Alert.SUCCESS, "Success! Profile picture updated.", "/profile");
+                    return;
+                }
+                else{
+                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
+                }
+            }
+            else {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
                 return;
             }
