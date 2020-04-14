@@ -68,7 +68,7 @@ public class Register extends HttpServlet {
         final WebContext webContext = new WebContext(req, resp, servletContext, req.getLocale());
         Alert alert;
         if(req.getSession().getAttribute("registerResult")==null){
-            alert = new Alert(false, "", "");
+            alert = new Alert(false, Alert.DANGER, "");
         } else {
             alert = (Alert) req.getSession().getAttribute("registerResult");
         }
@@ -89,7 +89,7 @@ public class Register extends HttpServlet {
         UserDAO userDAO = new UserDAO(connection);
         Alert alert = (Alert) req.getSession().getAttribute("registerResult");
         if(!password.equals(password_cnf)){
-            setAlert(req,resp,Alert.DANGER,"Passwords do not match","/register");
+            setAlert(req,resp,Alert.DANGER,"Passwords do not match");
             return;
         }
         else if(!role.equals("manager") && !role.equals("worker")){
@@ -99,22 +99,22 @@ public class Register extends HttpServlet {
 
         try {
             if(userDAO.alreadyExists(username, email)){
-                setAlert(req,resp,Alert.DANGER,"Account already exists.","/register");
+                setAlert(req,resp,Alert.DANGER,"Account already exists.");
                 return;
             }
 
             if (!userDAO.isEmailFree(email)) {
-                setAlert(req,resp,Alert.DANGER,"This email is already in use.","/register");
+                setAlert(req,resp,Alert.DANGER,"This email is already in use.");
                 return;
             }
 
             if(!userDAO.isUsernameFree(username)){
-                setAlert(req,resp,Alert.DANGER,"This username is already in use.","/register");
+                setAlert(req,resp,Alert.DANGER,"This username is already in use.");
                 return;
             }
 
             if(!isValidMailAddress(email)){
-                setAlert(req,resp,Alert.DANGER,"Invalid mail address.","/register");
+                setAlert(req,resp,Alert.DANGER,"Invalid mail address.");
                 return;
             }
 
@@ -146,7 +146,7 @@ public class Register extends HttpServlet {
                     String savedFileName = username + "." + Parser.getFileExtension(fileName);
                     // allows only JPEG and PNG files to be uploaded
                     if (!contentType.equalsIgnoreCase("image/jpeg") && !contentType.equalsIgnoreCase("image/png")) {
-                        setAlert(req,resp,Alert.DANGER,"Wrong file type","/register");
+                        setAlert(req,resp,Alert.DANGER,"Wrong file type");
                         return;
                     }
                     part.write(uploadFilePath + File.separator + savedFileName);
@@ -158,12 +158,12 @@ public class Register extends HttpServlet {
             }
 
         } catch (SQLException e){
-            setAlert(req,resp,Alert.DANGER,"Database or SQL error" + e.getMessage(),"/register");
+            setAlert(req,resp,Alert.DANGER,"Database or SQL error" + e.getMessage());
             return;
         }
 
         // Send "Account created"
-        setAlert(req,resp,Alert.SUCCESS,"Account created successfully. Please login <a href=\"login\">here</a>","/register");
+        setAlert(req,resp,Alert.SUCCESS,"Account created successfully. Please login <a href=\"login\">here</a>");
     }
 
     @Override
@@ -177,15 +177,13 @@ public class Register extends HttpServlet {
         }
     }
 
-    void setAlert(HttpServletRequest req, HttpServletResponse resp, String alertType, String alertContent, String redirectPath) throws IOException {
-        Alert alert = (Alert) req.getSession().getAttribute("profileAlert");
+    void setAlert(HttpServletRequest req, HttpServletResponse resp, String alertType, String alertContent) throws IOException {
+        Alert alert = (Alert) req.getSession().getAttribute("registerResult");
         alert.setType(alertType);
         alert.setContent(alertContent);
         alert.show();
         alert.dismiss();
-        if (redirectPath != null){
-            resp.sendRedirect(getServletContext().getContextPath()+redirectPath);
-        }
+        resp.sendRedirect(getServletContext().getContextPath()+ "/register");
     }
 
 }
