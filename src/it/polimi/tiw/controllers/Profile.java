@@ -70,6 +70,8 @@ public class Profile extends HttpServlet {
         if(user.getRole().equals("worker")){
             //Load worker profile template
             path = "/WEB-INF/profile/workerProfile.html";
+            String applicationPath = req.getServletContext().getContextPath();
+            ctx.setVariable("imageURL", applicationPath + "/uploads/profileImages/" + user.getImageURL());
         }else if(user.getRole().equals("manager")){
             //Load manager profile templete
             path = "/WEB-INF/profile/managerProfile.html";
