@@ -281,15 +281,13 @@ public class Profile extends HttpServlet {
                     }
                     File oldPhoto = null;
                     oldPhoto = new File(uploadFilePath + File.separator + user.getImageURL());
-                    if (!oldPhoto.delete()){
-                        setAlert(req, resp, Alert.DANGER, "Error changing picture. Please try again.", "/profile");
-                        return;
-                    }
-                    newFileName = uploadFilePath + newFileName;
+                    oldPhoto.delete();
                     try {
                         photo.write(uploadFilePath + File.separator + newFileName);
+                        user.setImageURL(newFileName);
+                        userDAO.updateUser(user);
                     }
-                    catch (IOException e){
+                    catch (IOException | SQLException e){
                         setAlert(req, resp, Alert.DANGER, "Error changing picture. Please try again.", "/profile");
                         return;
                     }
