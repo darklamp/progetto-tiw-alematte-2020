@@ -59,12 +59,9 @@
                         <div class="form-group">
                             <input type="hidden" name="userId" data-th-value="${user.getId()}"/>
                             <input type="hidden" name="action" data-th-value="updatePassword"/>
-                            <label>Old password</label>
-                            <input type="password" class="form-control" name="oldPassword" required/>
-                            <label>New password</label>
-                            <input type="password" class="form-control" name="newPassword" required/>
-                            <label>Repeat new password</label>
-                            <input type="password" class="form-control" name="newPasswordCnf" required/>
+                            <input type="password" class="form-control" name="oldPassword" placeholder="Old password" required/>
+                            <input type="password" class="form-control" name="newPassword" placeholder="New password" required/>
+                            <input type="password" class="form-control" name="newPasswordCnf" placeholder="Repeat new password" required/>
                         </div>
                         <div style="text-align:center">
                             <input type="submit" class="btn btn-success" value="Update information"/>
