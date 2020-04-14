@@ -3,6 +3,7 @@ package it.polimi.tiw.controllers;
 import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
+import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
 import org.thymeleaf.TemplateEngine;
@@ -103,9 +104,11 @@ public class Gallery extends HttpServlet {
             ctx.setVariable("isImageAvailable", true);
 
         }
+        User user = (User) req.getSession().getAttribute("user");
         ctx.setVariable("context", getServletContext().getContextPath());
         ctx.setVariable("campaign", campaign);
         ctx.setVariable("images", images);
+        ctx.setVariable("user", user);
         ctx.setVariable("imagePath", imagePath+File.separator);
         ctx.setVariable("campaignAlert", req.getSession().getAttribute("campaignAlert"));
         templateEngine.process(path, ctx, resp.getWriter());

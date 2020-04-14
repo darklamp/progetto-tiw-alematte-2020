@@ -142,6 +142,9 @@ public class CampaignDetail extends HttpServlet {
         String source = req.getParameter("source");
         String region = req.getParameter("region");
         String town = req.getParameter("town");
+        if (!resolution.equals("high") && !resolution.equals("medium") && !resolution.equals("low")){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
         if(latitudeStr.isEmpty() || longitudeStr.isEmpty() || resolution.isEmpty() || source.isEmpty() || region.isEmpty() || town.isEmpty()){
             alert.setContent("Please fill all form data");
             alert.setType(Alert.DANGER);

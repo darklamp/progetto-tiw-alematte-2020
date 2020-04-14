@@ -86,6 +86,9 @@ public class ImageUploader extends HttpServlet {
             resp.sendRedirect(path);
             return;
         }
+        if (!resolution.equals("high") && !resolution.equals("medium") && !resolution.equals("low")){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
         //try parsing strings in float
         float latitude;
         float longitude;

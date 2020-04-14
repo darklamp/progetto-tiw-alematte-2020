@@ -7,7 +7,7 @@
     <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.5.0.min.js" data-th-src="@{/js/jquery-3.5.0.min.js}"></script>
+<script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
 <!--<script src="../js/gallery.js" data-th-src="@{/js/gallery.js}"></script>-->
 <div class="container">
     <div class="navbar">
@@ -23,15 +23,187 @@
             <div class="col-12">
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">Nothing to show</div>
                 <div class="gallery" data-th-each="image : ${images}">
-                    <a onclick="gallery(0);" data-th-onclick="'gallery('+${image.getId()}+');'"><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}" alt=""></a>
+                    <a onclick="openDetail(0);" data-th-onclick="'openDetail('+${image.getId()}+');'"><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}" alt=""></a>
                 </div>
             </div>
         </div>
-
     </div>
+    <div id="imageDetailModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" id="closeDetail">&times;</span>
+                <h2>Image detail</h2>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="imageModalContentForm" style="display: none"></div>
+                <div class="row" id="imageModalContent">
+                    <div class="col-6-alt">
+                        <img src="../images/test1.jpg" id="modalImage" style="width: 100%; height: auto; max-height: 600px; "/>
+                        <span style="float: right;" onclick="modifyMetadata();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="modifyImageMetadataBtnIcon"></i></span>
+                        <div class="newspaper-2">
+                            <p><strong>Date: </strong><span id="imgDate"></span></p>
+                            <p><strong>Latitude: </strong><span id="imgLatitude"></span></p>
+                            <p><strong>Longitude: </strong><span id="imgLongitude"></span></p>
+                            <p><strong>Resolution: </strong><span id="imgResolution"></span></p>
+                            <p><strong>Source: </strong><span id="imgSource"></span></p>
+                            <p><strong>Region: </strong><span id="imgRegion"></span></p>
+                            <p><strong>Town: </strong><span id="imgTown"></span></p>
+                        </div>
+
+                    </div>
+                    <div class="col-6-alt">
+                        <form class="form" method="POST" data-th-action="@{/Gallery}">
+                            <div class="form-group">
+                                <input type="hidden" name="userId" data-th-value="${user.getId()}"/>
+                                <input type="hidden" name="action" data-th-value="addAnnotation"/>
+                                <label>Valid
+                                    <select class="form-control" name="validity" required>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </label>
+                                <label>Trust
+                                    <select class="form-control" name="trust" required>
+                                        <option value="low">Low</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High</option>
+                                    </select>
+                                </label>
+                                <div class="col-12" style="text-align: center">
+                                    <textarea rows="20" cols="36" id="annotationText" name="annotationText" placeholder="Insert something.." required></textarea>
+                                </div>
+                            </div>
+                            <div style="text-align: center">
+                                <input type="submit" class="btn btn-success" value="Add annotation"/>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End image detail modal-->
+
     <div class="footer">
         <div class="footer-content">(C) <a href="https://github.com/darklamp/progetto-tiw-alematte-2020">Project TIW</a> 2020</div>
     </div>
 </div>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById("newImageModal");
+    var span = document.getElementsByClassName("close")[0];
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+</script>
+<script data-th-inline="javascript">
+    const campaignId = [[${campaign.getId()}]];
+    var detailModal = document.getElementById("imageDetailModal");
+    var closeDetail = document.getElementById("closeDetail");
+    closeDetail.onclick = function(){
+        detailModal.style.display = "none";
+    }
+
+    function openDetail(imageId){
+        detailModal.style.display = "block";
+        $.ajax({
+            type: "POST",
+            url: /*[[@{/worker/getGalleryImage}]]*/ "test",
+            data: "imageId="+imageId,
+            dataType: "json",
+            success: function (jsonContent) {
+                var jsonObject = jsonContent;
+                var imageObject = jsonObject.image;
+                //fill image fields
+                var imagePath = /*[[${imagePath}]]*/ "";
+                document.getElementById("modalImage").src = imagePath + imageObject.url;
+
+                document.getElementById("imgDate").innerText = imageObject.date;
+                document.getElementById("imgLatitude").innerText = imageObject.latitude;
+                document.getElementById("imgLongitude").innerText = imageObject.longitude;
+                document.getElementById("imgResolution").innerText = imageObject.resolution;
+                document.getElementById("imgSource").innerText = imageObject.source;
+                document.getElementById("imgRegion").innerText = imageObject.region;
+                document.getElementById("imgTown").innerText = imageObject.town;
+                generateMetadataForm(imageObject, campaignId);
+
+            },
+            error: function () {
+                alert("Error");
+            },
+            async: true,
+        });
+
+
+    }
+
+    function generateMetadataForm(imageObject, campaignId){
+        const servletPath = /*[[@{/manager/campaign}]]*/ "";
+        document.getElementById("imageModalContentForm").innerHTML = "<form class=\"form\" method=\"POST\" action=\"" + servletPath + "\">" +
+            "                    <input type=\"hidden\" name=\"campaignId\" value=\"" + campaignId + "\" />" +
+            "                    <input type=\"hidden\" name=\"imageId\" value=\"" + imageObject.id + "\" />" +
+            "                    <div class=\"form-group\">" +
+            "                        <div class=\"row\">" +
+            "                            <div class=\"col-6-alt\">" +
+            "                                <label>Latitude</label>" +
+            "                                <input type=\"text\" class=\"form-control\" name=\"latitude\" required value='" + imageObject.latitude + "'/>" +
+            "                            </div>" +
+            "                            <div class=\"col-6-alt\">" +
+            "                                <label>Longitude</label>" +
+            "                                <input type=\"text\" class=\"form-control\" name=\"longitude\" required value='" + imageObject.longitude + "'/>" +
+            "                            </div>" +
+            "                        </div>" +
+            "                    </div>" +
+            "                    <div class=\"form-group\">" +
+            "                        <div class=\"row\">" +
+            "                            <div class=\"col-6-alt\">" +
+            "                                <label>Resolution</label>" +
+            "                                <input type=\"text\" class=\"form-control\" name=\"resolution\" required value='" + imageObject.resolution + "'/>" +
+            "                            </div>" +
+            "                            <div class=\"col-6-alt\">" +
+            "                                <label>Source</label>" +
+            "                                <input type=\"text\" class=\"form-control\" name=\"source\" required value='" + imageObject.source + "'/>" +
+            "                            </div>" +
+            "                        </div>" +
+            "                    </div>" +
+            "                    <div class=\"form-group\">" +
+            "                        <div class=\"row\">" +
+            "                            <div class=\"col-6-alt\">" +
+            "                                <label>Region</label>" +
+            "                                <input type=\"text\" class=\"form-control\" name=\"region\" required value='" + imageObject.region + "'/>" +
+            "                            </div>\n" +
+            "                            <div class=\"col-6-alt\">" +
+            "                                <label>Town</label>" +
+            "                                <input type=\"text\" class=\"form-control\" name=\"town\" required value='" + imageObject.town + "'/>" +
+            "                            </div>" +
+            "                        </div>" +
+            "                    </div>" +
+            "                    <button class='btn btn-danger' onclick='endModifyMetadata()'>Cancel</button>" +
+            "                    <input type=\"submit\" class=\"btn btn-success\" value=\"Update\"/>" +
+            "                </form>";
+    }
+
+    function modifyMetadata(){
+        document.getElementById("imageModalContent").style.display = "none";
+        document.getElementById("imageModalContentForm").style.display = "block";
+    }
+
+    function endModifyMetadata(){
+        document.getElementById("imageModalContent").style.display = "block";
+        document.getElementById("imageModalContentForm").style.display = "none";
+    }
+
+</script>
+
+
 </body>
 </html>
