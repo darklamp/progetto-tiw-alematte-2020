@@ -5,6 +5,7 @@ import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
+import it.polimi.tiw.utility.Parser;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -17,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -120,6 +122,71 @@ public class CampaignDetail extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
+        ImageDAO imageDAO = new ImageDAO(connection);
+        int campaignId, imageId;
+
+        //Get all param
+        if(!req.getParameterMap().containsKey("campaignId") || !req.getParameterMap().containsKey("imageId")){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        try {
+            campaignId = Integer.parseInt(req.getParameter("campaignId"));
+            imageId = Integer.parseInt(req.getParameter("imageId"));
+        } catch (NumberFormatException e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return;
+        }
+        Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
+        Image image = new Image();
+        String path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
+        String latitudeStr = req.getParameter("latitude").replace(',', '.');
+        String longitudeStr = req.getParameter("longitude").replace(',','.');
+        String resolution = req.getParameter("resolution");
+        String source = req.getParameter("source");
+        String region = req.getParameter("region");
+        String town = req.getParameter("town");
+        if(latitudeStr.isEmpty() || longitudeStr.isEmpty() || resolution.isEmpty() || source.isEmpty() || region.isEmpty() || town.isEmpty()){
+            alert.setContent("Please fill all form data");
+            alert.setType(Alert.DANGER);
+            alert.show();
+            alert.dismiss();
+            resp.sendRedirect(path);
+            return;
+        }
+        //try parsing strings in float
+        float latitude;
+        float longitude;
+        try {
+            latitude = Float.parseFloat(latitudeStr);
+            longitude = Float.parseFloat(longitudeStr);
+        } catch (NumberFormatException e){
+            alert.setContent("NumberFormatException in latitude or longitude");
+            alert.setType(Alert.DANGER);
+            alert.show();
+            alert.dismiss();
+            resp.sendRedirect(path);
+            return;
+        }
+        image.setId(imageId);
+        image.setTown(town);
+        image.setRegion(region);
+        image.setSource(source);
+        image.setResolution(resolution);
+        image.setLongitude(longitude);
+        image.setLatitude(latitude);
+        try{
+            imageDAO.updateImageMetadata(image);
+        } catch (SQLException e){
+            alert.setContent("An error occurred while saving image");
+            alert.setType(Alert.DANGER);
+            alert.show();
+            alert.dismiss();
+            resp.sendRedirect(path);
+            return;
+        }
+
+
+        resp.sendRedirect(path);
     }
 }

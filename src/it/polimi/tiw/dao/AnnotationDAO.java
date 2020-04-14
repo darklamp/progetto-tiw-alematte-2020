@@ -69,5 +69,15 @@ public class AnnotationDAO {
         }
     }
 
+    public int getNumberOdAnnotationsInCampaign(int campaignId) throws SQLException{
+        String query ="select count(*) as 'annotationNumber' from annotation where imageId in (select imageId from imageCampaign where campaignId=?)";
 
+        try (PreparedStatement statement = connection.prepareStatement(query)){
+            statement.setInt(1,campaignId);
+            try (ResultSet result = statement.executeQuery();) {
+                result.next();
+                return result.getInt(1);
+            }
+        }
+    }
 }

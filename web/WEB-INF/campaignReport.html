@@ -2,9 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Campaign report</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}">
+    <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
 </head>
 <body>
+<script src="https://code.jquery.com/jquery-3.5.0.min.jshttps://code.jquery.com/jquery-3.5.0.min.js" data-th-src="@{https://code.jquery.com/jquery-3.5.0.min.js}"></script>
+<div class="container">
+    <div class="navbar">
+        <!--<a href="" class="disabled">Manager</a>-->
+        <a href="managerHome.html" data-th-href="@{/manager}">Home</a>
+        <a href="managerAccount.html" data-th-href="@{/profile}">Account</a>
+        <div class="navbar-right">
+            <a href="../index.html" data-th-href="@{/logout}">Logout</a>
+        </div>
+    </div>
+    <div class="page-content">
+        <h1><a href="campaignDetail.html" data-th-href="@{/manager/campaign(id=${campaign.getId()})}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left"></i></a> Report: <span data-th-text="${campaign.getName()}"></span></h1>
+        <div class="row">
+            <div class="col-12">
+                <div class="highlight">
+                   <p><strong>Campaign name: </strong><span data-th-text="${campaign.getName()}"></span></p>
+                        <p><strong>Campaign client: </strong><span data-th-text="${campaign.getClient()}"></span></p>
 
+                    <p><strong>Campaign status: </strong><span class="badge badge-warning" data-th-class="${'badge badge-' + campaign.getBadge()}" data-th-text="${campaign.getState().toUpperCase()}"></span></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Detail</h2>
+            <div class="newspaper-2">
+                <p><strong>Total images: </strong><span data-th-text="${images.size()}"></span></p>
+                <p><strong>Total annotations: </strong><span  data-th-text="${totAnnotations}"></span></p>
+                <p><strong>Average number of annotations per image: </strong><span data-th-text="${midAnnotations}"></span></p>
+                <p><strong>Total images with conflict: </strong><span data-th-text="${conflictualImages.size()}"></span></p>
+            </div>
+        </div>
+
+    </div>
+</div>
 </body>
 </html>

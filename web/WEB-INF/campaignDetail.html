@@ -139,9 +139,11 @@
                 <h2>Image detail</h2>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div class="row" id="imageModalContentForm" style="display: none"></div>
+                <div class="row" id="imageModalContent">
                     <div class="col-6-alt">
                                 <img src="../images/test1.jpg" id="modalImage" style="width: 100%; height: auto; max-height: 600px; "/>
+                                <span style="float: right;" onclick="modifyMetadata();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="modifyImageMetadataBtnIcon"></i></span>
                                 <div class="newspaper-2">
                                     <p><strong>Date: </strong><span id="imgDate"></span></p>
                                     <p><strong>Latitude: </strong><span id="imgLatitude"></span></p>
@@ -186,12 +188,13 @@
     }
     </script>
 <script data-th-inline="javascript">
-
+    const campaignId = /*[[${campaign.getId()}]]*/ "1";
     var detailModal = document.getElementById("imageDetailModal");
     var closeDetail = document.getElementById("closeDetail");
     closeDetail.onclick = function(){
         detailModal.style.display = "none";
     }
+
 
     function showForm() {
         const infoForm = document.getElementById("infoForm");
@@ -229,7 +232,7 @@
                 document.getElementById("imgSource").innerText = imageObject.source;
                 document.getElementById("imgRegion").innerText = imageObject.region;
                 document.getElementById("imgTown").innerText = imageObject.town;
-
+                generateMetadataForm(imageObject, campaignId);
                 var annotationsObject = jsonObject.annotations;
                 if(annotationsObject == 0){
                     document.getElementById("annotationsEmptyAlert").style.display="block";
@@ -269,6 +272,7 @@
 
                 }
                 document.getElementById("annotationContainer").innerHTML = annotations;
+
             },
             error: function () {
                 alert("Error");
@@ -277,6 +281,63 @@
         });
 
 
+    }
+
+    function generateMetadataForm(imageObject, campaignId){
+        const servletPath = /*[[@{/manager/campaign}]]*/ "";
+        var modalModifyContent = "<form class=\"form\" method=\"POST\" action=\""+servletPath +"\">" +
+            "                    <input type=\"hidden\" name=\"campaignId\" value=\""+campaignId+"\" />" +
+            "                    <input type=\"hidden\" name=\"imageId\" value=\""+imageObject.id+"\" />" +
+            "                    <div class=\"form-group\">" +
+            "                        <div class=\"row\">" +
+            "                            <div class=\"col-6-alt\">" +
+            "                                <label>Latitude</label>" +
+            "                                <input type=\"text\" class=\"form-control\" name=\"latitude\" required value='"+imageObject.latitude+"'/>" +
+            "                            </div>" +
+            "                            <div class=\"col-6-alt\">" +
+            "                                <label>Longitude</label>" +
+            "                                <input type=\"text\" class=\"form-control\" name=\"longitude\" required value='"+imageObject.longitude+"'/>" +
+            "                            </div>" +
+            "                        </div>" +
+            "                    </div>" +
+            "                    <div class=\"form-group\">" +
+            "                        <div class=\"row\">" +
+            "                            <div class=\"col-6-alt\">" +
+            "                                <label>Resolution</label>" +
+            "                                <input type=\"text\" class=\"form-control\" name=\"resolution\" required value='"+imageObject.resolution+"'/>" +
+            "                            </div>" +
+            "                            <div class=\"col-6-alt\">" +
+            "                                <label>Source</label>" +
+            "                                <input type=\"text\" class=\"form-control\" name=\"source\" required value='"+imageObject.source+"'/>" +
+            "                            </div>" +
+            "                        </div>" +
+            "                    </div>" +
+            "                    <div class=\"form-group\">" +
+            "                        <div class=\"row\">" +
+            "                            <div class=\"col-6-alt\">" +
+            "                                <label>Region</label>" +
+            "                                <input type=\"text\" class=\"form-control\" name=\"region\" required value='"+imageObject.region+"'/>" +
+            "                            </div>\n" +
+            "                            <div class=\"col-6-alt\">" +
+            "                                <label>Town</label>" +
+            "                                <input type=\"text\" class=\"form-control\" name=\"town\" required value='"+imageObject.town+"'/>" +
+            "                            </div>" +
+            "                        </div>" +
+            "                    </div>" +
+            "                    <button class='btn btn-danger' onclick='endModifyMetadata()'>Cancel</button>"+
+            "                    <input type=\"submit\" class=\"btn btn-success\" value=\"Update\"/>" +
+            "                </form>";
+        document.getElementById("imageModalContentForm").innerHTML = modalModifyContent;
+    }
+
+    function modifyMetadata(){
+        document.getElementById("imageModalContent").style.display = "none";
+        document.getElementById("imageModalContentForm").style.display = "block";
+    }
+
+    function endModifyMetadata(){
+        document.getElementById("imageModalContent").style.display = "block";
+        document.getElementById("imageModalContentForm").style.display = "none";
     }
 
 </script>
