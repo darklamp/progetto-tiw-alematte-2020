@@ -183,8 +183,14 @@ public class Register extends HttpServlet {
 
     void setAlert(HttpServletRequest req, HttpServletResponse resp, String alertType, String alertContent) throws IOException {
         Alert alert = (Alert) req.getSession().getAttribute("registerResult");
-        alert.setType(alertType);
-        alert.setContent(alertContent);
+        if (alert == null) {
+            alert = new Alert(false, Alert.DANGER, alertContent);
+            req.getSession().setAttribute("registerResult", alert);
+        }
+        else {
+            alert.setType(alertType);
+            alert.setContent(alertContent);
+        }
         alert.show();
         alert.dismiss();
         resp.sendRedirect(getServletContext().getContextPath()+ "/register");
