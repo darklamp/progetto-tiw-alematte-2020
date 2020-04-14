@@ -3,7 +3,7 @@ package it.polimi.tiw.controllers;
 import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.ImageDAO;
-import it.polimi.tiw.utility.Parser;
+import it.polimi.tiw.utility.Utility;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -116,7 +116,7 @@ public class ImageUploader extends HttpServlet {
         }
         String fileName = part.getSubmittedFileName();
         String contentType = part.getContentType();
-        String savedFileName = "campaign"+ campaignId + "_" + "image" + (lastImageIndex+1) + "." + Parser.getFileExtension(fileName);
+        String savedFileName = "campaign"+ campaignId + "_" + "image" + (lastImageIndex+1) + "." + Utility.getFileExtension(fileName);
         // allows only JPEG and PNG files to be uploaded
         if (!contentType.equalsIgnoreCase("image/jpeg") && !contentType.equalsIgnoreCase("image/png")) {
             alert.setType(Alert.DANGER);

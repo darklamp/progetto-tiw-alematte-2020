@@ -21,7 +21,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
 
-import static it.polimi.tiw.utility.Parser.isValidMailAddress;
+import static it.polimi.tiw.utility.Utility.isValidMailAddress;
 
 @WebServlet("/profile")
 public class Profile extends HttpServlet {

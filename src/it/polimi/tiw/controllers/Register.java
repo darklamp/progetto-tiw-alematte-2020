@@ -2,7 +2,7 @@ package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.dao.UserDAO;
-import it.polimi.tiw.utility.Parser;
+import it.polimi.tiw.utility.Utility;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -23,7 +23,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static it.polimi.tiw.utility.Parser.isValidMailAddress;
+import static it.polimi.tiw.utility.Utility.isValidMailAddress;
 
 @WebServlet("/register")
 @MultipartConfig(fileSizeThreshold = 6291456, // 6 MB
@@ -145,7 +145,7 @@ public class Register extends HttpServlet {
                     //File exists
                     String fileName = part.getSubmittedFileName();
                     String contentType = part.getContentType();
-                    String savedFileName = username + "." + Parser.getFileExtension(fileName);
+                    String savedFileName = username + "." + Utility.getFileExtension(fileName);
                     // allows only JPEG and PNG files to be uploaded
                     if (!contentType.equalsIgnoreCase("image/jpeg") && !contentType.equalsIgnoreCase("image/png")) {
                         setAlert(req,resp,Alert.DANGER,"Wrong file type");
