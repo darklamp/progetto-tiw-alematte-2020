@@ -136,7 +136,9 @@ public class Register extends HttpServlet {
                 // creates upload folder if it does not exists
                 File uploadFolder = new File(uploadFilePath);
                 if (!uploadFolder.exists()) {
-                    uploadFolder.mkdirs();
+                    if (!uploadFolder.mkdirs()){
+                        resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error uploading the image. Please try again.");
+                    }
                 }
                 Part part = req.getPart("photo");
                 if(part != null && part.getSize()>0){
@@ -152,7 +154,9 @@ public class Register extends HttpServlet {
                     part.write(uploadFilePath + File.separator + savedFileName);
                     userDAO.addWorkerUser(username, email, password, role, experience, savedFileName);
                 } else {
-                    userDAO.addWorkerUser(username, email, password, role, experience, null);
+                    //userDAO.addWorkerUser(username, email, password, role, experience, null);
+                    setAlert(req,resp,Alert.DANGER,"Please upload an image.");
+                    return;
                 }
 
             }
@@ -173,7 +177,7 @@ public class Register extends HttpServlet {
             if (connection != null) {
                 connection.close();
             }
-        } catch (SQLException sqle) {
+        } catch (SQLException ignored) {
         }
     }
 
