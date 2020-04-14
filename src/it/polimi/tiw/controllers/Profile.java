@@ -215,7 +215,7 @@ public class Profile extends HttpServlet {
                     String oldImageURL = user.getImageURL();
                     String newImageURL = user.getUsername() + File.separator + Utility.getFileExtension(oldImageURL);
                     String applicationPath = req.getServletContext().getRealPath("");
-                    String uploadFilePath = applicationPath + File.separator + "uploads/profileImages";
+                    String uploadFilePath = applicationPath + "uploads/profileImages";
                     File oldImage = new File(uploadFilePath + File.separator + oldImageURL);
                     if (!oldImage.renameTo(new File(uploadFilePath + File.separator + newImageURL))){
                         setAlert(req, resp, Alert.DANGER, "Error changing data. Please try again.", "/profile");
@@ -270,7 +270,7 @@ public class Profile extends HttpServlet {
                 Part photo = req.getPart("photo");
                 if(photo != null && photo.getSize()>0) {
                     String applicationPath = req.getServletContext().getRealPath("");
-                    String uploadFilePath = applicationPath + File.separator + "uploads/profileImages";
+                    String uploadFilePath = applicationPath + "uploads/profileImages";
                     String fileName = photo.getSubmittedFileName();
                     String contentType = photo.getContentType();
                     String newFileName = user.getUsername() + "." + Utility.getFileExtension(fileName);
@@ -280,17 +280,12 @@ public class Profile extends HttpServlet {
                         return;
                     }
                     File oldPhoto = null;
-                    try {
-                        oldPhoto = new File(uploadFilePath + File.separator + imageDAO.getImage(user.getId()).getUrl());
-                    } catch (SQLException ee) {
-                        setAlert(req, resp, Alert.DANGER, "Error changing picture. Please try again.", "/profile");
-                        return;
-                    }
+                    oldPhoto = new File(uploadFilePath + File.separator + user.getImageURL());
                     if (!oldPhoto.delete()){
                         setAlert(req, resp, Alert.DANGER, "Error changing picture. Please try again.", "/profile");
                         return;
                     }
-                    newFileName = uploadFilePath + File.separator + newFileName;
+                    newFileName = uploadFilePath + newFileName;
                     try {
                         photo.write(uploadFilePath + File.separator + newFileName);
                     }
