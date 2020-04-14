@@ -2,11 +2,8 @@ package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.Image;
-import it.polimi.tiw.beans.User;
-import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
 import it.polimi.tiw.utility.Parser;
-import org.thymeleaf.TemplateEngine;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -107,7 +104,7 @@ public class ImageUploader extends HttpServlet {
         //File exists
         int lastImageIndex;
         try{
-            lastImageIndex = imageDAO.getLastImageIndex(campaignId);
+            lastImageIndex = imageDAO.getImagesNumber(campaignId);
         } catch (SQLException e){
             System.out.println("SQL Exeption on getting image index");
             alert.setContent("SQL error");

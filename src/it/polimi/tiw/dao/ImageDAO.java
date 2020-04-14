@@ -41,7 +41,7 @@ public class ImageDAO {
         }
     }
 
-    public int getLastImageIndex(int campaignId) throws SQLException{
+    public int getImagesNumber(int campaignId) throws SQLException{
         int index = 0;
         String query = "SELECT count(*) AS 'lastindex' FROM imageCampaign WHERE campaignId=?";
         try (PreparedStatement statement = connection.prepareStatement(query)){
@@ -106,5 +106,35 @@ public class ImageDAO {
         }
 
     }
+
+    public void updateImageMetadata(Image image) throws SQLException{
+        String query = "UPDATE image SET latitude=?, longitude=?, resolution=?, source=?, region=?, town=? WHERE id=?";
+        try (PreparedStatement statement = connection.prepareStatement(query)){
+            statement.setFloat(1,image.getLatitude());
+            statement.setFloat(2,image.getLongitude());
+            statement.setString(3, image.getResolution());
+            statement.setString(4, image.getSource());
+            statement.setString(5, image.getRegion());
+            statement.setString(6, image.getTown());
+            statement.setInt(7, image.getId());
+            statement.executeUpdate();
+        }
+    }
+
+    public List<Integer> getConflictualCampaignImages(int campaignId) throws SQLException{
+        String query = "select imageId from imageCampaign where campaignId= ? and imageId in (select imageId from annotation where validity=1) and imageId in (select imageId from annotation where validity=0) group by imageId";
+        List<Integer> results = new ArrayList<>();
+        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+            pstatement.setInt(1, campaignId);
+            try (ResultSet result = pstatement.executeQuery();) {
+                    while(result.next()) {
+                        int imageId = result.getInt("imageId");
+                        results.add(imageId);
+                    }
+                    return results;
+            }
+        }
+    }
+
 
 }
