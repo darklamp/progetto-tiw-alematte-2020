@@ -4,8 +4,10 @@ import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.beans.User;
+import it.polimi.tiw.dao.AnnotationDAO;
 import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
+import it.polimi.tiw.dao.UserDAO;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -23,10 +25,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @WebServlet("/worker/campaign/*")
 public class Gallery extends HttpServlet {
@@ -117,6 +118,64 @@ public class Gallery extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
+        if(!req.getParameterMap().containsKey("userId") || req.getParameter("userId").isEmpty()){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        int userId;
+        try {
+            userId = Integer.parseInt(req.getParameter("userId"));
+        } catch (NumberFormatException e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return;
+        }
+        List<Image> images = (List<Image>) req.getSession().getAttribute("images");
+        User user = (User)req.getSession().getAttribute("user");
+        if(user.getId()!=userId){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user");
+            return;
+        }
+        UserDAO userDAO = new UserDAO(connection);
+        ImageDAO imageDAO = new ImageDAO(connection);
+
+        if (!user.getRole().equals("worker")){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        String validity = req.getParameter("validity");
+        String trust = req.getParameter("trust");
+        int imageID = 0;
+        try{
+            imageID = Integer.parseInt(req.getParameter("imageId"));
+        }
+        catch (NumberFormatException e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        try {
+            if (!images.contains(imageDAO.getImage(imageID))){
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        }
+        catch (SQLException e){
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+
+        if (!validity.equals("true") && !validity.equals("false")){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        if (!trust.equals("high") && !trust.equals("medium") && !trust.equals("low")){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+
+        String note = req.getParameter("annotationText");
+        int validityToInt = 0;
+        if (validity.equals("true")){
+            validityToInt = 1;
+        }
+        if (note.length() > 1000){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        AnnotationDAO annotationDAO = new AnnotationDAO(connection);
+        annotationDAO.createAnnotation(userId,imageID,validityToInt,trust,note);
     }
 }
