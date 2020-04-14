@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Worker Homepage</title>
+    <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}">
 </head>
 <body>
@@ -52,7 +53,7 @@
                         <td data-th-text="${c.getName()}"></td>
                         <td data-th-text="${c.getClient()}"></td>
                         <td><p class="badge badge-warning" data-th-class="${'badge badge-' + c.getBadge()}" data-th-text="${c.getState().toUpperCase()}"></p></td>
-                        <td><a href="campaignDetail.html" data-th-href="@{/manager/campaign(id=${c.getId()})}" class="btn btn-outline-primary"><i class="fas fa-search"></i></i></a></td>
+                        <td><a href="campaignDetail.html" data-th-href="@{/manager/campaign(id=${c.getId()})}" class="btn btn-outline-primary"><i class="fas fa-eye"></i></i></a></td>
                     </tr>
                     </tbody>
                 </table>

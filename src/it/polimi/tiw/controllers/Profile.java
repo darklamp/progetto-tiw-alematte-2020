@@ -3,6 +3,7 @@ package it.polimi.tiw.controllers;
 import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.UserDAO;
+import it.polimi.tiw.utility.Utility;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -15,6 +16,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -87,7 +90,6 @@ public class Profile extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       //Update information and then resp.sendRedirect(getServletContext().getContextPath()+"/profile");
         if(!req.getParameterMap().containsKey("action") || !req.getParameterMap().containsKey("userId") || req.getParameter("action").isEmpty() || req.getParameter("userId").isEmpty()){
            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
            return;
@@ -100,7 +102,6 @@ public class Profile extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
-        //If someone chenge userId in request
         User user = (User)req.getSession().getAttribute("user");
         if(user.getId()!=userId){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user");
@@ -127,7 +128,7 @@ public class Profile extends HttpServlet {
                         user.setUsername(username);
                         userDAO.updateUser(user);
                     } else {
-                        setAlert(req,resp,Alert.DANGER,"Username or Email already used by an other user.","/profile");
+                        setAlert(req,resp,Alert.DANGER,"Username or Email already in use.","/profile");
                         return;
                     }
                 } catch (SQLException e){
@@ -184,26 +185,48 @@ public class Profile extends HttpServlet {
             if(action.equals("updateData")){
                 String username = req.getParameter("username");
                 String email = req.getParameter("email");
+                String experience = req.getParameter("experience");
+                Part photo = req.getPart("photo");
+                boolean modified = false;
                 //Invalid param -> impossible from a webpage
                 if(username.isEmpty() || email.isEmpty()){
                     resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid param");
                     return;
                 }
                 try{
+                    if(!experience.equals("low") && !experience.equals("medium") && !experience.equals("high")){
+                        resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid experience");
+                        return;
+                    }
+
                     if((userDAO.isUsernameFree(username) || username.equals(user.getUsername())) && (userDAO.isEmailFree(email) || email.equals(user.getEmail()))){
                         if (!isValidMailAddress(email)){
                             setAlert(req,resp,Alert.DANGER,"Invalid mail address.","/profile");
                             return;
                         }
-                        else {
-                            user.setEmail(email);
-                            user.setUsername(username);
-                            userDAO.updateUser(user);
-                        }
                     } else {
                         setAlert(req,resp,Alert.DANGER,"Username or Email already used by an other user","/profile");
                         return;
                     }
+
+                    if(photo != null && photo.getSize()>0){
+                        String applicationPath = req.getServletContext().getRealPath("");
+                        String uploadFilePath = applicationPath + File.separator + "uploads/profileImages";
+                        String fileName = photo.getSubmittedFileName();
+                        String contentType = photo.getContentType();
+                        String savedFileName = username + "." + Utility.getFileExtension(fileName);
+                        // allows only JPEG and PNG files to be uploaded
+                        if (!contentType.equalsIgnoreCase("image/jpeg") && !contentType.equalsIgnoreCase("image/png")) {
+                            setAlert(req,resp,Alert.DANGER,"Wrong file type","/profile");
+                            return;
+                        }
+                        photo.write(uploadFilePath + File.separator + savedFileName);
+                    }
+                    user.setEmail(email);
+                    user.setUsername(username);
+                    user.setLevel(experience);
+                    userDAO.updateUser(user);
+
                 } catch (SQLException e){
                     resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SQL query error");
                     return;

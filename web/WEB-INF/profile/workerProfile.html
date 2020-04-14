@@ -31,16 +31,25 @@
                         <p>Role: <span class="badge badge-success">Worker</span></p>
                     </div>
                     <div id="infoForm" style="display: none;">
-                        <form class="form" method="POST" data-th-action="@{/profile}">
+                        <form class="form" method="POST" data-th-action="@{/profile}" enctype="multipart/form-data">
                             <div class="form-group">
-                                <input type="hidden" name="userId" data-th-value="${user.getId()}"/>
-                                <input type="hidden" name="action" data-th-value="updateData"/>
                                 <label>Username</label>
                                 <input type="text" class="form-control" name="username" data-th-value="${user.getUsername()}" required/>
                                 <label>E-Mail</label>
                                 <input type="email" class="form-control" name="email" data-th-value="${user.getEmail()}" required/>
+                                <label>Experience</label>
+                                <select class="form-control" name="experience" data-th-value="${user.getLevel()}" required>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                                <label>Image</label>
+                                <input type="file" name="photo" class="form-control"/>                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="userId" data-th-value="${user.getId()}"/>
+                                <input type="hidden" name="action" data-th-value="updateData"/>
                             </div>
-                            <input type="submit" class="btn btn-success" value="Update information"/>
+                                <input type="submit" class="btn btn-success" value="Update information"/>
                         </form>
                     </div>
                 </div>
