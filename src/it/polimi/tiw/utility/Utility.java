@@ -2,7 +2,7 @@ package it.polimi.tiw.utility;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
-public class Parser {
+public class Utility {
     public static String getFileExtension(String fileName){
         if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
             return fileName.substring(fileName.lastIndexOf(".")+1);
