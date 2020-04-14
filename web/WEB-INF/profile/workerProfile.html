@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-12 mx-auto">
                 <div class="col-4">
-                    <img src="/images/test1.jpg" data-th-src="${user.getImageURL() != null} ? ${user.getImageURL()} : ${@/images/test1.jpg}" alt="Profile Image">
+                    <img src="/images/test1.jpg" data-th-src="${imageURL != null} ? ${imageURL} : ${../../images/test1.jpg}" alt="Profile Image">
                 </div>
                 <div class="col-4">
                     <h2>Your information <span onclick="showForm();"><i class="fas fa-pencil-alt" id="modifyProfileIcon"></i></span></h2>
