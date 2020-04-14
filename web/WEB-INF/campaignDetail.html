@@ -7,7 +7,7 @@
     <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.5.0.min.jshttps://code.jquery.com/jquery-3.5.0.min.js" data-th-src="@{https://code.jquery.com/jquery-3.5.0.min.js}"></script>
+<script src="https://code.jquery.com/jquery-3.5.0.min.js" data-th-src="@{https://code.jquery.com/jquery-3.5.0.min.js}"></script>
 <div class="container">
     <div class="navbar">
         <!--<a href="" class="disabled">Manager</a>-->
@@ -103,8 +103,13 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-6-alt">
-                                <label>Resolution</label>
-                                <input type="text" class="form-control" name="resolution" required/>
+                                <label>Resolution
+                                    <select class="form-control" name="resolution" required>
+                                        <option value="low">Low</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High</option>
+                                    </select>
+                                </label>
                             </div>
                             <div class="col-6-alt">
                                 <label>Source</label>
