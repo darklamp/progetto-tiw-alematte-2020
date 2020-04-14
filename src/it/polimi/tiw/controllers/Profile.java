@@ -259,7 +259,7 @@ public class Profile extends HttpServlet {
             if (connection != null) {
                 connection.close();
             }
-        } catch (SQLException sqle) {
+        } catch (SQLException ignored) {
         }
     }
 

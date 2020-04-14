@@ -19,12 +19,16 @@
         <h1 style="text-align:center" data-th-text="${user.getUsername() + '\'s' + ' profile' }">Your Profile</h1>
         <div class="row"><div class="col-12"><div class="alert alert-danger" data-th-class="${'alert alert-' + profileAlert.getType()}" data-th-if="${profileAlert.isVisible()}" data-th-utext="${profileAlert.getContent()}">General error</div></div></div>
         <div class="row">
-            <div class="col-8">
-                <div class="col-10 mx-auto">
+            <div class="col-12 mx-auto">
+                <div class="col-4">
+                    <img src="/images/test1.jpg" data-th-src="${user.getImageURL() != null} ? ${user.getImageURL()} : ${@/images/test1.jpg}" alt="Profile Image">
+                </div>
+                <div class="col-4">
                     <h2>Your information <span onclick="showForm();"><i class="fas fa-pencil-alt" id="modifyProfileIcon"></i></span></h2>
                     <div id="infoText">
                         <p>Username: <span data-th-text="${user.getUsername()}"></span></p>
                         <p>E-Mail: <span data-th-text="${user.getEmail()}"></span></p>
+                        <p>Experience level: <span data-th-text="${user.getLevel()}"></span></p>
                         <p>Role: <span class="badge badge-success">Worker</span></p>
                     </div>
                     <div id="infoForm" style="display: none;">
@@ -41,24 +45,24 @@
                         </form>
                     </div>
                 </div>
-            </div>
-            <div class="col-4">
-                <h2 style="text-align:center">Update your password</h2>
-                <form class="form" method="POST" data-th-action="@{/profile}">
-                    <div class="form-group">
-                        <input type="hidden" name="userId" data-th-value="${user.getId()}"/>
-                        <input type="hidden" name="action" data-th-value="updatePassword"/>
-                        <label>Old password</label>
-                        <input type="password" class="form-control" name="oldPassword" required/>
-                        <label>New password</label>
-                        <input type="password" class="form-control" name="newPassword" required/>
-                        <label>Repeat new password</label>
-                        <input type="password" class="form-control" name="newPasswordCnf" required/>
-                    </div>
-                    <div style="text-align:center">
-                        <input type="submit" class="btn btn-success" value="Update information"/>
-                    </div>
-                </form>
+                <div class="col-4">
+                    <h2 style="text-align:center">Update your password</h2>
+                    <form class="form" method="POST" data-th-action="@{/profile}">
+                        <div class="form-group">
+                            <input type="hidden" name="userId" data-th-value="${user.getId()}"/>
+                            <input type="hidden" name="action" data-th-value="updatePassword"/>
+                            <label>Old password</label>
+                            <input type="password" class="form-control" name="oldPassword" required/>
+                            <label>New password</label>
+                            <input type="password" class="form-control" name="newPassword" required/>
+                            <label>Repeat new password</label>
+                            <input type="password" class="form-control" name="newPasswordCnf" required/>
+                        </div>
+                        <div style="text-align:center">
+                            <input type="submit" class="btn btn-success" value="Update information"/>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
