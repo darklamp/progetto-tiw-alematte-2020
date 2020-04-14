@@ -1,6 +1,7 @@
 package it.polimi.tiw.dao;
 
 import it.polimi.tiw.beans.Image;
+import it.polimi.tiw.beans.User;
 
 import java.sql.*;
 import java.util.ArrayList;
