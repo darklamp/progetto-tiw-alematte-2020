@@ -7,7 +7,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AnnotationDAO {
@@ -17,8 +20,30 @@ public class AnnotationDAO {
         this.connection = connection;
     }
 
-    public void createAnnotation(int workerId, int imageId, int validity, String trust, String note){
-
+    public void createAnnotation(int workerId, int imageId, int validity, String trust, String note) throws SQLException {
+        String query = "INSERT INTO annotation (workerId, imageId, date, validity, trust, note) values (?,?,NOW(),?,?,?)";
+        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+            pstatement.setInt(1, workerId);
+            pstatement.setInt(2, imageId);
+            pstatement.setInt(3, validity);
+            pstatement.setString(4, trust);
+            pstatement.setString(5, note);
+            try (ResultSet result = pstatement.executeQuery();) {
+                if (!result.isBeforeFirst()) // no results
+                    return null;
+                else {
+                    result.next();
+                    Annotation annotation = new Annotation();
+                    annotation.setWorkerId(workerId);
+                    annotation.setImageId(imageId);
+                    annotation.setDate(result.getDate("date"));
+                    annotation.setValidity(result.getInt("validity"));
+                    annotation.setTrust(result.getString("trust"));
+                    annotation.setNote(result.getString("note"));
+                    return annotation;
+                }
+            }
+        }
     }
 
     public Annotation getAnnotation(int workerId, int imageId) throws SQLException {

@@ -53,10 +53,10 @@
 
                     </div>
                     <div class="col-6-alt">
-                        <form class="form" method="POST" data-th-action="@{/Gallery}">
+                        <form class="form" method="POST" data-th-action="@{/worker/campaign}">
                             <div class="form-group">
                                 <input type="hidden" name="userId" data-th-value="${user.getId()}"/>
-                                <input type="hidden" name="action" data-th-value="addAnnotation"/>
+                                <input type="hidden" name="imageId" data-th-value="${param.id}"/>
                                 <label>Valid
                                     <select class="form-control" name="validity" required>
                                         <option value="true">Yes</option>
