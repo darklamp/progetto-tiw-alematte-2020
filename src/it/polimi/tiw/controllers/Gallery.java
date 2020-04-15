@@ -165,10 +165,10 @@ public class Gallery extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-        /*if (!Utility.containsId(images, imageID)){
+        if (!Utility.containsId(images, imageID)){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
-        }*/
+        }
 
         if (!validity.equals("true") && !validity.equals("false")){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
