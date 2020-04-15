@@ -5,20 +5,24 @@
          version="4.0">
     ***REMOVED***
     ***REMOVED***
-        <param-value>jdbc:mysql://192.168.1.124:3306/TIWProject?serverTimezone=UTC</param-value>
+        <param-value>jdbc:mysql://127.0.0.1:3306/db_prog_tiw?serverTimezone=Europe/Berlin</param-value>
     ***REMOVED***
     ***REMOVED***
     ***REMOVED***
+        <param-value>user_db_tecweb</param-value>
     ***REMOVED***
     ***REMOVED***
     ***REMOVED***
-    ***REMOVED***
-    ***REMOVED***
+        <param-value></param-value>
     ***REMOVED***
     ***REMOVED***
         <param-name>dbDriver</param-name>
         <param-value>com.mysql.cj.jdbc.Driver</param-value>
     ***REMOVED***
+    <filter>
+        <filter-name>CookieChecker</filter-name>
+        <filter-class>it.polimi.tiw.filters.CookieChecker</filter-class>
+    </filter>
     <filter>
         <filter-name>Checker</filter-name>
         <filter-class>it.polimi.tiw.filters.Checker</filter-class>
@@ -31,6 +35,12 @@
         <filter-name>WorkerChecker</filter-name>
         <filter-class>it.polimi.tiw.filters.WorkerChecker</filter-class>
     </filter>
+    <filter-mapping>
+        <filter-name>CookieChecker</filter-name>
+        <url-pattern>/</url-pattern>
+        <url-pattern>/login</url-pattern>
+        <url-pattern>/register</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>Checker</filter-name>
         <url-pattern>/manager</url-pattern>
