@@ -51,10 +51,10 @@
                                 <input type="email" class="form-control" name="email" data-th-value="${user.getEmail()}" required/>
                                 <label>Experience</label>
                                 <select class="form-control" name="experience" required>
-                                    <option value="" data-th-value="${user.getLevel()}" selected disabled hidden>Choose here</option>
-                                    <option value="low">Low</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="high">High</option>
+                                    <!--<option value="" data-th-value="${user.getLevel()}" selected disabled hidden>Choose here</option>-->
+                                    <option value="low" data-th-selected="${user.getLevel()=='low'}">Low</option>
+                                    <option value="medium" data-th-selected="${user.getLevel()=='medium'}">Medium</option>
+                                    <option value="high" data-th-selected="${user.getLevel()=='high'}">High</option>
                                 </select>
                             </div>
                                 <input type="submit" class="btn btn-success" value="Update information"/>
