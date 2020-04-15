@@ -1,11 +1,10 @@
 package it.polimi.tiw.dao;
 
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.NoSuchElementException;
@@ -17,6 +16,7 @@ import it.polimi.tiw.utility.Crypto;
 import org.thymeleaf.model.IStandaloneElementTag;
 
 import javax.servlet.http.Cookie;
+import javax.swing.text.DateFormatter;
 
 import static de.mkammerer.argon2.Argon2Factory.*;
 
@@ -66,6 +66,21 @@ public class UserDAO {
             statement.setString(1, hashedValue);
             statement.setInt(2, u.getId());
             statement.executeUpdate();
+        }
+    }
+
+    public void deleteCookie(User user){
+        int id = user.getId();
+        Date fakeDate = new Date(1);
+        String date = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(fakeDate);
+
+        String query = "UPDATE user SET authcookie=?,cookietime=? WHERE id=?";
+        try (PreparedStatement statement = con.prepareStatement(query);){
+            statement.setNull(1, Types.VARCHAR);
+            statement.setString(2, date);
+            statement.setInt(3, id);
+            statement.executeUpdate();
+        } catch (SQLException ignored) {
         }
     }
 
