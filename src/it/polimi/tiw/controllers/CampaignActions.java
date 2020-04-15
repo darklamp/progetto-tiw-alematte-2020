@@ -84,7 +84,8 @@ public class CampaignActions extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Campaign campaign;
-        if(!req.getParameterMap().containsKey("campaignId")){
+        Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
+        if(!req.getParameterMap().containsKey("campaignId") && !req.getParameterMap().containsKey("viewMode")){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } else {
             int campaignId;
@@ -94,6 +95,17 @@ public class CampaignActions extends HttpServlet {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
+
+            String path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
+            if(req.getParameter("viewMode")==null) {
+                path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
+            }else if(req.getParameter("viewMode").equals("grid")) {
+                path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
+            }else if(req.getParameter("viewModa").equals("maps")){
+                path = getServletContext().getContextPath() + "/manager/campaign/maps?id="+campaignId;
+            }
+
+
             try{
                 campaign = campaignDAO.getCampaignById(campaignId);
             } catch (SQLException e){
@@ -109,7 +121,7 @@ public class CampaignActions extends HttpServlet {
             if(action.equals("modifyData")){
                 String name = req.getParameter("campaignName");
                 String client = req.getParameter("campaignClient");
-                Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
+
                 if(!name.isEmpty() && !client.isEmpty()){
                     try{
                         if(campaignDAO.inNameFree(name) || name.equals(campaign.getName())){
@@ -119,7 +131,7 @@ public class CampaignActions extends HttpServlet {
                             alert.setType(Alert.DANGER);
                             alert.show();
                             alert.dismiss();
-                            resp.sendRedirect(getServletContext().getContextPath() + "/manager/campaign?id="+campaignId);
+                            resp.sendRedirect(path);
                             return;
                         }
                     } catch (SQLException e){
@@ -135,8 +147,7 @@ public class CampaignActions extends HttpServlet {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
-
-            resp.sendRedirect(getServletContext().getContextPath() + "/manager/campaign?id="+campaignId);
+            resp.sendRedirect(path);
         }
     }
 

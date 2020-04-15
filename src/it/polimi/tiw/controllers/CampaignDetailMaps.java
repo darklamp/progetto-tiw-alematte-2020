@@ -5,7 +5,6 @@ import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
-import it.polimi.tiw.utility.Utility;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -26,9 +25,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/manager/campaign")
-public class CampaignDetail extends HttpServlet {
-
+@WebServlet("/manager/campaign/maps")
+public class CampaignDetailMaps extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
     private TemplateEngine templateEngine;
@@ -68,8 +66,8 @@ public class CampaignDetail extends HttpServlet {
         }
         Alert campaignAlert;
         if(req.getSession().getAttribute("campaignAlert")==null){
-           campaignAlert = new Alert(false, Alert.DANGER, "");
-           req.getSession().setAttribute("campaignAlert", campaignAlert);
+            campaignAlert = new Alert(false, Alert.DANGER, "");
+            req.getSession().setAttribute("campaignAlert", campaignAlert);
         } else {
             campaignAlert = (Alert) req.getSession().getAttribute("campaignAlert");
         }
@@ -81,7 +79,7 @@ public class CampaignDetail extends HttpServlet {
             uploadFolder.mkdirs();
         }
 
-        String path = "/WEB-INF/campaignDetail.html";
+        String path = "/WEB-INF/campaignDetailMaps.html";
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
 
@@ -136,7 +134,7 @@ public class CampaignDetail extends HttpServlet {
         }
         Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
         Image image = new Image();
-        String path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
+        String path = getServletContext().getContextPath() + "/manager/campaign/maps?id="+campaignId;
         String latitudeStr = req.getParameter("latitude").replace(',', '.');
         String longitudeStr = req.getParameter("longitude").replace(',','.');
         String resolution = req.getParameter("resolution");
@@ -148,7 +146,7 @@ public class CampaignDetail extends HttpServlet {
             return;
         }
         if(latitudeStr.isEmpty() || longitudeStr.isEmpty() || source.isEmpty() || region.isEmpty() || town.isEmpty()){
-           alert.setContent("Please fill all form data");
+            alert.setContent("Please fill all form data");
             alert.setType(Alert.DANGER);
             alert.show();
             alert.dismiss();
