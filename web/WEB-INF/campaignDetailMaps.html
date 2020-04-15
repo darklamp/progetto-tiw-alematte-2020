@@ -54,10 +54,8 @@
         <div class="row">
             <div class="col-8">
                 <h2>Campaign images</h2>
-                <div class="alert alert-primary" data-th-if="${not isImageAvailable}">Nothing to show</div>
-                <div class="gallery" data-th-each="image : ${images}">
-                    <a onclick="openDetail(0);" data-th-onclick="'openDetail('+${image.getId()}+');'"><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}" alt=""></a>
-                </div>
+                <div class="alert alert-primary" data-th-if="${not isImageAvailable}">No images</div>
+                <!-- Insert map here, use showDetail(imageId) to open modal -->
 
             </div>
             <div class="col-4">
