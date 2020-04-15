@@ -233,7 +233,7 @@
                 document.getElementById("imgDate").innerText = imageObject.date;
                 document.getElementById("imgLatitude").innerText = imageObject.latitude;
                 document.getElementById("imgLongitude").innerText = imageObject.longitude;
-                document.getElementById("imgResolution").innerText = imageObject.resolution;
+                document.getElementById("imgResolution").innerText = imageObject.resolution.toUpperCase();
                 document.getElementById("imgSource").innerText = imageObject.source;
                 document.getElementById("imgRegion").innerText = imageObject.region;
                 document.getElementById("imgTown").innerText = imageObject.town;
@@ -309,7 +309,15 @@
             "                        <div class=\"row\">" +
             "                            <div class=\"col-6-alt\">" +
             "                                <label>Resolution</label>" +
-            "                                <input type=\"text\" class=\"form-control\" name=\"resolution\" required value='"+imageObject.resolution+"'/>" +
+            "                                <select class=\"form-control\" name=\"resolution\" required>";
+            if(imageObject.resolution === "low"){
+                modalModifyContent += "<option value=\"low\" selected>Low</option><option value=\"medium\">Medium</option><option value=\"high\">High</option>";
+            } else if(imageObject.resolution === "medium"){
+                modalModifyContent += "<option value=\"low\">Low</option><option value=\"medium\" selected>Medium</option><option value=\"high\">High</option>";
+            } else {
+                modalModifyContent += "<option value=\"low\">Low</option><option value=\"medium\">Medium</option><option value=\"high\" selected>High</option>";
+            }
+            modalModifyContent += "</select>" +
             "                            </div>" +
             "                            <div class=\"col-6-alt\">" +
             "                                <label>Source</label>" +
