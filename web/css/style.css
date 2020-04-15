@@ -168,10 +168,8 @@ p, h1, h2, h3, h4, h5, h6{
     width: 31%;
 }
 
-.col-4-profile{
+.profile{
     padding: 0.5%;
-    float: left;
-    width: 31%;
     font-size: 1.6vw;
     text-align: center;
 }
@@ -416,6 +414,10 @@ p, h1, h2, h3, h4, h5, h6{
 
 .text-bold{
     font-weight: bold;
+}
+
+.text-center{
+    text-align: center;
 }
 
 /* Buttons */
