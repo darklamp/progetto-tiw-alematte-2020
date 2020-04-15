@@ -1,12 +1,10 @@
 package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Alert;
-import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.ImageDAO;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utility.Utility;
-import jdk.jshell.execution.Util;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -296,6 +294,7 @@ public class Profile extends HttpServlet {
                 }
                 else{
                     resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
+                    return;
                 }
             }
             else {

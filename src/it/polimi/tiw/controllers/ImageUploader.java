@@ -88,6 +88,7 @@ public class ImageUploader extends HttpServlet {
         }
         if (!resolution.equals("high") && !resolution.equals("medium") && !resolution.equals("low")){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
         //try parsing strings in float
         float latitude;

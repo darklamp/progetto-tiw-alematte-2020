@@ -5,6 +5,7 @@ import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
+import it.polimi.tiw.utility.Utility;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -144,9 +145,10 @@ public class CampaignDetail extends HttpServlet {
         String town = req.getParameter("town");
         if (!resolution.equals("high") && !resolution.equals("medium") && !resolution.equals("low")){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
         if(latitudeStr.isEmpty() || longitudeStr.isEmpty() || resolution.isEmpty() || source.isEmpty() || region.isEmpty() || town.isEmpty()){
-            alert.setContent("Please fill all form data");
+           alert.setContent("Please fill all form data");
             alert.setType(Alert.DANGER);
             alert.show();
             alert.dismiss();
