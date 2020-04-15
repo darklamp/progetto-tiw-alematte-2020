@@ -22,8 +22,8 @@
         <div class="row">
             <div class="col-12">
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">Nothing to show</div>
-                <div class="gallery" data-th-each="image : ${images}" data-th-with="toDisplay=${annotatedImages == null || !annotatedImages.contains(image.getId())},currentImageID=${image.getId()}">
-                        <a onclick="openDetail(0);" data-th-onclick="'+${toDisplay}+' ? 'openDetail('+${currentImageId}+');' : ''"><img data-th-style="${toDisplay} ? 'display: block' : 'opacity: 26%'"  src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}"  data-th-id="'galleryImageID' + ${currentImageId}" data-th-alt="'Image #' + ${currentImageId}"></a>
+                <div class="gallery" data-th-each="image : ${images}" data-th-with="toDisplay=${annotatedImages == null || !annotatedImages.contains(image.getId())}">
+                        <a onclick="openDetail(0);" data-th-onclick="'+${toDisplay}+' ? 'openDetail('+${image.getId()}+');' : ''"><img data-th-style="${toDisplay} ? 'display: block' : 'opacity: 26%'"  src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}"  data-th-id="'galleryImageID' + ${image.getId()}" data-th-alt="'Image #' + ${image.getId()}"></a>
                 </div>
             </div>
         </div>
