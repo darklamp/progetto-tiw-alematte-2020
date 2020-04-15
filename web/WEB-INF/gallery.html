@@ -115,11 +115,12 @@
 
     function closeDetailWindow() {
         detailModal.style.display = "none";
-        curImageFrame.style.display="none";
+        curImageFrame.style.opacity="0.26";
+        window.alert("Annotation submitted");
     }
 
     function isHidden(image) {
-        return image.style.display==="none";
+        return image.style.opacity==="0.26";
     }
 
     function openDetail(imageId){

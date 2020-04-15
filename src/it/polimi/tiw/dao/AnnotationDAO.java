@@ -21,7 +21,7 @@ public class AnnotationDAO {
         this.connection = connection;
     }
 
-    public void createAnnotation(int workerId, int imageId, int validity, String trust, String note) throws SQLException {
+    public void createAnnotation(int workerId, int imageId, int campaignId, int validity, String trust, String note) throws SQLException {
         String query = "INSERT INTO annotation (workerId, imageId, date, validity, trust, note) values (?,?,NOW(),?,?,?)";
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
             pstatement.setInt(1, workerId);
@@ -29,6 +29,22 @@ public class AnnotationDAO {
             pstatement.setInt(3, validity);
             pstatement.setString(4, trust);
             pstatement.setString(5, note);
+            pstatement.executeUpdate();
+        }
+        query = "SELECT workerId, campaignId FROM workerCampaign WHERE workerId = ? AND campaignId = ?";
+        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+            pstatement.setInt(1, workerId);
+            pstatement.setInt(2, campaignId);
+            try (ResultSet result = pstatement.executeQuery();) {
+                if (result.isBeforeFirst()) {// got results
+                    return;
+                }
+            }
+        }
+        query = "INSERT INTO workerCampaign (workerId, campaignId) values (?,?)";
+        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+            pstatement.setInt(1, workerId);
+            pstatement.setInt(2, campaignId);
             pstatement.executeUpdate();
         }
     }
