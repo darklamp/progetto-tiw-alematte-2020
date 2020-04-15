@@ -94,7 +94,7 @@ public class UserDAO {
                     throw new NoSuchElementException();
                 else {
                     result.next();
-                    Date then = result.getDate("cookietime");
+                    Date then = result.getTimestamp("cookietime");
                     Date now = new Date();
                     if(then == null) throw new NoSuchElementException();
                     long seconds = (now.getTime()-then.getTime())/1000;

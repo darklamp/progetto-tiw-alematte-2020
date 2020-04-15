@@ -78,6 +78,9 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
+        String rememberMe = req.getParameter("rememberMe");
+
+        if (rememberMe == null || !rememberMe.equals("true")) rememberMe = "false";
         UserDAO usr = new UserDAO(connection);
         User u = null;
         try {
@@ -99,18 +102,20 @@ public class Login extends HttpServlet {
         String target = (u.getRole().equals("manager")) ? "/manager" : "/worker";
         path = path + target;
 
-        Cookie cookie = new Cookie("progtiw-auth", Crypto.createCookie());
-        cookie.setMaxAge(3600);
-        cookie.setSecure(true);
-        cookie.setHttpOnly(true);
+        if (rememberMe.equals("true")){
+            Cookie cookie = new Cookie("progtiw-auth", Crypto.createCookie());
+            cookie.setMaxAge(3600);
+            cookie.setSecure(true);
+            cookie.setHttpOnly(true);
 
-        try {
-            usr.addCookie(u,cookie);
-        } catch (SQLException throwables) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                usr.addCookie(u,cookie);
+            } catch (SQLException throwables) {
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+            //cookie.setDomain("localhost");
+            resp.addCookie(cookie);
         }
-        //cookie.setDomain("localhost");
-        resp.addCookie(cookie);
 
         resp.sendRedirect(path);
     }
