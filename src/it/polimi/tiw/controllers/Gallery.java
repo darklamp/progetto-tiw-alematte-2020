@@ -141,8 +141,6 @@ public class Gallery extends HttpServlet {
         UserDAO userDAO = new UserDAO(connection);
         ImageDAO imageDAO = new ImageDAO(connection);
 
-        //TODO: controllare che l'annotazione non esista già
-
         if (!user.getRole().equals("worker")){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
@@ -152,14 +150,6 @@ public class Gallery extends HttpServlet {
         int imageID = 0;
         try{
             imageID = Integer.parseInt(req.getParameter("imageId"));
-        }
-        catch (NumberFormatException e){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-        int campaignId = 0;
-        try{
-            campaignId = (int) req.getSession().getAttribute("campaignReqId");
         }
         catch (NumberFormatException e){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -191,24 +181,21 @@ public class Gallery extends HttpServlet {
         }
         AnnotationDAO annotationDAO = new AnnotationDAO(connection);
         try {
+            annotationDAO.getAnnotation(userId,imageID);
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST,"This image has already been annotated by you.");
+            return;
+        } catch (SQLException e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        } catch (NoSuchElementException ignored){
+        }
+
+        try {
             annotationDAO.createAnnotation(userId,imageID,validityToInt,trust,note);
         } catch (SQLException e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
         }
-        setAlert(req,resp,campaignId);
-    }
-    void setAlert(HttpServletRequest req, HttpServletResponse resp, int campaignId) throws IOException {
-        Alert alert = (Alert) req.getSession().getAttribute("registerResult");
-        if (alert == null) {
-            alert = new Alert(false, Alert.SUCCESS, "Annotazione inserita correttamente!");
-            req.getSession().setAttribute("registerResult", alert);
-        }
-        else {
-            alert.setType(Alert.SUCCESS);
-            alert.setContent("Annotazione inserita correttamente!");
-        }
-        alert.show();
-        alert.dismiss();
-        resp.setStatus(204); /* the 204 status code or "No Content" make the browser stay on the previous page */
+        resp.setStatus(204);
     }
 }
