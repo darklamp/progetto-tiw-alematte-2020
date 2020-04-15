@@ -28,21 +28,7 @@ public class AnnotationDAO {
             pstatement.setInt(3, validity);
             pstatement.setString(4, trust);
             pstatement.setString(5, note);
-            try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst()) // no results
-                    return null;
-                else {
-                    result.next();
-                    Annotation annotation = new Annotation();
-                    annotation.setWorkerId(workerId);
-                    annotation.setImageId(imageId);
-                    annotation.setDate(result.getDate("date"));
-                    annotation.setValidity(result.getInt("validity"));
-                    annotation.setTrust(result.getString("trust"));
-                    annotation.setNote(result.getString("note"));
-                    return annotation;
-                }
-            }
+            pstatement.executeUpdate();
         }
     }
 
