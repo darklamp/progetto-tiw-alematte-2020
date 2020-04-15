@@ -1,7 +1,6 @@
 package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Alert;
-import it.polimi.tiw.beans.Annotation;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.AnnotationDAO;
@@ -93,7 +92,7 @@ public class CampaignReport extends HttpServlet {
             campaign = campaignDAO.getCampaignById(campaignId);
             images = imageDAO.getCampaignImages(campaignId);
             conflictualImages = imageDAO.getConflictualCampaignImages(campaignId);
-            totAnnotations = annotationDAO.getNumberOdAnnotationsInCampaign(campaignId);
+            totAnnotations = annotationDAO.getNumberOfAnnotationsInCampaign(campaignId);
         } catch (SQLException e){
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SQL Error");
             return;
