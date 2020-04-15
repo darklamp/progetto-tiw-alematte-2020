@@ -8,6 +8,7 @@ import it.polimi.tiw.dao.AnnotationDAO;
 import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
 import it.polimi.tiw.dao.UserDAO;
+import it.polimi.tiw.utility.Utility;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -25,8 +26,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @WebServlet("/worker/campaign/*")
@@ -110,8 +109,11 @@ public class Gallery extends HttpServlet {
         ctx.setVariable("campaign", campaign);
         ctx.setVariable("images", images);
         ctx.setVariable("user", user);
+        req.getSession().setAttribute("imageList", images);
+        req.getSession().setAttribute("campaignReqId", campaignId);
+        req.getSession().setAttribute("errorMessage", new Alert(false, Alert.DANGER, "Error"));
         ctx.setVariable("imagePath", imagePath+File.separator);
-        ctx.setVariable("campaignAlert", req.getSession().getAttribute("campaignAlert"));
+        ctx.setVariable("errorMessage", req.getSession().getAttribute("errorMessage"));
         templateEngine.process(path, ctx, resp.getWriter());
         if(campaignAlert.isDismissible()) campaignAlert.hide();
     }
@@ -129,7 +131,8 @@ public class Gallery extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
-        List<Image> images = (List<Image>) req.getSession().getAttribute("images");
+        List<Image> images = new ArrayList<>();
+        images = (ArrayList<Image>) req.getSession().getAttribute("imageList");
         User user = (User)req.getSession().getAttribute("user");
         if(user.getId()!=userId){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user");
@@ -137,6 +140,8 @@ public class Gallery extends HttpServlet {
         }
         UserDAO userDAO = new UserDAO(connection);
         ImageDAO imageDAO = new ImageDAO(connection);
+
+        //TODO: controllare che l'annotazione non esista già
 
         if (!user.getRole().equals("worker")){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -152,14 +157,17 @@ public class Gallery extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-        try {
-            if (!images.contains(imageDAO.getImage(imageID))){
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
+        int campaignId = 0;
+        try{
+            campaignId = (int) req.getSession().getAttribute("campaignReqId");
         }
-        catch (SQLException e){
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        catch (NumberFormatException e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if (!Utility.containsId(images, imageID)){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
 
         if (!validity.equals("true") && !validity.equals("false")){
@@ -179,13 +187,28 @@ public class Gallery extends HttpServlet {
         }
         if (note.length() > 1000){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
         AnnotationDAO annotationDAO = new AnnotationDAO(connection);
         try {
-            annotationDAO.createAnnotation(userId, imageID, validityToInt, trust, note);
-        } catch (SQLException e){
+            annotationDAO.createAnnotation(userId,imageID,validityToInt,trust,note);
+        } catch (SQLException e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return;
         }
+        setAlert(req,resp,campaignId);
+    }
+    void setAlert(HttpServletRequest req, HttpServletResponse resp, int campaignId) throws IOException {
+        Alert alert = (Alert) req.getSession().getAttribute("registerResult");
+        if (alert == null) {
+            alert = new Alert(false, Alert.SUCCESS, "Annotazione inserita correttamente!");
+            req.getSession().setAttribute("registerResult", alert);
+        }
+        else {
+            alert.setType(Alert.SUCCESS);
+            alert.setContent("Annotazione inserita correttamente!");
+        }
+        alert.show();
+        alert.dismiss();
+        resp.setStatus(204); /* the 204 status code or "No Content" make the browser stay on the previous page */
     }
 }
