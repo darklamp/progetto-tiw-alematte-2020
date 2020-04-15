@@ -140,6 +140,7 @@ public class Gallery extends HttpServlet {
 
         if (!user.getRole().equals("worker")){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
         String validity = req.getParameter("validity");
         String trust = req.getParameter("trust");
@@ -149,10 +150,12 @@ public class Gallery extends HttpServlet {
         }
         catch (NumberFormatException e){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
         try {
             if (!images.contains(imageDAO.getImage(imageID))){
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;
             }
         }
         catch (SQLException e){
@@ -161,9 +164,11 @@ public class Gallery extends HttpServlet {
 
         if (!validity.equals("true") && !validity.equals("false")){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
         if (!trust.equals("high") && !trust.equals("medium") && !trust.equals("low")){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
 
 
@@ -176,6 +181,11 @@ public class Gallery extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
         AnnotationDAO annotationDAO = new AnnotationDAO(connection);
-        annotationDAO.createAnnotation(userId,imageID,validityToInt,trust,note);
+        try {
+            annotationDAO.createAnnotation(userId, imageID, validityToInt, trust, note);
+        } catch (SQLException e){
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
     }
 }
