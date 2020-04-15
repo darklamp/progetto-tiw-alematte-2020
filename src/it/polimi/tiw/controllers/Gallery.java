@@ -189,9 +189,10 @@ public class Gallery extends HttpServlet {
             return;
         } catch (NoSuchElementException ignored){
         }
+        int campaignId = (int) req.getSession().getAttribute("campaignReqId");
 
         try {
-            annotationDAO.createAnnotation(userId,imageID,validityToInt,trust,note);
+            annotationDAO.createAnnotation(userId,imageID,campaignId,validityToInt,trust,note);
         } catch (SQLException e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
