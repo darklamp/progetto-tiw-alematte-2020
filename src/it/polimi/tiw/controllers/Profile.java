@@ -211,7 +211,7 @@ public class Profile extends HttpServlet {
                     }
 
                     String oldImageURL = user.getImageURL();
-                    String newImageURL = user.getUsername() + File.separator + Utility.getFileExtension(oldImageURL);
+                    String newImageURL = username+ "." + Utility.getFileExtension(oldImageURL);
                     String applicationPath = req.getServletContext().getRealPath("");
                     String uploadFilePath = applicationPath + "uploads/profileImages";
                     File oldImage = new File(uploadFilePath + File.separator + oldImageURL);
