@@ -5,7 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.NoSuchElementException;
 
 import de.mkammerer.argon2.Argon2;
@@ -57,7 +59,7 @@ public class UserDAO {
     }
 
     public void addCookie(User u, Cookie cookie) throws SQLException{
-        String query = "UPDATE user SET authcookie=? WHERE id=?";
+        String query = "UPDATE user SET authcookie=?,cookietime=NOW() WHERE id=?";
         String cookieValue = cookie.getValue();
         String hashedValue = Crypto.cookieHash(cookieValue);
         try (PreparedStatement statement = con.prepareStatement(query);){
@@ -77,6 +79,13 @@ public class UserDAO {
                     throw new NoSuchElementException();
                 else {
                     result.next();
+                    Date then = result.getDate("cookietime");
+                    Date now = new Date();
+                    if(then == null) throw new NoSuchElementException();
+                    long seconds = (now.getTime()-then.getTime())/1000;
+                    if (seconds < 0 || seconds > 3600){
+                        throw new NoSuchElementException();
+                    }
                     User user = new User();
                     if(result.getString("role").equals("worker")){
                         user.setImageURL(result.getString("photo"));
