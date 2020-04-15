@@ -3,6 +3,8 @@ package it.polimi.tiw.controllers;
 import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.UserDAO;
+import it.polimi.tiw.utility.Crypto;
+import it.polimi.tiw.utility.Utility;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -12,6 +14,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -95,6 +98,19 @@ public class Login extends HttpServlet {
         req.getSession().setAttribute("loginResult", true);
         String target = (u.getRole().equals("manager")) ? "/manager" : "/worker";
         path = path + target;
+
+        Cookie cookie = new Cookie("progtiw-auth", Crypto.createCookie());
+        cookie.setMaxAge(3600);
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+
+        try {
+            usr.addCookie(u,cookie);
+        } catch (SQLException throwables) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+        //cookie.setDomain("localhost");
+        resp.addCookie(cookie);
 
         resp.sendRedirect(path);
     }

@@ -14,6 +14,8 @@ import it.polimi.tiw.beans.User;
 import it.polimi.tiw.utility.Crypto;
 import org.thymeleaf.model.IStandaloneElementTag;
 
+import javax.servlet.http.Cookie;
+
 import static de.mkammerer.argon2.Argon2Factory.*;
 
 public class UserDAO {
@@ -51,6 +53,42 @@ public class UserDAO {
                 }
             }
 
+        }
+    }
+
+    public void addCookie(User u, Cookie cookie) throws SQLException{
+        String query = "UPDATE user SET authcookie=? WHERE id=?";
+        String cookieValue = cookie.getValue();
+        String hashedValue = Crypto.cookieHash(cookieValue);
+        try (PreparedStatement statement = con.prepareStatement(query);){
+            statement.setString(1, hashedValue);
+            statement.setInt(2, u.getId());
+            statement.executeUpdate();
+        }
+    }
+
+    public User getUserFromCookie(String cookie) throws SQLException{
+        String query = "SELECT * FROM user WHERE authcookie=?";
+        String hashedValue = Crypto.cookieHash(cookie);
+        try (PreparedStatement pstatement = con.prepareStatement(query);) {
+            pstatement.setString(1, hashedValue);
+            try (ResultSet result = pstatement.executeQuery();) {
+                if (!result.isBeforeFirst()) // no results, credential check failed
+                    throw new NoSuchElementException();
+                else {
+                    result.next();
+                    User user = new User();
+                    if(result.getString("role").equals("worker")){
+                        user.setImageURL(result.getString("photo"));
+                        user.setLevel(result.getString("level"));
+                    }
+                    user.setId(result.getInt("id"));
+                    user.setRole(result.getString("role"));
+                    user.setUsername(result.getString("username"));
+                    user.setEmail(result.getString("email"));
+                    return user;
+                }
+            }
         }
     }
 

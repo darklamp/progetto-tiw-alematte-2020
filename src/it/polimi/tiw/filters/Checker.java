@@ -1,12 +1,17 @@
 package it.polimi.tiw.filters;
 
+import it.polimi.tiw.beans.User;
+import it.polimi.tiw.dao.UserDAO;
+
 import java.io.IOException;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import javax.servlet.*;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +50,38 @@ public class Checker implements Filter {
         String loginPath = req.getServletContext().getContextPath() + "/login";
 
         HttpSession s = req.getSession();
-        if (s.isNew() || s.getAttribute("user") == null) {
+        String key = "progtiw-auth";
+        Optional<String> authCookie = Arrays.stream(req.getCookies())
+                .filter(c -> key.equals(c.getName()))
+                .map(Cookie::getValue)
+                .findFirst();
+        if (s.isNew() && authCookie.isPresent()){
+            Connection connection = null;
+            ServletContext context  = req.getServletContext();
+            try{
+                String driver = context.getInitParameter("dbDriver");
+                String url = context.getInitParameter("dbUrl");
+                String user = context.getInitParameter("dbUser");
+                String password = context.getInitParameter("dbPassword");
+                Class.forName(driver);
+                connection = DriverManager.getConnection(url, user, password);
+            } catch (ClassNotFoundException e) {
+                throw new UnavailableException("Can't load database driver");
+            } catch (SQLException e) {
+                throw new UnavailableException("Couldn't get db connection");
+            }
+            UserDAO userDAO = new UserDAO(connection);
+            User user = null;
+            try {
+                user = userDAO.getUserFromCookie(authCookie.get());
+            } catch (SQLException | NoSuchElementException e) {
+                res.sendError(HttpServletResponse.SC_BAD_REQUEST,"Bad cookie.");
+                return;
+            }
+            s.setAttribute("user",user);
+            chain.doFilter(request, response);
+        }
+        else if (s.isNew() || s.getAttribute("user") == null) {
             res.sendRedirect(loginPath);
             return;
         }
