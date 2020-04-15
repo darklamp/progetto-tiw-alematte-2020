@@ -22,9 +22,8 @@
         <div class="row">
             <div class="col-12">
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">Nothing to show</div>
-                <div class="alert alert-danger" data-th-class="${'alert alert-' + errorMessage.getType()}" data-th-if="${errorMessage.isVisible()}" data-th-utext="${errorMessage.getContent()}">Invalid login</div>
                 <div class="gallery" data-th-each="image : ${images}">
-                    <a onclick="openDetail(0);" data-th-onclick="'openDetail('+${image.getId()}+');'"><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}" alt=""></a>
+                    <a onclick="openDetail(0);" data-th-onclick="'openDetail('+${image.getId()}+');'"><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}"  data-th-id="'galleryImageID' + ${image.getId()}" data-th-alt="'Image #' + ${image.getId()}"></a>
                 </div>
             </div>
         </div>
@@ -41,7 +40,6 @@
                 <div class="row" id="imageModalContent">
                     <div class="col-6-alt">
                         <img src="../images/test1.jpg" id="modalImage" style="width: 100%; height: auto; max-height: 600px; "/>
-                        <span style="float: right;" onclick="modifyMetadata();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="modifyImageMetadataBtnIcon"></i></span>
                         <div class="newspaper-2">
                             <p><strong>Date: </strong><span id="imgDate"></span></p>
                             <p><strong>Latitude: </strong><span id="imgLatitude"></span></p>
@@ -51,6 +49,7 @@
                             <p><strong>Region: </strong><span id="imgRegion"></span></p>
                             <p><strong>Town: </strong><span id="imgTown"></span></p>
                         </div>
+                <div class="alert alert-danger" data-th-class="${'alert alert-' + errorMessage.getType()}" data-th-if="${errorMessage.isVisible()}" data-th-utext="${errorMessage.getContent()}">Invalid login</div>
 
                     </div>
                     <div class="col-6-alt">
@@ -106,6 +105,7 @@
 </script>
 <script data-th-inline="javascript">
     var cur = document.getElementById("imageIdPost");
+    let curImageFrame = document.getElementById("galleryImageID0");
     const campaignId = [[${campaign.getId()}]];
     var detailModal = document.getElementById("imageDetailModal");
     var closeDetail = document.getElementById("closeDetail");
@@ -115,9 +115,16 @@
 
     function closeDetailWindow() {
         detailModal.style.display = "none";
+        curImageFrame.style.display="none";
+    }
+
+    function isHidden(image) {
+        return image.style.display==="none";
     }
 
     function openDetail(imageId){
+        curImageFrame = document.getElementById("galleryImageID" + imageId);
+        if (isHidden(curImageFrame)) return;
         detailModal.style.display = "block";
         $.ajax({
             type: "POST",

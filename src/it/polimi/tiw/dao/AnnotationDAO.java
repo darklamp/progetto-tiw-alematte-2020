@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class AnnotationDAO {
     private Connection connection;
@@ -39,7 +40,7 @@ public class AnnotationDAO {
             pstatement.setInt(2, imageId);
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) // no results
-                    return null;
+                    throw new NoSuchElementException();
                 else {
                     result.next();
                     Annotation annotation = new Annotation();
