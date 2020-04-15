@@ -14,7 +14,7 @@ public class Utility {
     public static boolean isValidMailAddress(String email){
         return EmailValidator.getInstance().isValid(email);
     }
-    public boolean containsId(List<Image> images, int imageID){
+    public static boolean containsId(List<Image> images, int imageID){
         return images.stream().map(Image::getId).anyMatch(n -> n == imageID);
     }
 }
