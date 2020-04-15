@@ -54,6 +54,8 @@ public class ImageUploader extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+
         ImageDAO imageDAO = new ImageDAO(connection);
 
         // gets absolute path of the web application
@@ -68,10 +70,25 @@ public class ImageUploader extends HttpServlet {
         Part part = req.getPart("image");
 
         //Get all param
-        int campaignId = Integer.parseInt(req.getParameter("campaignId"));
+        int campaignId;
+        try {
+            campaignId = Integer.parseInt(req.getParameter("campaignId"));
+        } catch (NumberFormatException e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid campaign id");
+            return;
+        }
         Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
         Image image = new Image();
+
         String path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
+        if(req.getParameter("viewMode")==null) {
+            path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
+        }else if(req.getParameter("viewMode").equals("grid")) {
+            path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
+        }else if(req.getParameter("viewModa").equals("maps")){
+            path = getServletContext().getContextPath() + "/manager/campaign/maps?id="+campaignId;
+        }
+
         String latitudeStr = req.getParameter("latitude").replace(',', '.');
         String longitudeStr = req.getParameter("longitude").replace(',','.');
         String resolution = req.getParameter("resolution");

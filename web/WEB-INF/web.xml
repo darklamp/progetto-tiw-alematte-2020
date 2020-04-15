@@ -37,6 +37,7 @@
         <url-pattern>/logout</url-pattern>
         <url-pattern>/worker</url-pattern>
         <url-pattern>/manager/campaign</url-pattern>
+        <url-pattern>/manager/campaign/maps</url-pattern>
         <url-pattern>/manager/createCampaign</url-pattern>
         <url-pattern>/imageUploader</url-pattern>
         <url-pattern>/manager/campaignActions</url-pattern>
@@ -49,6 +50,7 @@
          <filter-name>ManagerChecker</filter-name>
          <url-pattern>/manager</url-pattern>
         <url-pattern>/manager/campaign</url-pattern>
+        <url-pattern>/manager/campaign/maps</url-pattern>
         <url-pattern>/manager/createCampaign</url-pattern>
         <url-pattern>/imageUploader</url-pattern>
         <url-pattern>/manager/campaignActions</url-pattern>

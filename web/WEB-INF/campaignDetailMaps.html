@@ -24,28 +24,28 @@
                 <div class="highlight">
                     <span style="float: right;" onclick="showForm();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="buttonInfoIcon"></i></span>
                     <div id="infoText"><p><strong>Campaign name: </strong><span data-th-text="${campaign.getName()}"></span></p>
-                    <p><strong>Campaign client: </strong><span data-th-text="${campaign.getClient()}"></span></p></div>
-                <div id="infoForm" style="display: none;">
-                    <form class="form" method="POST" action="" data-th-action="@{/manager/campaignActions}">
-                        <input type="hidden" name="campaignId" data-th-value="${campaign.getId()}"/>
-                        <input type="hidden" name="viewMode" value="grid"/>
-                        <input type="hidden" name="action" value="modifyData"/>
-                        <div class="row">
-                            <div class="col-4">
-                                <label>Campaign name</label>
-                                <input type="text" class="form-control-bg-dark" name="campaignName" data-th-value="${campaign.getName()}" required/>
+                        <p><strong>Campaign client: </strong><span data-th-text="${campaign.getClient()}"></span></p></div>
+                    <div id="infoForm" style="display: none;">
+                        <form class="form" method="POST" action="" data-th-action="@{/manager/campaignActions}">
+                            <input type="hidden" name="campaignId" data-th-value="${campaign.getId()}"/>
+                            <input type="hidden" name="viewMode" value="maps"/>
+                            <input type="hidden" name="action" value="modifyData"/>
+                            <div class="row">
+                                <div class="col-4">
+                                    <label>Campaign name</label>
+                                    <input type="text" class="form-control-bg-dark" name="campaignName" data-th-value="${campaign.getName()}" required/>
+                                </div>
+                                <div class="col-4">
+                                    <label>Campaign client</label>
+                                    <input type="text" class="form-control-bg-dark" name="campaignClient" data-th-value="${campaign.getClient()}" required/>
+                                </div>
+                                <div class="col-4">
+                                    <br/>
+                                    <input type="submit" class="btn btn-secondary" style="margin: 0 auto;" value="Update"/>
+                                </div>
                             </div>
-                            <div class="col-4">
-                                <label>Campaign client</label>
-                                <input type="text" class="form-control-bg-dark" name="campaignClient" data-th-value="${campaign.getClient()}" required/>
-                            </div>
-                            <div class="col-4">
-                                <br/>
-                                <input type="submit" class="btn btn-secondary" style="margin: 0 auto;" value="Update"/>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                        </form>
+                    </div>
                     <p><strong>Campaign status: </strong><span class="badge badge-warning" data-th-class="${'badge badge-' + campaign.getBadge()}" data-th-text="${campaign.getState().toUpperCase()}"></span></p>
                 </div>
             </div>
@@ -63,7 +63,7 @@
             <div class="col-4">
                 <h2>Actions</h2>
                 <a class="btn btn-outline-primary btn-full" id="newImageModalBtn" data-th-if="${campaign.getState().equals('created')}">Add new image</a> <br/>
-                <a class="btn btn-outline-primary btn-full" href="campaignDetailmaps.html" data-th-href="@{/manager/campaign/maps(id=${campaign.getId()})}">Show images in map</a>
+                <a class="btn btn-outline-primary btn-full" href="campaignDetail.html" data-th-href="@{/manager/campaign(id=${campaign.getId()})}">Show images in grid mode</a>
                 <hr/>
                 <a href="campaignDetail.html" class="btn btn-outline-success btn-full" data-th-href="@{/manager/campaignActions(campaignId=${campaign.getId()}, action='setStart')}" data-th-if="${campaign.getState().equals('created') && isImageAvailable}">Start campaign</a>
                 <a href="campaignDetail.html" class="btn btn-outline-danger btn-full" data-th-href="@{/manager/campaignActions(campaignId=${campaign.getId()}, action='setClose')}" data-th-if="${campaign.getState().equals('started')}">Close campaign</a><br/>
@@ -82,11 +82,11 @@
             </div>
             <div class="modal-body">
                 <form class="form" method="POST" action="" data-th-action="@{/imageUploader}" enctype="multipart/form-data">
-                    <input type="hidden" name="viewMode" value="grid"/>
+                    <input type="hidden" name="viewMode" value="maps"/>
                     <input type="hidden" name="campaignId" value="" data-th-value="${campaign.getId()}"/>
                     <div class="form-group">
                         <div class="row">
-                        <label>Image file</label>
+                            <label>Image file</label>
                             <input type="file" class="form-control" name="image" required/>
                         </div>
                     </div>
@@ -149,17 +149,17 @@
                 <div class="row" id="imageModalContentForm" style="display: none"></div>
                 <div class="row" id="imageModalContent">
                     <div class="col-6-alt">
-                                <img src="../images/test1.jpg" id="modalImage" style="width: 100%; height: auto; max-height: 600px; "/>
-                                <span style="float: right;" onclick="modifyMetadata();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="modifyImageMetadataBtnIcon"></i></span>
-                                <div class="newspaper-2">
-                                    <p><strong>Date: </strong><span id="imgDate"></span></p>
-                                    <p><strong>Latitude: </strong><span id="imgLatitude"></span></p>
-                                    <p><strong>Longitude: </strong><span id="imgLongitude"></span></p>
-                                    <p><strong>Resolution: </strong><span id="imgResolution"></span></p>
-                                    <p><strong>Source: </strong><span id="imgSource"></span></p>
-                                    <p><strong>Region: </strong><span id="imgRegion"></span></p>
-                                    <p><strong>Town: </strong><span id="imgTown"></span></p>
-                                </div>
+                        <img src="../images/test1.jpg" id="modalImage" style="width: 100%; height: auto; max-height: 600px; "/>
+                        <span style="float: right;" onclick="modifyMetadata();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="modifyImageMetadataBtnIcon"></i></span>
+                        <div class="newspaper-2">
+                            <p><strong>Date: </strong><span id="imgDate"></span></p>
+                            <p><strong>Latitude: </strong><span id="imgLatitude"></span></p>
+                            <p><strong>Longitude: </strong><span id="imgLongitude"></span></p>
+                            <p><strong>Resolution: </strong><span id="imgResolution"></span></p>
+                            <p><strong>Source: </strong><span id="imgSource"></span></p>
+                            <p><strong>Region: </strong><span id="imgRegion"></span></p>
+                            <p><strong>Town: </strong><span id="imgTown"></span></p>
+                        </div>
 
                     </div>
                     <div class="col-6-alt" >
@@ -193,7 +193,7 @@
     span.onclick = function() {
         modal.style.display = "none";
     }
-    </script>
+</script>
 <script data-th-inline="javascript">
     const campaignId = /*[[${campaign.getId()}]]*/ "1";
     var detailModal = document.getElementById("imageDetailModal");
@@ -253,29 +253,29 @@
                     var userObject = annotationsObject[i].user;
                     var annotationObjet = annotationsObject[i].annotation;
                     annotations += "<div class='card mx-auto'><div class='card-header'>";
-                            if(annotationObjet.validity === '1'){
-                                annotations += "<span class='icon icon-success'><i class='fas fa-thumbs-up'></i></span>";
-                            } else {
-                                annotations += "<span class='icon icon-danger'><i class='fas fa-thumbs-down'></i></span>";
-                            }
+                    if(annotationObjet.validity === '1'){
+                        annotations += "<span class='icon icon-success'><i class='fas fa-thumbs-up'></i></span>";
+                    } else {
+                        annotations += "<span class='icon icon-danger'><i class='fas fa-thumbs-down'></i></span>";
+                    }
 
-                        annotations += "<p><strong>Creator: </strong>"+userObject.username +" (" + userObject.email +")"+"</p>";
-                            if(userObject.experience === "high"){
-                                annotations += "<p><strong>Experience: </strong><span class='text-success text-uppercase text-bold'>High</span></p>";
-                            } else if(userObject.experience === "medium"){
-                                annotations += "<p><strong>Experience: </strong><span class='text-warning text-uppercase text-bold'>Medium</span></p>";
-                            } else{
-                                annotations += "<p><strong>Experience: </strong><span class='text-danger text-uppercase text-bold'>Low</span></p>";
-                            }
-                        annotations += "</div><div class='card-body'><p><strong>Data: </strong>"+ annotationObjet.date +"</p>";
-                            if(annotationObjet.trust ==="high"){
-                                annotations += "<p><strong>Trust: </strong><span class='text-success text-uppercase text-bold'>high</span></p>";
-                            } else if(annotationObjet.trust ==="medium"){
-                                annotations += "<p><strong>Trust: </strong><span class='text-warning text-uppercase text-bold'>medium</span></p>";
-                            } else {
-                                annotations += "<p><strong>Trust: </strong><span class='text-danger text-uppercase text-bold'>low</span></p>";
-                            }
-                        annotations += "<p><strong>Nota: </strong>"+annotationObjet.note+"</p></div></div>";
+                    annotations += "<p><strong>Creator: </strong>"+userObject.username +" (" + userObject.email +")"+"</p>";
+                    if(userObject.experience === "high"){
+                        annotations += "<p><strong>Experience: </strong><span class='text-success text-uppercase text-bold'>High</span></p>";
+                    } else if(userObject.experience === "medium"){
+                        annotations += "<p><strong>Experience: </strong><span class='text-warning text-uppercase text-bold'>Medium</span></p>";
+                    } else{
+                        annotations += "<p><strong>Experience: </strong><span class='text-danger text-uppercase text-bold'>Low</span></p>";
+                    }
+                    annotations += "</div><div class='card-body'><p><strong>Data: </strong>"+ annotationObjet.date +"</p>";
+                    if(annotationObjet.trust ==="high"){
+                        annotations += "<p><strong>Trust: </strong><span class='text-success text-uppercase text-bold'>high</span></p>";
+                    } else if(annotationObjet.trust ==="medium"){
+                        annotations += "<p><strong>Trust: </strong><span class='text-warning text-uppercase text-bold'>medium</span></p>";
+                    } else {
+                        annotations += "<p><strong>Trust: </strong><span class='text-danger text-uppercase text-bold'>low</span></p>";
+                    }
+                    annotations += "<p><strong>Nota: </strong>"+annotationObjet.note+"</p></div></div>";
 
                 }
                 document.getElementById("annotationContainer").innerHTML = annotations;
@@ -291,8 +291,9 @@
     }
 
     function generateMetadataForm(imageObject, campaignId){
-        const servletPath = /*[[@{/manager/campaign}]]*/ "";
+        const servletPath = /*[[@{/manager/campaign/maps}]]*/ "";
         var modalModifyContent = "<form class=\"form\" method=\"POST\" action=\""+servletPath +"\">" +
+            "                       <input type=\"hidden\" name=\"viewMode\" value=\"maps\"/>"+
             "                    <input type=\"hidden\" name=\"campaignId\" value=\""+campaignId+"\" />" +
             "                    <input type=\"hidden\" name=\"imageId\" value=\""+imageObject.id+"\" />" +
             "                    <div class=\"form-group\">" +
@@ -312,14 +313,14 @@
             "                            <div class=\"col-6-alt\">" +
             "                                <label>Resolution</label>" +
             "                                <select class=\"form-control\" name=\"resolution\" required>";
-            if(imageObject.resolution === "low"){
-                modalModifyContent += "<option value=\"low\" selected>Low</option><option value=\"medium\">Medium</option><option value=\"high\">High</option>";
-            } else if(imageObject.resolution === "medium"){
-                modalModifyContent += "<option value=\"low\">Low</option><option value=\"medium\" selected>Medium</option><option value=\"high\">High</option>";
-            } else {
-                modalModifyContent += "<option value=\"low\">Low</option><option value=\"medium\">Medium</option><option value=\"high\" selected>High</option>";
-            }
-            modalModifyContent += "</select>" +
+        if(imageObject.resolution === "low"){
+            modalModifyContent += "<option value=\"low\" selected>Low</option><option value=\"medium\">Medium</option><option value=\"high\">High</option>";
+        } else if(imageObject.resolution === "medium"){
+            modalModifyContent += "<option value=\"low\">Low</option><option value=\"medium\" selected>Medium</option><option value=\"high\">High</option>";
+        } else {
+            modalModifyContent += "<option value=\"low\">Low</option><option value=\"medium\">Medium</option><option value=\"high\" selected>High</option>";
+        }
+        modalModifyContent += "</select>" +
             "                            </div>" +
             "                            <div class=\"col-6-alt\">" +
             "                                <label>Source</label>" +
