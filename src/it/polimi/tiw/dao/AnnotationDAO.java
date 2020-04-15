@@ -1,12 +1,11 @@
 package it.polimi.tiw.dao;
 
 import it.polimi.tiw.beans.Annotation;
+import it.polimi.tiw.beans.Campaign;
+import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.beans.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,6 +46,26 @@ public class AnnotationDAO {
             pstatement.setInt(2, campaignId);
             pstatement.executeUpdate();
         }
+    }
+
+    public ArrayList<Integer> getAnnotatedImages(int campaignId, int userId) throws SQLException{
+        String query = "SELECT imageId FROM annotation natural join imageCampaign WHERE workerId = ? AND campaignId = ?";
+        ArrayList<Integer> result = new ArrayList<>();
+        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+            pstatement.setInt(1, userId);
+            pstatement.setInt(2, campaignId);
+            try (ResultSet resultSet = pstatement.executeQuery();) {
+                if (!resultSet.isBeforeFirst()) {
+                    return null;
+                }
+                else {
+                    while(resultSet.next()) {
+                        result.add(resultSet.getInt("imageId"));
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     public Annotation getAnnotation(int workerId, int imageId) throws SQLException {
@@ -97,7 +116,7 @@ public class AnnotationDAO {
         }
     }
 
-    public int getNumberOdAnnotationsInCampaign(int campaignId) throws SQLException{
+    public int getNumberOfAnnotationsInCampaign(int campaignId) throws SQLException{
         String query ="select count(*) as 'annotationNumber' from annotation where imageId in (select imageId from imageCampaign where campaignId=?)";
 
         try (PreparedStatement statement = connection.prepareStatement(query)){

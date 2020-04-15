@@ -83,11 +83,16 @@ public class Gallery extends HttpServlet {
 
         CampaignDAO campaignDAO = new CampaignDAO(connection);
         ImageDAO imageDAO = new ImageDAO(connection);
+        AnnotationDAO annotationDAO = new AnnotationDAO(connection);
         Campaign campaign = null;
         List<Image> images = null;
+        User user = (User) req.getSession().getAttribute("user");
+        ArrayList<Integer> annotatedImages = null;
+
         try{
             campaign = campaignDAO.getCampaignById(campaignId);
             images = imageDAO.getCampaignImages(campaignId);
+            annotatedImages = annotationDAO.getAnnotatedImages(campaignId,user.getId());
         } catch (SQLException e){
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
@@ -102,13 +107,12 @@ public class Gallery extends HttpServlet {
             images = new ArrayList<>();
         } else {
             ctx.setVariable("isImageAvailable", true);
-
         }
-        User user = (User) req.getSession().getAttribute("user");
         ctx.setVariable("context", getServletContext().getContextPath());
         ctx.setVariable("campaign", campaign);
         ctx.setVariable("images", images);
         ctx.setVariable("user", user);
+        ctx.setVariable("annotatedImages", annotatedImages);
         req.getSession().setAttribute("imageList", images);
         req.getSession().setAttribute("campaignReqId", campaignId);
         req.getSession().setAttribute("errorMessage", new Alert(false, Alert.DANGER, "Error"));
