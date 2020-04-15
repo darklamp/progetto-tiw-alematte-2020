@@ -196,6 +196,6 @@ public class Gallery extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
-        resp.setStatus(201);
+        resp.setStatus(204);
     }
 }
