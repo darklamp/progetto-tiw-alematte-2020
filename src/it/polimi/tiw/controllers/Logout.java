@@ -50,16 +50,16 @@ public class Logout extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Cookie cookie = new Cookie("progtiw-auth", null);
+        cookie.setMaxAge(0);
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        resp.addCookie(cookie);
         HttpSession session = req.getSession(false);
         if (session != null) {
             UserDAO userDAO = new UserDAO(connection);
             userDAO.deleteCookie((User)req.getSession().getAttribute("user"));
-            Cookie cookie = new Cookie("progtiw-auth", "");
-            cookie.setValue(null);
-            cookie.setMaxAge(0);
-            resp.addCookie(cookie);
             session.invalidate();
-
         }
         //TODO: remove cookie
         String path = getServletContext().getContextPath() +  "/index.html";
