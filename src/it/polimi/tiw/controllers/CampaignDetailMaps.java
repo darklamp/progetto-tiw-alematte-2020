@@ -132,6 +132,19 @@ public class CampaignDetailMaps extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
+
+        try{
+            CampaignDAO campaignDAO = new CampaignDAO(connection);
+            Campaign campaign = campaignDAO.getCampaignById(campaignId);
+            if(!campaign.getState().equals("created")){
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+        } catch (SQLException e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            return;
+        }
+        
         Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
         Image image = new Image();
         String path = getServletContext().getContextPath() + "/manager/campaign/maps?id="+campaignId;
