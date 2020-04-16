@@ -54,10 +54,11 @@ public class Logout extends HttpServlet {
         if (session != null) {
             UserDAO userDAO = new UserDAO(connection);
             userDAO.deleteCookie((User)req.getSession().getAttribute("user"));
-            session.invalidate();
             Cookie cookie = new Cookie("progtiw-auth", "");
+            cookie.setValue(null);
             cookie.setMaxAge(0);
             resp.addCookie(cookie);
+            session.invalidate();
 
         }
         //TODO: remove cookie
