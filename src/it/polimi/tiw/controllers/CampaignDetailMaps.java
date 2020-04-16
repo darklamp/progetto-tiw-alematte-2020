@@ -144,7 +144,7 @@ public class CampaignDetailMaps extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             return;
         }
-        
+
         Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
         Image image = new Image();
         String path = getServletContext().getContextPath() + "/manager/campaign/maps?id="+campaignId;

@@ -119,6 +119,10 @@ public class CampaignActions extends HttpServlet {
             }
             String action = req.getParameter("action");
             if(action.equals("modifyData")){
+                if(!campaign.getState().equals("created")){
+                    resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+                    return;
+                }
                 String name = req.getParameter("campaignName");
                 String client = req.getParameter("campaignClient");
 
