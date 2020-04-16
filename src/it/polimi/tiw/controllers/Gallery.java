@@ -145,10 +145,10 @@ public class Gallery extends HttpServlet {
         UserDAO userDAO = new UserDAO(connection);
         ImageDAO imageDAO = new ImageDAO(connection);
 
-        if (!user.getRole().equals("worker")){
+       /* if (!user.getRole().equals("worker")){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
-        }
+        }*/
         String validity = req.getParameter("validity");
         String trust = req.getParameter("trust");
         int imageID = 0;
