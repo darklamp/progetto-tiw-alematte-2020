@@ -5,6 +5,7 @@
     <title>Campaign detail</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}">
     <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
 <script src="https://code.jquery.com/jquery-3.5.0.min.js" data-th-src="@{https://code.jquery.com/jquery-3.5.0.min.js}"></script>
@@ -56,7 +57,7 @@
                 <h2>Campaign images</h2>
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">No images</div>
                 <!-- Insert map here, use showDetail(imageId) to open modal -->
-
+                <div id="mapsContainer" class="map-container"></div>
             </div>
             <div class="col-4">
                 <h2>Actions</h2>
@@ -192,7 +193,12 @@
         modal.style.display = "none";
     }
 </script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM8iIHDMc3wkFhSFANRr11eRI7ZtRi3U&callback=initMap"
+        type="text/javascript"></script>
 <script data-th-inline="javascript">
+
+    var imagesList = /*[[${images}]]*/ [];
+    var locations = getLocationsFromList(imagesList);
     const campaignId = /*[[${campaign.getId()}]]*/ "1";
     var detailModal = document.getElementById("imageDetailModal");
     var closeDetail = document.getElementById("closeDetail");
@@ -353,6 +359,59 @@
         document.getElementById("imageModalContent").style.display = "block";
         document.getElementById("imageModalContentForm").style.display = "none";
     }
+
+    function getLocationsFromList(imagesList) {
+        var locations = [];
+        for(var i=0; i<imagesList.length; i++){
+            locations.push(["Image "+(i+1), parseFloat(imagesList[i].longitude), parseFloat(imagesList[i].latitude), (i+1)]);
+        }
+        return locations;
+    }
+
+    function initMap() {
+
+        var locations = getLocationsFromList(imagesList)
+
+        var map = new google.maps.Map(document.getElementById('mapsContainer'), {
+            zoom: 13,
+            center: new google.maps.LatLng(41.976816, -87.659916),
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+        })
+
+        var infowindow = new google.maps.InfoWindow({})
+
+        var marker, i
+
+        for (i = 0; i < locations.length; i++) {
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                map: map,
+            })
+
+            google.maps.event.addListener(
+                marker,
+                'click',
+                (function(marker, i) {
+                    return function() {
+                        infowindow.setContent(locations[i][0])
+                        infowindow.open(map, marker)
+                    }
+                })(marker, i)
+            )
+        }
+    }
+
+    /*function AutoCenter() {
+        //  Create a new viewpoint bound
+        var bounds = new google.maps.LatLngBounds();
+        //  Go through each...
+        $.each(markers, function (index, marker) {
+            bounds.extend(marker.position);
+        });
+        //  Fit these bounds to the map
+        map.fitBounds(bounds);
+    }
+    AutoCenter();*/
 
 </script>
 </body>
