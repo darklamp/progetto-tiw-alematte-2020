@@ -23,7 +23,7 @@
             <div class="col-12">
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">Nothing to show</div>
                 <div class="gallery" data-th-each="image : ${images}" data-th-with="toDisplay=${campaignClosed || annotatedImages == null || !annotatedImages.contains(image.getId())}">
-                        <a onclick="openDetail(0,false);" data-th-onclick="${toDisplay} ? 'openDetail('+${image.getId()}+','+${campaignClosed}+');' : ''"><img data-th-style="${toDisplay} ? 'display: block' : 'opacity: 26%'"  src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}"  data-th-id="'galleryImageID' + ${image.getId()}" data-th-alt="'Image #' + ${image.getId()}"></a>
+                        <a onclick="openDetail(0,false);" data-th-onclick="'+${toDisplay}+' ? 'openDetail('+${image.getId()}+','+${campaignClosed}+');' : ''"><img data-th-style="${toDisplay} ? 'display: block' : 'opacity: 26%'"  src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}"  data-th-id="'galleryImageID' + ${image.getId()}" data-th-alt="'Image #' + ${image.getId()}"></a>
                 </div>
             </div>
         </div>
