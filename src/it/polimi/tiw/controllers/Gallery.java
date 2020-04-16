@@ -91,7 +91,7 @@ public class Gallery extends HttpServlet {
 
         try{
             campaign = campaignDAO.getCampaignById(campaignId);
-            if (!campaign.getState().equals(Campaign.STARTED)){
+            if (campaign == null || !campaign.getState().equals(Campaign.STARTED)){
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
@@ -102,10 +102,6 @@ public class Gallery extends HttpServlet {
             return;
         }
 
-        if(campaign==null){
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return;
-        }
         if(images == null){
             ctx.setVariable("isImageAvailable", false);
             images = new ArrayList<>();
