@@ -52,7 +52,7 @@ public class Logout extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Cookie cookie = new Cookie("progtiw-auth", null);
         cookie.setMaxAge(0);
-        cookie.setSecure(true);
+        //cookie.setSecure(true);
         cookie.setHttpOnly(true);
         resp.addCookie(cookie);
         HttpSession session = req.getSession(false);

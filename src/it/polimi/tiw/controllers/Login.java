@@ -105,7 +105,7 @@ public class Login extends HttpServlet {
         if (rememberMe.equals("true")){
             Cookie cookie = new Cookie("progtiw-auth", Crypto.createCookie());
             cookie.setMaxAge(3600);
-            cookie.setSecure(true);
+            //cookie.setSecure(true);
             cookie.setHttpOnly(true);
 
             try {

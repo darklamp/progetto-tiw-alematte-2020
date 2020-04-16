@@ -80,7 +80,7 @@ public class CookieChecker implements Filter {
                 } catch (NoSuchElementException e) {
                     Cookie toRemove = new Cookie("progtiw-auth",null);
                     toRemove.setMaxAge(0);
-                    toRemove.setSecure(true);
+                    //toRemove.setSecure(true);
                     toRemove.setHttpOnly(true);
                     res.addCookie(toRemove);
                     res.sendRedirect(redirectPath+"/login");
