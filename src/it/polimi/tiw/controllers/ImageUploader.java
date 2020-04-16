@@ -1,7 +1,9 @@
 package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Alert;
+import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
+import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
 import it.polimi.tiw.utility.Utility;
 
@@ -77,6 +79,19 @@ public class ImageUploader extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid campaign id");
             return;
         }
+
+        try{
+            CampaignDAO campaignDAO = new CampaignDAO(connection);
+            Campaign campaign = campaignDAO.getCampaignById(campaignId);
+            if(!campaign.getState().equals("created")){
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+        } catch (SQLException e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            return;
+        }
+
         Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
         Image image = new Image();
 
