@@ -78,7 +78,12 @@ public class CookieChecker implements Filter {
                 try {
                     user = userDAO.getUserFromCookie(authCookie.get());
                 } catch (NoSuchElementException e) {
-                    res.sendError(HttpServletResponse.SC_BAD_REQUEST,"Bad cookie.");
+                    Cookie toRemove = new Cookie("progtiw-auth",null);
+                    toRemove.setMaxAge(0);
+                    toRemove.setSecure(true);
+                    toRemove.setHttpOnly(true);
+                    res.addCookie(toRemove);
+                    res.sendRedirect(redirectPath+"/login");
                     return;
                 } catch (SQLException ee){
                     res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
