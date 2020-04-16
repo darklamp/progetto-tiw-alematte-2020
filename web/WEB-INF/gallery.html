@@ -22,8 +22,8 @@
         <div class="row">
             <div class="col-12">
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">Nothing to show</div>
-                <div class="gallery" data-th-each="image : ${images}" data-th-with="toDisplay=${campaignClosed || annotatedImages == null || !annotatedImages.contains(image.getId())}">
-                        <a onclick="openDetail(0,false);" data-th-onclick="${toDisplay} ? 'openDetail('+${image.getId()}+','+${campaignClosed}+');' : ''"><img data-th-style="${toDisplay} ? 'display: block' : 'opacity: 26%'"  src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}"  data-th-id="'galleryImageID' + ${image.getId()}" data-th-alt="'Image #' + ${image.getId()}"></a>
+                <div class="gallery" data-th-each="image : ${images}" data-th-with="toDisplay=${annotatedImages == null || !annotatedImages.contains(image.getId())}">
+                        <a onclick="openDetail(0);" data-th-onclick="${toDisplay} ? 'openDetail('+${image.getId()}+');' : ''"><img data-th-style="${toDisplay} ? 'display: block' : 'opacity: 26%'"  src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}"  data-th-id="'galleryImageID' + ${image.getId()}" data-th-alt="'Image #' + ${image.getId()}"></a>
                 </div>
             </div>
         </div>
@@ -110,7 +110,7 @@
     }
 
 
-    function openDetail(imageId,campaignClosed){
+    function openDetail(imageId){
         curImageFrame = document.getElementById("galleryImageID" + imageId);
         if (isHidden(curImageFrame)) return;
         detailModal.style.display = "block";
@@ -124,7 +124,7 @@
                 var imageObject = jsonObject.image;
                 //fill image fields
                 var imagePath = /*[[${imagePath}]]*/ "";
-                if (!campaignClosed) cur.setAttribute("value",imageId);
+                cur.setAttribute("value",imageId);
                 document.getElementById("modalImage").src = imagePath + imageObject.url;
                 document.getElementById("imgDate").innerText = imageObject.date;
                 document.getElementById("imgLatitude").innerText = imageObject.latitude;
