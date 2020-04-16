@@ -64,7 +64,7 @@ public class CampaignDAO {
 
     public List<Campaign> getWorkerCampaigns(int workerId) throws SQLException{
         List<Campaign> result = new ArrayList<>();
-        String query = "SELECT * FROM campaign AS c JOIN workerCampaign AS wC ON c.id = wC.campaignId WHERE wC.workerId = ?";
+        String query = "SELECT * FROM campaign AS c JOIN workerCampaign AS wC ON c.id = wC.campaignId WHERE wC.workerId = ? and state='started'";
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
             pstatement.setInt(1, workerId);
             try (ResultSet resultSet = pstatement.executeQuery();) {

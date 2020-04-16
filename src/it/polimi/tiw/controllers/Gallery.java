@@ -91,6 +91,10 @@ public class Gallery extends HttpServlet {
 
         try{
             campaign = campaignDAO.getCampaignById(campaignId);
+            if (!campaign.getState().equals(Campaign.STARTED)){
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
             images = imageDAO.getCampaignImages(campaignId);
             annotatedImages = annotationDAO.getAnnotatedImages(campaignId,user.getId());
         } catch (SQLException e){
