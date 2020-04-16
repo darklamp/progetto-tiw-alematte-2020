@@ -113,7 +113,7 @@ public class Login extends HttpServlet {
             } catch (SQLException throwables) {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-            //cookie.setDomain("localhost");
+            //cookie.setDomain(getServletContext().getContextPath());
             resp.addCookie(cookie);
         }
 

@@ -51,7 +51,7 @@ public class CookieChecker implements Filter {
         String loginPath = redirectPath + "/login";
 
         HttpSession s = req.getSession();
-        if (s.isNew() || req.getRequestURI().contains("register")){
+        if ((s.isNew() || req.getRequestURI().contains("register")) && req.getCookies()!=null){
             String key = "progtiw-auth";
             Optional<String> authCookie = Arrays.stream(req.getCookies())
                     .filter(c -> key.equals(c.getName()))
