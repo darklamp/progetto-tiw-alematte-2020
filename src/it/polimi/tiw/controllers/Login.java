@@ -115,6 +115,7 @@ public class Login extends HttpServlet {
                 usr.addCookie(u,cookie);
             } catch (SQLException throwables) {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
             }
             //cookie.setDomain(getServletContext().getContextPath());
             resp.addCookie(cookie);
