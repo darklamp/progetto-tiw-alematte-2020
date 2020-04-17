@@ -66,7 +66,7 @@ public class Gallery extends HttpServlet {
         try{
             campaignId = Integer.parseInt(req.getParameter("id"));
         } catch (Exception e){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
         Alert campaignAlert;
@@ -131,14 +131,14 @@ public class Gallery extends HttpServlet {
         try {
             userId = Integer.parseInt(req.getParameter("userId"));
         } catch (NumberFormatException e){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST); // do not disclose error for user-enumeration purposes
             return;
         }
         List<Image> images = new ArrayList<>();
         images = (ArrayList<Image>) req.getSession().getAttribute("imageList");
         User user = (User)req.getSession().getAttribute("user");
         if(user.getId()!=userId){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
         UserDAO userDAO = new UserDAO(connection);

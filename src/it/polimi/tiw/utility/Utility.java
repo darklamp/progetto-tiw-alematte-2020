@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class Utility {
     public static String getFileExtension(String fileName){
@@ -22,11 +23,10 @@ public class Utility {
     }
 
     public static boolean paramExists(HttpServletRequest req, HttpServletResponse resp, List<String> params) throws IOException {
-        for(int i=0; i<params.size(); i++){
-            if(!req.getParameterMap().containsKey(params.get(i))){
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter " + params.get(i) + " not found");
-                return false;
-            }
+        Map<String,String[]> parameterMap = req.getParameterMap();
+        if(params.stream().anyMatch(parameter -> !parameterMap.containsKey(parameter))){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return false;
         }
         return true;
     }
