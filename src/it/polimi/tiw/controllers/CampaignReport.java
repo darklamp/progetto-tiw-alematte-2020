@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -59,7 +61,7 @@ public class CampaignReport extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(!Utility.paramExists(req,resp,"campaignId"))return;
+        if(!Utility.paramExists(req,resp,new ArrayList<>(Arrays.asList("campaignId", "viewMode"))))return;
         int campaignId;
         try{
             campaignId = Integer.parseInt(req.getParameter("campaignId"));
@@ -78,7 +80,10 @@ public class CampaignReport extends HttpServlet {
         String applicationPath = req.getServletContext().getContextPath();
         String uploadFilePath = applicationPath + File.separator + "uploads/campaignImages";
         File uploadFolder = new File(uploadFilePath);
-
+        String backPath = "/manager/campaign";
+        if(req.getParameter("viewMode").equals("maps")){
+            backPath = "/manager/campaign/maps";
+        }
 
         String path = "/WEB-INF/campaignReport.html";
         ServletContext servletContext = getServletContext();
@@ -110,6 +115,7 @@ public class CampaignReport extends HttpServlet {
             return;
         }
         float midAnnotations = ((float)totAnnotations)/((float)images.size());
+        ctx.setVariable("backPath", backPath);
         ctx.setVariable("midAnnotations", midAnnotations);
         ctx.setVariable("totAnnotations", totAnnotations);
         ctx.setVariable("campaign", campaign);
