@@ -88,10 +88,8 @@ public class Register extends HttpServlet {
         List<String> paramList = new ArrayList<>(Arrays.asList("username", "role", "email", "password", "password_cnf"));
         if(!Utility.paramExists(req, resp, paramList) || Utility.paramIsEmpty(req, resp, paramList)) return;
         String username = req.getParameter("username");
-        username = StringEscapeUtils.escapeJava(username);
         String role = req.getParameter("role");
         String email = req.getParameter("email");
-        email = StringEscapeUtils.escapeJava(email);
         String password = req.getParameter("password");
         String password_cnf = req.getParameter("password_cnf");
         UserDAO userDAO = new UserDAO(connection);

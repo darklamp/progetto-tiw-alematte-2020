@@ -3,6 +3,7 @@ package it.polimi.tiw.dao;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.beans.User;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ public class CampaignDAO {
         String query = "INSERT INTO campaign (managerId, name, client, state) VALUES (?,?,?,'created')";
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);){
             statement.setInt(1, managerId);
-            statement.setString(2, name);
-            statement.setString(3, client);
+            statement.setString(2, StringEscapeUtils.escapeJava(name));
+            statement.setString(3, StringEscapeUtils.escapeJava(client));
             statement.executeUpdate();
             ResultSet rs = statement.getGeneratedKeys();
             if(rs.next()){
@@ -32,8 +33,8 @@ public class CampaignDAO {
     public void updateCampaign(int campaignId, String name, String client) throws SQLException {
         String query = "UPDATE campaign SET name=?, client=? WHERE id=?";
         try (PreparedStatement statement = connection.prepareStatement(query)){
-            statement.setString(1, name);
-            statement.setString(2, client);
+            statement.setString(1, StringEscapeUtils.escapeJava(name));
+            statement.setString(2, StringEscapeUtils.escapeJava(client));
             statement.setInt(3, campaignId);
             statement.executeUpdate();
         }
@@ -52,8 +53,8 @@ public class CampaignDAO {
                     while(resultSet.next()) {
                         Campaign campaign = new Campaign();
                         campaign.setId(resultSet.getInt("id"));
-                        campaign.setName(resultSet.getString("name"));
-                        campaign.setClient(resultSet.getString("client"));
+                        campaign.setName(StringEscapeUtils.unescapeJava(resultSet.getString("name")));
+                        campaign.setClient(StringEscapeUtils.unescapeJava(resultSet.getString("client")));
                         campaign.setState(resultSet.getString("state"));
                         result.add(campaign);
                     }
@@ -75,8 +76,8 @@ public class CampaignDAO {
                     while(resultSet.next()) {
                         Campaign campaign = new Campaign();
                         campaign.setId(resultSet.getInt("id"));
-                        campaign.setName(resultSet.getString("name"));
-                        campaign.setClient(resultSet.getString("client"));
+                        campaign.setName(StringEscapeUtils.unescapeJava(resultSet.getString("name")));
+                        campaign.setClient(StringEscapeUtils.unescapeJava(resultSet.getString("client")));
                         campaign.setState(resultSet.getString("state"));
                         result.add(campaign);
                     }
@@ -98,8 +99,8 @@ public class CampaignDAO {
                     while(resultSet.next()) {
                         Campaign campaign = new Campaign();
                         campaign.setId(resultSet.getInt("id"));
-                        campaign.setName(resultSet.getString("name"));
-                        campaign.setClient(resultSet.getString("client"));
+                        campaign.setName(StringEscapeUtils.escapeJava(resultSet.getString("name")));
+                        campaign.setClient(StringEscapeUtils.escapeJava(resultSet.getString("client")));
                         campaign.setState(resultSet.getString("state"));
                         result.add(campaign);
                     }
@@ -129,8 +130,8 @@ public class CampaignDAO {
                     result.next();
                     Campaign campaign = new Campaign();
                     campaign.setId(campaignId);
-                    campaign.setName(result.getString("name"));
-                    campaign.setClient(result.getString("client"));
+                    campaign.setName(StringEscapeUtils.unescapeJava(result.getString("name")));
+                    campaign.setClient(StringEscapeUtils.unescapeJava(result.getString("client")));
                     campaign.setState(result.getString("state"));
                     return campaign;
                 }
@@ -141,7 +142,7 @@ public class CampaignDAO {
     public boolean inNameFree(String name) throws SQLException{
         String query = "SELECT 1 FROM campaign WHERE name=?";
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
-            pstatement.setString(1, name);
+            pstatement.setString(1, StringEscapeUtils.escapeJava(name));
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
                     return true;

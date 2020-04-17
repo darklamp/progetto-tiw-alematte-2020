@@ -1,14 +1,9 @@
 package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Alert;
-import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.utility.Utility;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -61,7 +56,9 @@ public class CreateCampaign extends HttpServlet {
         if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("campaignName", "campaignClient")))) return;
 
         String name = req.getParameter("campaignName");
+
         String client = req.getParameter("campaignClient");
+
         long id;
         try{
             if(campaignDAO.inNameFree(name)){

@@ -13,6 +13,7 @@ import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.utility.Crypto;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.thymeleaf.model.IStandaloneElementTag;
 
 import javax.servlet.http.Cookie;
@@ -108,8 +109,8 @@ public class UserDAO {
                     }
                     user.setId(result.getInt("id"));
                     user.setRole(result.getString("role"));
-                    user.setUsername(result.getString("username"));
-                    user.setEmail(result.getString("email"));
+                    user.setUsername(StringEscapeUtils.unescapeJava(result.getString("username")));
+                    user.setEmail(StringEscapeUtils.unescapeJava(result.getString("email")));
                     return user;
                 }
             }
@@ -122,7 +123,7 @@ public class UserDAO {
         String query = "SELECT  * FROM user WHERE username = ? AND password = ?";
         String hash = Crypto.pwHash(password,salt.getBytes(StandardCharsets.UTF_8));
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
-            pstatement.setString(1, username);
+            pstatement.setString(1, StringEscapeUtils.escapeJava(username));
             pstatement.setString(2, hash);
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
@@ -136,8 +137,8 @@ public class UserDAO {
                     }
                     user.setId(result.getInt("id"));
                     user.setRole(result.getString("role"));
-                    user.setUsername(result.getString("username"));
-                    user.setEmail(result.getString("email"));
+                    user.setUsername(StringEscapeUtils.unescapeJava(result.getString("username")));
+                    user.setEmail(StringEscapeUtils.unescapeJava(result.getString("email")));
                     return user;
                 }
             }
@@ -160,8 +161,8 @@ public class UserDAO {
                     }
                     user.setId(result.getInt("id"));
                     user.setRole(result.getString("role"));
-                    user.setUsername(result.getString("username"));
-                    user.setEmail(result.getString("email"));
+                    user.setUsername(StringEscapeUtils.unescapeJava(result.getString("username")));
+                    user.setEmail(StringEscapeUtils.unescapeJava(result.getString("email")));
                     return user;
                 }
             }
@@ -171,8 +172,8 @@ public class UserDAO {
     public void updateUser(User user) throws SQLException{
         String query = "UPDATE user SET username=?, email=?, level=?, photo=? WHERE id=?";
         try (PreparedStatement statement = con.prepareStatement(query);){
-            statement.setString(1, user.getUsername());
-            statement.setString(2, user.getEmail());
+            statement.setString(1, StringEscapeUtils.escapeJava(user.getUsername()));
+            statement.setString(2, StringEscapeUtils.escapeJava(user.getEmail()));
             statement.setString(3, user.getLevel());
             statement.setString(4, user.getImageURL());
             statement.setInt(5, user.getId());
@@ -197,8 +198,8 @@ public class UserDAO {
         String salt = Crypto.createSalt();
         String hash = Crypto.pwHash(password,salt.getBytes(StandardCharsets.UTF_8));
         try (PreparedStatement statement = con.prepareStatement(query);){
-            statement.setString(1, username);
-            statement.setString(2, email);
+            statement.setString(1, StringEscapeUtils.escapeJava(username));
+            statement.setString(2, StringEscapeUtils.escapeJava(email));
             statement.setString(3, hash);
             statement.setString(4, role);
             statement.setString(5, salt);
@@ -211,8 +212,8 @@ public class UserDAO {
         String salt = Crypto.createSalt();
         String hash = Crypto.pwHash(password,salt.getBytes(StandardCharsets.UTF_8));
         try (PreparedStatement statement = con.prepareStatement(query);){
-            statement.setString(1, username);
-            statement.setString(2, email);
+            statement.setString(1, StringEscapeUtils.escapeJava(username));
+            statement.setString(2, StringEscapeUtils.escapeJava(email));
             statement.setString(3, hash);
             statement.setString(4, role);
             statement.setString(5, experience);
@@ -225,7 +226,7 @@ public class UserDAO {
     public boolean isUsernameFree(String username) throws SQLException{
         String query = "SELECT 1 FROM user WHERE username= ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
-            pstatement.setString(1, username);
+            pstatement.setString(1, StringEscapeUtils.escapeJava(username));
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
                     return true;
@@ -237,7 +238,7 @@ public class UserDAO {
     public boolean isEmailFree(String email) throws SQLException{
         String query = "SELECT 1 FROM user WHERE email=?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
-            pstatement.setString(1, email);
+            pstatement.setString(1, StringEscapeUtils.escapeJava(email));
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
                     return true;
@@ -249,8 +250,8 @@ public class UserDAO {
     public boolean alreadyExists(String username, String email) throws SQLException{
         String query = "SELECT 1 FROM user WHERE username= ? AND email= ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
-            pstatement.setString(1, username);
-            pstatement.setString(2, email);
+            pstatement.setString(1, StringEscapeUtils.escapeJava(username));
+            pstatement.setString(2, StringEscapeUtils.escapeJava(email));
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
                     return false;
