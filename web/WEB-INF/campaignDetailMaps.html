@@ -14,10 +14,12 @@
             padding: 0;
         }
         #map {
-            position: absolute;
-            top: 400px;
-            bottom: 0;
-            width: 61%;
+            position: relative;
+            padding: 1%;
+            float: left;
+            height: 800px;
+            width: 98%;
+            scroll-behavior: auto;
         }
         .marker {
             background-image: url('http://localhost:8180/Progetto_TIW_war_exploded/images/mapmarker.png');
@@ -27,6 +29,17 @@
             border-radius: 50%;
             cursor: pointer;
         }
+        .mapboxgl-popup {
+            width: 400px;
+            height: 400px;
+        }
+
+        .mapboxgl-popup-content {
+            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+
 
     </style>
     <link rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}">
@@ -222,7 +235,6 @@
 <script data-th-inline="javascript">
 
     var imagesList = /*[[${images}]]*/ [];
-    var locations = getLocationsFromList(imagesList);
     var detailModal = document.getElementById("imageDetailModal");
     var closeDetail = document.getElementById("closeDetail");
     closeDetail.onclick = function(){
@@ -382,9 +394,9 @@
 
     var map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/light-v10',
-        center: [-77.032, 38.913],
-        zoom: 3
+        style: 'mapbox://styles/darklamp/ck94eyqp01woc1iq7nbshmvmc/draft',
+        center: [0.0,0.0],
+        zoom: 1
     });
 
     var campaignID = document.getElementById("campaignId").getAttribute("value");
@@ -408,19 +420,21 @@
     }
     getGeoJson();
 
-
     geojson.features.forEach(function(marker) {
 
         // create a HTML element for each feature
         var el = document.createElement('div');
+        el.setAttribute("onclick","openDetail("+marker.properties.title+")");
         el.className = 'marker';
 
         // make a marker for each feature and add to the map
-        new mapboxgl.Marker(el)
+        var asd = new mapboxgl.Marker(el)
             .setLngLat(marker.geometry.coordinates)
             .addTo(map);
 
     });
+
+
 
 </script>
 
