@@ -148,7 +148,8 @@
                 <div class="row" id="imageModalContentForm" style="display: none"></div>
                 <div class="row" id="imageModalContent">
                     <div class="col-6-alt">
-                        <img src="../images/test1.jpg" id="modalImage" style="width: 100%; height: auto; max-height: 600px; "/>
+                        <img src="../images/test1.jpg" id="modalImage" style="max-width: 100%; width: auto; height: auto; max-height: 400px; "/>
+                        <div class="row">
                         <span style="float: right;" onclick="modifyMetadata();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="modifyImageMetadataBtnIcon"></i></span>
                         <div class="newspaper-2">
                             <p><strong>Date: </strong><span id="imgDate"></span></p>
@@ -159,7 +160,7 @@
                             <p><strong>Region: </strong><span id="imgRegion"></span></p>
                             <p><strong>Town: </strong><span id="imgTown"></span></p>
                         </div>
-
+                        </div>
                     </div>
                     <div class="col-6-alt" >
                         <div class="alert alert-primary" id="annotationsEmptyAlert">No annotations for this image</div>
@@ -363,7 +364,7 @@
     function getLocationsFromList(imagesList) {
         var locations = [];
         for(var i=0; i<imagesList.length; i++){
-            locations.push(["Image "+(i+1), parseFloat(imagesList[i].longitude), parseFloat(imagesList[i].latitude), (i+1)]);
+            locations.push(["Image "+(i+1), parseFloat(imagesList[i].latitude), parseFloat(imagesList[i].longitude), (i+1)]);
         }
         return locations;
     }
@@ -393,9 +394,29 @@
                 'click',
                 (function(marker, i) {
                     return function() {
-                        //infowindow.setContent(locations[i][0]);
-                        //infowindow.open(map, marker);
                         openDetail(imagesList[i].id);
+                    }
+                })(marker, i)
+            )
+
+            google.maps.event.addListener(
+                marker,
+                'mouseover',
+                (function(marker, i) {
+                    return function() {
+                        infowindow.setContent(locations[i][0] + " Lat: " + locations[i][1] + " Long: " + locations[i][2]);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i)
+            )
+
+            google.maps.event.addListener(
+                marker,
+                'mouseout',
+                (function(marker, i) {
+                    return function() {
+                        infowindow.setContent(locations[i][0] + " Lat: " + locations[i][1] + " Long: " + locations[i][2]);
+                        infowindow.close();
                     }
                 })(marker, i)
             )

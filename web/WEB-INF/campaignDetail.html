@@ -149,18 +149,19 @@
                 <div class="row" id="imageModalContentForm" style="display: none"></div>
                 <div class="row" id="imageModalContent">
                     <div class="col-6-alt">
-                                <img src="../images/test1.jpg" id="modalImage" style="width: 100%; height: auto; max-height: 600px; "/>
-                                <span style="float: right;" onclick="modifyMetadata();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="modifyImageMetadataBtnIcon"></i></span>
-                                <div class="newspaper-2">
-                                    <p><strong>Date: </strong><span id="imgDate"></span></p>
-                                    <p><strong>Latitude: </strong><span id="imgLatitude"></span></p>
-                                    <p><strong>Longitude: </strong><span id="imgLongitude"></span></p>
-                                    <p><strong>Resolution: </strong><span id="imgResolution"></span></p>
-                                    <p><strong>Source: </strong><span id="imgSource"></span></p>
-                                    <p><strong>Region: </strong><span id="imgRegion"></span></p>
-                                    <p><strong>Town: </strong><span id="imgTown"></span></p>
+                                <img src="../images/test1.jpg" id="modalImage" style="max-width: 100%; width: auto; height: auto; max-height: 400px; "/>
+                                <div class="row">
+                                    <span style="float: right;" onclick="modifyMetadata();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="modifyImageMetadataBtnIcon"></i></span>
+                                    <div class="newspaper-2">
+                                        <p><strong>Date: </strong><span id="imgDate"></span></p>
+                                        <p><strong>Latitude: </strong><span id="imgLatitude"></span></p>
+                                        <p><strong>Longitude: </strong><span id="imgLongitude"></span></p>
+                                        <p><strong>Resolution: </strong><span id="imgResolution"></span></p>
+                                        <p><strong>Source: </strong><span id="imgSource"></span></p>
+                                        <p><strong>Region: </strong><span id="imgRegion"></span></p>
+                                        <p><strong>Town: </strong><span id="imgTown"></span></p>
+                                    </div>
                                 </div>
-
                     </div>
                     <div class="col-6-alt" >
                         <div class="alert alert-primary" id="annotationsEmptyAlert">No annotations for this image</div>
