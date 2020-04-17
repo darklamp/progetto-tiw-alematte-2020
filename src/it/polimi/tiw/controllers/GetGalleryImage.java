@@ -1,11 +1,7 @@
 package it.polimi.tiw.controllers;
 
-import it.polimi.tiw.beans.Annotation;
 import it.polimi.tiw.beans.Image;
-import it.polimi.tiw.beans.User;
-import it.polimi.tiw.dao.AnnotationDAO;
 import it.polimi.tiw.dao.ImageDAO;
-import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utility.JsonArrayConverter;
 import it.polimi.tiw.utility.JsonMapConverter;
 import it.polimi.tiw.utility.Utility;
@@ -17,7 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;

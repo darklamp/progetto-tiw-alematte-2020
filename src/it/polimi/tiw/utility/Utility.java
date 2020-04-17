@@ -1,7 +1,6 @@
 package it.polimi.tiw.utility;
 
 import it.polimi.tiw.beans.Image;
-import it.polimi.tiw.dao.AnnotationDAO;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import javax.servlet.http.HttpServletRequest;

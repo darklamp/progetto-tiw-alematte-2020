@@ -1,7 +1,6 @@
 package it.polimi.tiw.dao;
 
 import it.polimi.tiw.beans.Image;
-import it.polimi.tiw.beans.User;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.sql.*;

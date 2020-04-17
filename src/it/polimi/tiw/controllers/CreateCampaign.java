@@ -18,7 +18,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @WebServlet("/manager/createCampaign")
 public class CreateCampaign extends HttpServlet {

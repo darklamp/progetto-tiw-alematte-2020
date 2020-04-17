@@ -1,21 +1,10 @@
 package it.polimi.tiw.filters;
 
-import it.polimi.tiw.beans.User;
-import it.polimi.tiw.dao.UserDAO;
-
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import javax.servlet.*;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpSession;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 /**
  * Servlet Filter implementation class checker

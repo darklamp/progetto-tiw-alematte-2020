@@ -1,25 +1,15 @@
 package it.polimi.tiw.dao;
 
-import java.nio.charset.StandardCharsets;
-import java.sql.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.NoSuchElementException;
-
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.utility.Crypto;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.thymeleaf.model.IStandaloneElementTag;
 
 import javax.servlet.http.Cookie;
-import javax.swing.text.DateFormatter;
-
-import static de.mkammerer.argon2.Argon2Factory.*;
+import java.nio.charset.StandardCharsets;
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.NoSuchElementException;
 
 public class UserDAO {
     private Connection con;
