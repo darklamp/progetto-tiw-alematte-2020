@@ -13,14 +13,11 @@
             margin: 0;
             padding: 0;
         }
-
         #map {
             position: absolute;
-            top: 0;
+            top: 400px;
             bottom: 0;
-            max-height: 500px;
-            max-width: 500px;
-            width: 100%;
+            width: 61%;
         }
         .marker {
             background-image: url('http://localhost:8180/Progetto_TIW_war_exploded/images/mapmarker.png');
@@ -226,7 +223,6 @@
 
     var imagesList = /*[[${images}]]*/ [];
     var locations = getLocationsFromList(imagesList);
-    const campaignId = /*[[${campaign.getId()}]]*/ "1";
     var detailModal = document.getElementById("imageDetailModal");
     var closeDetail = document.getElementById("closeDetail");
     closeDetail.onclick = function(){
@@ -262,7 +258,6 @@
                 //fill image fields
                 var imagePath = /*[[${imagePath}]]*/ "";
                 document.getElementById("modalImage").src = imagePath + imageObject.url;
-
                 document.getElementById("imgDate").innerText = imageObject.date;
                 document.getElementById("imgLatitude").innerText = imageObject.latitude;
                 document.getElementById("imgLongitude").innerText = imageObject.longitude;
@@ -272,7 +267,7 @@
                 document.getElementById("imgTown").innerText = imageObject.town;
                 generateMetadataForm(imageObject, campaignId);
                 var annotationsObject = jsonObject.annotations;
-                if(annotationsObject == 0){
+                if(annotationsObject === 0){
                     document.getElementById("annotationsEmptyAlert").style.display="block";
                     document.getElementById("annotationContainer").innerHTML = "";
                     return;
@@ -377,89 +372,8 @@
         document.getElementById("imageModalContentForm").innerHTML = modalModifyContent;
     }
 
-    function modifyMetadata(){
-        document.getElementById("imageModalContent").style.display = "none";
-        document.getElementById("imageModalContentForm").style.display = "block";
-    }
 
-    function endModifyMetadata(){
-        document.getElementById("imageModalContent").style.display = "block";
-        document.getElementById("imageModalContentForm").style.display = "none";
-    }
 
-    function getLocationsFromList(imagesList) {
-        var locations = [];
-        for(var i=0; i<imagesList.length; i++){
-            locations.push(["Image "+(i+1), parseFloat(imagesList[i].latitude), parseFloat(imagesList[i].longitude), (i+1)]);
-        }
-        return locations;
-    }
-
-    function initMap() {
-
-        var locations = getLocationsFromList(imagesList)
-
-        var map = new google.maps.Map(document.getElementById('mapsContainer'), {
-            zoom: 13,
-            center: new google.maps.LatLng(41.976816, -87.659916),
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-        })
-
-        var infowindow = new google.maps.InfoWindow({})
-
-        var marker, i
-
-        for (i = 0; i < locations.length; i++) {
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-                map: map,
-            })
-
-            google.maps.event.addListener(
-                marker,
-                'click',
-                (function(marker, i) {
-                    return function() {
-                        openDetail(imagesList[i].id);
-                    }
-                })(marker, i)
-            )
-
-            google.maps.event.addListener(
-                marker,
-                'mouseover',
-                (function(marker, i) {
-                    return function() {
-                        infowindow.setContent(locations[i][0] + " Lat: " + locations[i][1] + " Long: " + locations[i][2]);
-                        infowindow.open(map, marker);
-                    }
-                })(marker, i)
-            )
-
-            google.maps.event.addListener(
-                marker,
-                'mouseout',
-                (function(marker, i) {
-                    return function() {
-                        infowindow.setContent(locations[i][0] + " Lat: " + locations[i][1] + " Long: " + locations[i][2]);
-                        infowindow.close();
-                    }
-                })(marker, i)
-            )
-        }
-    }
-
-    /*function AutoCenter() {
-        //  Create a new viewpoint bound
-        var bounds = new google.maps.LatLngBounds();
-        //  Go through each...
-        $.each(markers, function (index, marker) {
-            bounds.extend(marker.position);
-        });
-        //  Fit these bounds to the map
-        map.fitBounds(bounds);
-    }
-    AutoCenter();*/
 
 </script>
 <script>
@@ -505,6 +419,7 @@
         new mapboxgl.Marker(el)
             .setLngLat(marker.geometry.coordinates)
             .addTo(map);
+
     });
 
 </script>
