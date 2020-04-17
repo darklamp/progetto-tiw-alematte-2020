@@ -3,6 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Campaign detail</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js'></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            position: absolute;
+            top: 400px;
+            bottom: 0;
+            width: 61%;
+        }
+        .marker {
+            background-image: url('http://localhost:8180/Progetto_TIW_war_exploded/images/mapmarker.png');
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+    </style>
     <link rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}">
     <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
 
@@ -28,7 +54,7 @@
                         <p><strong>Campaign client: </strong><span data-th-text="${campaign.getClient()}"></span></p></div>
                     <div id="infoForm" style="display: none;">
                         <form class="form" method="POST" action="" data-th-action="@{/manager/campaignActions}">
-                            <input type="hidden" name="campaignId" data-th-value="${campaign.getId()}"/>
+                            <input type="hidden" name="campaignId" id="campaignId" data-th-value="${campaign.getId()}"/>
                             <input type="hidden" name="viewMode" value="maps"/>
                             <input type="hidden" name="action" value="modifyData"/>
                             <div class="row">
@@ -56,8 +82,7 @@
             <div class="col-8">
                 <h2>Campaign images</h2>
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">No images</div>
-                <!-- Insert map here, use showDetail(imageId) to open modal -->
-                <div id="mapsContainer" class="map-container"></div>
+                <div id="map" data-th-if="${isImageAvailable}"></div>
             </div>
             <div class="col-4">
                 <h2>Actions</h2>
@@ -194,13 +219,10 @@
         modal.style.display = "none";
     }
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM8iIHDMc3wkFhSFANRr11eRI7ZtRi3U&callback=initMap"
-        type="text/javascript"></script>
 <script data-th-inline="javascript">
 
     var imagesList = /*[[${images}]]*/ [];
     var locations = getLocationsFromList(imagesList);
-    const campaignId = /*[[${campaign.getId()}]]*/ "1";
     var detailModal = document.getElementById("imageDetailModal");
     var closeDetail = document.getElementById("closeDetail");
     closeDetail.onclick = function(){
@@ -236,7 +258,6 @@
                 //fill image fields
                 var imagePath = /*[[${imagePath}]]*/ "";
                 document.getElementById("modalImage").src = imagePath + imageObject.url;
-
                 document.getElementById("imgDate").innerText = imageObject.date;
                 document.getElementById("imgLatitude").innerText = imageObject.latitude;
                 document.getElementById("imgLongitude").innerText = imageObject.longitude;
@@ -246,7 +267,7 @@
                 document.getElementById("imgTown").innerText = imageObject.town;
                 generateMetadataForm(imageObject, campaignId);
                 var annotationsObject = jsonObject.annotations;
-                if(annotationsObject == 0){
+                if(annotationsObject === 0){
                     document.getElementById("annotationsEmptyAlert").style.display="block";
                     document.getElementById("annotationContainer").innerHTML = "";
                     return;
@@ -351,90 +372,57 @@
         document.getElementById("imageModalContentForm").innerHTML = modalModifyContent;
     }
 
-    function modifyMetadata(){
-        document.getElementById("imageModalContent").style.display = "none";
-        document.getElementById("imageModalContentForm").style.display = "block";
-    }
 
-    function endModifyMetadata(){
-        document.getElementById("imageModalContent").style.display = "block";
-        document.getElementById("imageModalContentForm").style.display = "none";
-    }
 
-    function getLocationsFromList(imagesList) {
-        var locations = [];
-        for(var i=0; i<imagesList.length; i++){
-            locations.push(["Image "+(i+1), parseFloat(imagesList[i].latitude), parseFloat(imagesList[i].longitude), (i+1)]);
-        }
-        return locations;
-    }
-
-    function initMap() {
-
-        var locations = getLocationsFromList(imagesList)
-
-        var map = new google.maps.Map(document.getElementById('mapsContainer'), {
-            zoom: 13,
-            center: new google.maps.LatLng(41.976816, -87.659916),
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-        })
-
-        var infowindow = new google.maps.InfoWindow({})
-
-        var marker, i
-
-        for (i = 0; i < locations.length; i++) {
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-                map: map,
-            })
-
-            google.maps.event.addListener(
-                marker,
-                'click',
-                (function(marker, i) {
-                    return function() {
-                        openDetail(imagesList[i].id);
-                    }
-                })(marker, i)
-            )
-
-            google.maps.event.addListener(
-                marker,
-                'mouseover',
-                (function(marker, i) {
-                    return function() {
-                        infowindow.setContent(locations[i][0] + " Lat: " + locations[i][1] + " Long: " + locations[i][2]);
-                        infowindow.open(map, marker);
-                    }
-                })(marker, i)
-            )
-
-            google.maps.event.addListener(
-                marker,
-                'mouseout',
-                (function(marker, i) {
-                    return function() {
-                        infowindow.setContent(locations[i][0] + " Lat: " + locations[i][1] + " Long: " + locations[i][2]);
-                        infowindow.close();
-                    }
-                })(marker, i)
-            )
-        }
-    }
-
-    /*function AutoCenter() {
-        //  Create a new viewpoint bound
-        var bounds = new google.maps.LatLngBounds();
-        //  Go through each...
-        $.each(markers, function (index, marker) {
-            bounds.extend(marker.position);
-        });
-        //  Fit these bounds to the map
-        map.fitBounds(bounds);
-    }
-    AutoCenter();*/
 
 </script>
+<script>
+
+    mapboxgl.accessToken = '***REMOVED***';
+
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: [-77.032, 38.913],
+        zoom: 3
+    });
+
+    var campaignID = document.getElementById("campaignId").getAttribute("value");
+
+    var geojson;
+
+    function getGeoJson() {
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:8180/Progetto_TIW_war_exploded/manager/campaign/maps',
+            data: "campaignId=" + campaignID,
+            dataType: "json",
+            success: function (jsonContent) {
+                geojson = jsonContent;
+            },
+            error: function () {
+                alert("Error");
+            },
+            async: false,
+        });
+    }
+    getGeoJson();
+
+
+    geojson.features.forEach(function(marker) {
+
+        // create a HTML element for each feature
+        var el = document.createElement('div');
+        el.className = 'marker';
+
+        // make a marker for each feature and add to the map
+        new mapboxgl.Marker(el)
+            .setLngLat(marker.geometry.coordinates)
+            .addTo(map);
+
+    });
+
+</script>
+
 </body>
 </html>

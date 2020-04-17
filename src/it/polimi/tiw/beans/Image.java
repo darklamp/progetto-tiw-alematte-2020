@@ -105,4 +105,15 @@ public class Image implements JsonSupport {
         return result;
     }
 
+    public String convertToGeoJSON() {
+        String result = "{";
+        result += "\"type\": \"Feature\",\"properties\": {";
+        result += "\"title\": \"Image" + id + "\"},";
+        result += "\"geometry\": {";
+        result += "\"coordinates\": [" + longitude + ", " + latitude + "],";
+        result += "\"type\": \"Point\"}}";
+
+        return result;
+    }
+
 }
