@@ -9,6 +9,7 @@ import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utility.Utility;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -172,6 +173,7 @@ public class Gallery extends HttpServlet {
 
 
         String note = req.getParameter("annotationText");
+        note = StringEscapeUtils.escapeJava(note);
         int validityToInt = 0;
         if (validity.equals("true")){
             validityToInt = 1;
