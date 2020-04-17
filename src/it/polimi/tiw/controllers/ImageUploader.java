@@ -6,6 +6,7 @@ import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
 import it.polimi.tiw.utility.Utility;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -113,8 +114,11 @@ public class ImageUploader extends HttpServlet {
         String longitudeStr = req.getParameter("longitude").replace(',','.');
         String resolution = req.getParameter("resolution");
         String source = req.getParameter("source");
+        source = StringEscapeUtils.escapeJava(source);
         String region = req.getParameter("region");
+        region = StringEscapeUtils.escapeJava(region);
         String town = req.getParameter("town");
+        town = StringEscapeUtils.escapeJava(town);
         if(latitudeStr.isEmpty() || longitudeStr.isEmpty() || resolution.isEmpty() || source.isEmpty() || region.isEmpty() || town.isEmpty() || part == null || part.getSize()<=0){
             alert.setContent("Please fill all form data");
             alert.setType(Alert.DANGER);
@@ -133,6 +137,7 @@ public class ImageUploader extends HttpServlet {
         try {
             latitude = Float.parseFloat(latitudeStr);
             longitude = Float.parseFloat(longitudeStr);
+            if (latitude<-90 || latitude > 90 || longitude < -180 || longitude > 180) throw new NumberFormatException();
         } catch (NumberFormatException e){
             alert.setContent("NumberFormatException in latitude or longitude");
             alert.setType(Alert.DANGER);
@@ -149,7 +154,7 @@ public class ImageUploader extends HttpServlet {
         try{
             lastImageIndex = imageDAO.getImagesNumber(campaignId);
         } catch (SQLException e){
-            System.out.println("SQL Exeption on getting image index");
+            System.out.println("SQL Exception on getting image index");
             alert.setContent("SQL error");
             alert.setType(Alert.DANGER);
             alert.show();

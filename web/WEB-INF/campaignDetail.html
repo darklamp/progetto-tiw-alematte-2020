@@ -31,9 +31,9 @@
                 <h2>Actions</h2>
                 <a style="width: 94%; margin-bottom: 10px" class="btn btn-outline-primary btn-full" id="newImageModalBtn" data-th-if="${campaign.getState().equals('created')}">Add new image</a>
                 <a style="width: 94%; margin-bottom: 10px" class="btn btn-outline-primary btn-full" href="campaignDetailMaps.html" data-th-href="@{/manager/campaign/maps(id=${campaign.getId()})}">Show images in map</a>
-                <a style="width: 94%" href="campaignDetail.html" class="btn btn-outline-success btn-full" data-th-href="@{/manager/campaignActions(campaignId=${campaign.getId()}, action='setStart')}" data-th-if="${campaign.getState().equals('created') && isImageAvailable}">Start campaign</a>
-                <a style="width: 94%" href="campaignDetail.html" class="btn btn-outline-danger btn-full" data-th-href="@{/manager/campaignActions(campaignId=${campaign.getId()}, action='setClose')}" data-th-if="${campaign.getState().equals('started')}">Close campaign</a><br/>
-                <a style="width: 94%" href="campaignDetail.html" class="btn btn-outline-info btn-full" data-th-href="@{/manager/campaignReport(campaignId=${campaign.getId()},viewMode='maps')}" data-th-if="${not campaign.getState().equals('created')}">Show report</a>
+                <a style="width: 94%" href="campaignDetail.html" class="btn btn-outline-success btn-full" data-th-href="@{/manager/campaignActions(campaignId=${campaign.getId()}, action='setStart', viewMode='grid')}" data-th-if="${campaign.getState().equals('created') && isImageAvailable}">Start campaign</a>
+                <a style="width: 94%" href="campaignDetail.html" class="btn btn-outline-danger btn-full" data-th-href="@{/manager/campaignActions(campaignId=${campaign.getId()}, action='setClose', viewMode='grid')}" data-th-if="${campaign.getState().equals('started')}">Close campaign</a><br/>
+                <a style="width: 94%" href="campaignDetail.html" class="btn btn-outline-info btn-full" data-th-href="@{/manager/campaignReport(campaignId=${campaign.getId()},viewMode='grid')}" data-th-if="${not campaign.getState().equals('created')}">Show report</a>
                 <div style="width:94%; margin-top: 6px" class="highlight">
                     <span style="float: right;" onclick="showForm();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="buttonInfoIcon"></i></span>
                     <div id="infoText">
