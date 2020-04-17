@@ -136,10 +136,7 @@ public class CampaignDetailMaps extends HttpServlet {
         try{
             CampaignDAO campaignDAO = new CampaignDAO(connection);
             Campaign campaign = campaignDAO.getCampaignById(campaignId);
-            if(!campaign.getState().equals("created")){
-                resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-                return;
-            }
+
         } catch (SQLException e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
