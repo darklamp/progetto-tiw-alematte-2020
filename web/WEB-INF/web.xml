@@ -5,15 +5,15 @@
          version="4.0">
     <context-param>
         <param-name>dbUrl</param-name>
-        <param-value>jdbc:mysql://127.0.0.1:3306/db_prog_tiw?serverTimezone=Europe/Berlin</param-value>
+        <param-value>jdbc:mysql://192.168.1.124:3306/TIWProject?serverTimezone=Europe/Rome</param-value>
     </context-param>
     <context-param>
         <param-name>dbUser</param-name>
-        <param-value>user_db_tecweb</param-value>
+        <param-value>matteo</param-value>
     </context-param>
     <context-param>
         <param-name>dbPassword</param-name>
-        <param-value></param-value>
+        <param-value>matmacsystem</param-value>
     </context-param>
     <context-param>
         <param-name>dbDriver</param-name>
