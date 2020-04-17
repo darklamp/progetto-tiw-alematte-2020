@@ -3,6 +3,8 @@ package it.polimi.tiw.controllers;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.CampaignDAO;
+import it.polimi.tiw.utility.JsonMapConverter;
+import it.polimi.tiw.utility.Utility;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -19,7 +21,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/worker")
 public class WorkerHome extends HttpServlet {
@@ -67,6 +71,7 @@ public class WorkerHome extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in reading data");
             return;
         }
+
         ctx.setVariable("user", user);
         ctx.setVariable("userJoinedCampaigns", userJoinedCampaigns);
         ctx.setVariable("userAvailableCampaigns", userAvailableCampaigns);

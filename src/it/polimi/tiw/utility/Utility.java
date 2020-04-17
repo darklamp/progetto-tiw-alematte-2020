@@ -6,6 +6,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public class Utility {
     }
     public static boolean paramExists(HttpServletRequest req, HttpServletResponse resp, String param) throws IOException {
             if(!req.getParameterMap().containsKey(param)){
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter " + param + " not found");
                 return false;
             }
         return true;
@@ -40,9 +41,9 @@ public class Utility {
 
 
     public static boolean paramIsEmpty(HttpServletRequest req, HttpServletResponse resp, List<String> params) throws IOException{
-        for(int i=0; i<params.size(); i++){
-            if(req.getParameter(params.get(i)).isEmpty()){
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        for (String param : params) {
+            if (req.getParameter(param).isEmpty()) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter " + param + " is empty");
                 return true;
             }
         }
@@ -50,9 +51,19 @@ public class Utility {
     }
     public static boolean paramIsEmpty(HttpServletRequest req, HttpServletResponse resp, String param) throws IOException{
         if(req.getParameter(param).isEmpty()){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter " + param + " is empty");
             return true;
         }
         return false;
+    }
+
+    public static String createMapGeoJSON(ArrayList<Image> images){
+        String output = "{\n" +
+                "  \"features\": [";
+        output = images != null ? images.stream().map(Image::convertToGeoJSON).reduce(output, (old,newPart) -> old + newPart + ",") : null;
+        if (output == null) return null;
+        output = JsonMapConverter.removeLastCharacter(output);
+        output += "],\"type\": \"FeatureCollection\"";
+        return output;
     }
 }

@@ -5,6 +5,7 @@ import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
+import it.polimi.tiw.utility.JsonMapConverter;
 import it.polimi.tiw.utility.Utility;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -23,10 +24,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @WebServlet("/manager/campaign/maps")
 public class CampaignDetailMaps extends HttpServlet {
@@ -107,8 +105,13 @@ public class CampaignDetailMaps extends HttpServlet {
             images = new ArrayList<>();
         } else {
             ctx.setVariable("isImageAvailable", true);
-
         }
+
+
+        String jsonConvertedMap = Utility.createMapGeoJSON((ArrayList<Image>) images);
+
+
+
         ctx.setVariable("context", getServletContext().getContextPath());
         ctx.setVariable("campaign", campaign);
         ctx.setVariable("images", images);
