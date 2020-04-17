@@ -91,10 +91,10 @@ public class ImageUploader extends HttpServlet {
                 return;
             }
         } catch (SQLException e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         } catch (NoSuchElementException e){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
@@ -107,6 +107,7 @@ public class ImageUploader extends HttpServlet {
         }else if(req.getParameter("viewMode").equals("maps")){
             path = getServletContext().getContextPath() + "/manager/campaign/maps?id="+campaignId;
         }
+
 
         String latitudeStr = req.getParameter("latitude").replace(',', '.');
         String longitudeStr = req.getParameter("longitude").replace(',','.');
@@ -140,6 +141,8 @@ public class ImageUploader extends HttpServlet {
             resp.sendRedirect(path);
             return;
         }
+
+
         //Insert image on database
         //File exists
         int lastImageIndex;
@@ -167,6 +170,7 @@ public class ImageUploader extends HttpServlet {
             return;
         }
         part.write(uploadFilePath + File.separator + savedFileName);
+
         image.setUrl(savedFileName);
         image.setTown(town);
         image.setRegion(region);
