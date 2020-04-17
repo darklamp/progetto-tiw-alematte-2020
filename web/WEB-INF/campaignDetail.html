@@ -67,7 +67,7 @@
                 <hr/>
                 <a href="campaignDetail.html" class="btn btn-outline-success btn-full" data-th-href="@{/manager/campaignActions(campaignId=${campaign.getId()}, action='setStart')}" data-th-if="${campaign.getState().equals('created') && isImageAvailable}">Start campaign</a>
                 <a href="campaignDetail.html" class="btn btn-outline-danger btn-full" data-th-href="@{/manager/campaignActions(campaignId=${campaign.getId()}, action='setClose')}" data-th-if="${campaign.getState().equals('started')}">Close campaign</a><br/>
-                <a href="campaignDetail.html" class="btn btn-outline-info btn-full" data-th-href="@{/manager/campaignReport(campaignId=${campaign.getId()})}" data-th-if="${not campaign.getState().equals('created')}">Show report</a>
+                <a href="campaignDetail.html" class="btn btn-outline-info btn-full" data-th-href="@{/manager/campaignReport(campaignId=${campaign.getId()}, viewMode='grid')}" data-th-if="${not campaign.getState().equals('created')}">Show report</a>
             </div>
         </div>
     </div>
