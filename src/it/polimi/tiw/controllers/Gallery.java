@@ -9,6 +9,7 @@ import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utility.Utility;
+import jdk.jshell.execution.Util;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -124,10 +125,8 @@ public class Gallery extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(!req.getParameterMap().containsKey("userId") || req.getParameter("userId").isEmpty()){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
+        if(!Utility.paramExists(req, resp, "userId") || Utility.paramIsEmpty(req, resp, "userId")) return;
+
         int userId;
         try {
             userId = Integer.parseInt(req.getParameter("userId"));
@@ -144,11 +143,7 @@ public class Gallery extends HttpServlet {
         }
         UserDAO userDAO = new UserDAO(connection);
         ImageDAO imageDAO = new ImageDAO(connection);
-
-       /* if (!user.getRole().equals("worker")){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }*/
+        if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("validity", "trust", "annotationText")))) return;
         String validity = req.getParameter("validity");
         String trust = req.getParameter("trust");
         int imageID = 0;

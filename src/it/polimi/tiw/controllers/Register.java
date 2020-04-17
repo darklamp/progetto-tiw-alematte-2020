@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static it.polimi.tiw.utility.Utility.isValidMailAddress;
 
@@ -81,6 +84,8 @@ public class Register extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<String> paramList = new ArrayList<>(Arrays.asList("username", "role", "email", "password", "password_cnf"));
+        if(!Utility.paramExists(req, resp, paramList) || Utility.paramIsEmpty(req, resp, paramList)) return;
         String username = req.getParameter("username");
         String role = req.getParameter("role");
         String email = req.getParameter("email");
@@ -123,6 +128,7 @@ public class Register extends HttpServlet {
                 userDAO.addManagerUser(username, email, password, role);
             } else {
                 //Get photo and level
+                if(!Utility.paramExists(req, resp, "experience") || Utility.paramIsEmpty(req, resp, "experience")) return;
                 String experience = req.getParameter("experience");
                 if(!experience.equals("low") && !experience.equals("medium") && !experience.equals("high")){
                     resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid experience");

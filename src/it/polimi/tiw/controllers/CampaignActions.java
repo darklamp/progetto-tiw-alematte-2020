@@ -3,6 +3,8 @@ package it.polimi.tiw.controllers;
 import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.dao.CampaignDAO;
+import it.polimi.tiw.utility.Utility;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -14,6 +16,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @WebServlet("/manager/campaignActions")
 public class CampaignActions extends HttpServlet {
@@ -85,9 +89,7 @@ public class CampaignActions extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Campaign campaign;
         Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
-        if(!req.getParameterMap().containsKey("campaignId") && !req.getParameterMap().containsKey("viewMode")){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        } else {
+        if(!Utility.paramExists(req,resp, new ArrayList<>(Arrays.asList("campaignId", "viewMode", "action")))) return;
             int campaignId;
             try{
                 campaignId = Integer.parseInt(req.getParameter("campaignId"));
@@ -96,15 +98,13 @@ public class CampaignActions extends HttpServlet {
                 return;
             }
 
+            //Get viewMode type
             String path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
-            if(req.getParameter("viewMode")==null) {
-                path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
-            }else if(req.getParameter("viewMode").equals("grid")) {
+            if(req.getParameter("viewMode").equals("grid")) {
                 path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
             }else if(req.getParameter("viewModa").equals("maps")){
                 path = getServletContext().getContextPath() + "/manager/campaign/maps?id="+campaignId;
             }
-
 
             try{
                 campaign = campaignDAO.getCampaignById(campaignId);
@@ -112,17 +112,16 @@ public class CampaignActions extends HttpServlet {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
             }
-            //All instruction here
-            if(!req.getParameterMap().containsKey("action")){
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
+
             String action = req.getParameter("action");
             if(action.equals("modifyData")){
                 if(!campaign.getState().equals("created")){
                     resp.sendError(HttpServletResponse.SC_FORBIDDEN);
                     return;
                 }
+
+                if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("campaignName", "campaignClient")))) return;
+
                 String name = req.getParameter("campaignName");
                 String client = req.getParameter("campaignClient");
 
@@ -152,7 +151,7 @@ public class CampaignActions extends HttpServlet {
                 return;
             }
             resp.sendRedirect(path);
-        }
+
     }
 
     @Override

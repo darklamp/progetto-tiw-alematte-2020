@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 @WebServlet("/imageUploader")
 @MultipartConfig(fileSizeThreshold = 6291456, // 6 MB
@@ -70,8 +73,8 @@ public class ImageUploader extends HttpServlet {
             uploadFolder.mkdirs();
         }
         Part part = req.getPart("image");
+        if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("campaignId", "viewMode", "latitude", "longitude", "resolution", "source", "region", "town")))) return;
 
-        //Get all param
         int campaignId;
         try {
             campaignId = Integer.parseInt(req.getParameter("campaignId"));
@@ -90,15 +93,16 @@ public class ImageUploader extends HttpServlet {
         } catch (SQLException e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             return;
+        } catch (NoSuchElementException e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return;
         }
 
         Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
         Image image = new Image();
 
         String path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
-        if(req.getParameter("viewMode")==null) {
-            path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
-        }else if(req.getParameter("viewMode").equals("grid")) {
+        if(req.getParameter("viewMode").equals("grid")) {
             path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
         }else if(req.getParameter("viewModa").equals("maps")){
             path = getServletContext().getContextPath() + "/manager/campaign/maps?id="+campaignId;

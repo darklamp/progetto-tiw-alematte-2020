@@ -6,6 +6,7 @@ import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.AnnotationDAO;
 import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
+import it.polimi.tiw.utility.Utility;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -24,6 +25,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @WebServlet("/manager/campaignReport")
 public class CampaignReport extends HttpServlet {
@@ -57,6 +59,7 @@ public class CampaignReport extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if(!Utility.paramExists(req,resp,"campaignId"))return;
         int campaignId;
         try{
             campaignId = Integer.parseInt(req.getParameter("campaignId"));
@@ -96,12 +99,12 @@ public class CampaignReport extends HttpServlet {
         } catch (SQLException e){
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SQL Error");
             return;
-        }
-
-        if(campaign==null){
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Campaign is null");
+        } catch (NoSuchElementException e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
+
+        //Only in this case images must exists
         if(images == null){
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No images found");
             return;

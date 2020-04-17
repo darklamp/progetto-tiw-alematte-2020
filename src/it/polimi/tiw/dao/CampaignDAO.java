@@ -7,6 +7,7 @@ import it.polimi.tiw.beans.User;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class CampaignDAO {
     private Connection connection;
@@ -117,13 +118,13 @@ public class CampaignDAO {
         }
     }
 
-    public Campaign getCampaignById(int campaignId) throws SQLException{
+    public Campaign getCampaignById(int campaignId) throws SQLException, NoSuchElementException {
         String query = "SELECT * FROM campaign WHERE id = ?";
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
             pstatement.setInt(1, campaignId);
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
-                    return null;
+                    throw new NoSuchElementException("Campaign not found");
                 else {
                     result.next();
                     Campaign campaign = new Campaign();

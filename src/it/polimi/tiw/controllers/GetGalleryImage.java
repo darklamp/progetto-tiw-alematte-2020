@@ -8,6 +8,7 @@ import it.polimi.tiw.dao.ImageDAO;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utility.JsonArrayConverter;
 import it.polimi.tiw.utility.JsonMapConverter;
+import it.polimi.tiw.utility.Utility;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -22,10 +23,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @WebServlet("/worker/getGalleryImage")
 public class GetGalleryImage extends HttpServlet {
@@ -56,10 +54,7 @@ public class GetGalleryImage extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(!req.getParameterMap().containsKey("imageId")){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
+        if(!Utility.paramExists(req, resp, "imageId")) return;
         int imageId;
         try {
             imageId = Integer.parseInt(req.getParameter("imageId"));
@@ -71,23 +66,18 @@ public class GetGalleryImage extends HttpServlet {
         PrintWriter out = resp.getWriter();
         resp.setContentType("application/json");
         ImageDAO imageDAO = new ImageDAO(connection);
-        AnnotationDAO annotationDAO = new AnnotationDAO(connection);
-        UserDAO userDAO = new UserDAO(connection);
         JsonArrayConverter jsonArrayConverter = new JsonArrayConverter();
         JsonMapConverter jsonMapConverter = new JsonMapConverter();
         Map<String, String> resultMap = new LinkedHashMap<>();
         List<String> annotationsStr = new ArrayList<>();
         try{
             Image image = imageDAO.getImage(imageId);
-
-            if(image==null){
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid image");
-                return;
-            }
-
             resultMap.put("image", image.convertToJSON());
         }catch (SQLException e){
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            return;
+        } catch (NoSuchElementException e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
 

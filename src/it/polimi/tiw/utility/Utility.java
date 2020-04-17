@@ -3,6 +3,9 @@ package it.polimi.tiw.utility;
 import it.polimi.tiw.beans.Image;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 public class Utility {
@@ -16,5 +19,40 @@ public class Utility {
     }
     public static boolean containsId(List<Image> images, int imageID){
         return images.stream().map(Image::getId).anyMatch(n -> n == imageID);
+    }
+
+    public static boolean paramExists(HttpServletRequest req, HttpServletResponse resp, List<String> params) throws IOException {
+        for(int i=0; i<params.size(); i++){
+            if(!req.getParameterMap().containsKey(params.get(i))){
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter " + params.get(i) + " not found");
+                return false;
+            }
+        }
+        return true;
+    }
+    public static boolean paramExists(HttpServletRequest req, HttpServletResponse resp, String param) throws IOException {
+            if(!req.getParameterMap().containsKey(param)){
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter " + param + " not found");
+                return false;
+            }
+        return true;
+    }
+
+
+    public static boolean paramIsEmpty(HttpServletRequest req, HttpServletResponse resp, List<String> params) throws IOException{
+        for(int i=0; i<params.size(); i++){
+            if(req.getParameter(params.get(i)).isEmpty()){
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter " + params.get(i) + " is empty");
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean paramIsEmpty(HttpServletRequest req, HttpServletResponse resp, String param) throws IOException{
+        if(req.getParameter(param).isEmpty()){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter " + param + " is empty");
+            return true;
+        }
+        return false;
     }
 }
