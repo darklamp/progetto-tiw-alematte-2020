@@ -20,7 +20,7 @@ public class JsonMapConverter implements JsonConverter<Map<String,String>>{
         return result.toString();
     }
 
-    private String removeLastCharacter(String str) {
+    static String removeLastCharacter(String str) {
         String result = null;
         if ((str != null) && (str.length() > 0)) {
             result = str.substring(0, str.length() - 1);

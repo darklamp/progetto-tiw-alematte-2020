@@ -26,5 +26,7 @@
     <orderEntry type="library" name="org.apache.commons:commons-lang3:3.3.2" level="project" />
     <orderEntry type="library" name="commons-validator:commons-validator:1.6" level="project" />
     <orderEntry type="library" name="jquery-3.5.0" level="application" />
+    <orderEntry type="library" name="mapbox-gl" level="application" />
+    <orderEntry type="library" name="4a39771299" level="application" />
   </component>
 </module>
