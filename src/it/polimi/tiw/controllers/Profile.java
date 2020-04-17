@@ -5,6 +5,7 @@ import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.ImageDAO;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utility.Utility;
+import jdk.jshell.execution.Util;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import static it.polimi.tiw.utility.Utility.isValidMailAddress;
@@ -93,10 +96,8 @@ public class Profile extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(!req.getParameterMap().containsKey("action") || !req.getParameterMap().containsKey("userId") || req.getParameter("action").isEmpty() || req.getParameter("userId").isEmpty()){
-           resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-           return;
-        }
+        if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("action", "userId"))) ) return;
+
         int userId;
         String action = req.getParameter("action");
         try {
@@ -113,8 +114,8 @@ public class Profile extends HttpServlet {
         UserDAO userDAO = new UserDAO(connection);
         ImageDAO imageDAO = new ImageDAO(connection);
         if(user.getRole().equals("manager")){
-
             if(action.equals("updateData")){
+                if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("username", "email")))) return;
                 String username = req.getParameter("username");
                 String email = req.getParameter("email");
                 //Invalid param -> impossible from a webpage
@@ -142,6 +143,7 @@ public class Profile extends HttpServlet {
 
 
             } else if(action.equals("updatePassword")){
+                if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("oldPassword", "newPassword", "newPasswordCnf")))) return;
                 String oldPassword = req.getParameter("oldPassword");
                 String newPassword = req.getParameter("newPassword");
                 String newPasswordCnf = req.getParameter("newPasswordCnf");
@@ -187,6 +189,7 @@ public class Profile extends HttpServlet {
 
         } else if(user.getRole().equals("worker")){
             if(action.equals("updateData")){
+                if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("username", "email", "experience")))) return;
                 String username = req.getParameter("username");
                 String email = req.getParameter("email");
                 String experience = req.getParameter("experience");
@@ -234,6 +237,7 @@ public class Profile extends HttpServlet {
 
 
             } else if(action.equals("updatePassword")){
+                if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("oldPassword", "newPassword", "newPasswordCnf")))) return;
                 String oldPassword = req.getParameter("oldPassword");
                 String newPassword = req.getParameter("newPassword");
                 String newPasswordCnf = req.getParameter("newPasswordCnf");

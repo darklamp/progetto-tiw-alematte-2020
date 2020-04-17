@@ -4,6 +4,7 @@ import it.polimi.tiw.beans.Alert;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.CampaignDAO;
+import it.polimi.tiw.utility.Utility;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -20,6 +21,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet("/manager/createCampaign")
@@ -54,6 +57,9 @@ public class CreateCampaign extends HttpServlet {
         User user = (User) req.getSession().getAttribute("user");
         Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
         CampaignDAO campaignDAO = new CampaignDAO(connection);
+
+        if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("campaignName", "campaignClient")))) return;
+
         String name = req.getParameter("campaignName");
         String client = req.getParameter("campaignClient");
         long id;

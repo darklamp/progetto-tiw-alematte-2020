@@ -55,6 +55,7 @@
         <url-pattern>/manager/getCampaignImageData</url-pattern>
         <url-pattern>/worker/campaign</url-pattern>
         <url-pattern>/manager/campaignReport</url-pattern>
+        <url-pattern>/manager/campaign/maps</url-pattern>
     </filter-mapping>
     <filter-mapping>
          <filter-name>ManagerChecker</filter-name>
@@ -67,6 +68,7 @@
         <url-pattern>/manager/campaignReport</url-pattern>
         <url-pattern>/manager/getCampaignImageData</url-pattern>
         <url-pattern>/manager/campaignReport</url-pattern>
+        <url-pattern>/manager/campaign/maps</url-pattern>
      </filter-mapping>
      <filter-mapping>
          <filter-name>WorkerChecker</filter-name>

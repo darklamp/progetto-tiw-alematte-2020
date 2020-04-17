@@ -24,7 +24,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @WebServlet("/manager/campaign")
 public class CampaignDetail extends HttpServlet {
@@ -59,6 +61,7 @@ public class CampaignDetail extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if(!Utility.paramExists(req,resp,"id"))return;
         int campaignId;
         try{
             campaignId = Integer.parseInt(req.getParameter("id"));
@@ -95,12 +98,11 @@ public class CampaignDetail extends HttpServlet {
         } catch (SQLException e){
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
-        }
-
-        if(campaign==null){
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (NoSuchElementException e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
+
         if(images == null){
             ctx.setVariable("isImageAvailable", false);
             images = new ArrayList<>();
@@ -122,11 +124,8 @@ public class CampaignDetail extends HttpServlet {
         ImageDAO imageDAO = new ImageDAO(connection);
         int campaignId, imageId;
 
-        //Get all param
-        if(!req.getParameterMap().containsKey("campaignId") || !req.getParameterMap().containsKey("imageId")){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
+        if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("campaignId", "imageId")))) return;
+
         try {
             campaignId = Integer.parseInt(req.getParameter("campaignId"));
             imageId = Integer.parseInt(req.getParameter("imageId"));
@@ -144,6 +143,9 @@ public class CampaignDetail extends HttpServlet {
             }
         } catch (SQLException e){
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            return;
+        } catch (NoSuchElementException e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
 

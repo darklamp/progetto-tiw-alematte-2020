@@ -6,6 +6,7 @@ import it.polimi.tiw.beans.User;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class ImageDAO {
     private Connection connection;
@@ -55,13 +56,13 @@ public class ImageDAO {
         return index;
     }
 
-    public Image getImage(int imageId) throws SQLException{
+    public Image getImage(int imageId) throws SQLException, NoSuchElementException {
         String query = "SELECT * FROM image WHERE id=?";
         try (PreparedStatement pstatement = connection.prepareStatement(query)) {
             pstatement.setInt(1, imageId);
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) // no results
-                    return null;
+                    throw new NoSuchElementException("No image found with id "+imageId);
                 else {
                     result.next();
                     Image image = new Image();
