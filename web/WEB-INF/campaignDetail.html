@@ -20,55 +20,52 @@
     <div class="page-content">
         <h1><a href="managerHome.html" data-th-href="@{/manager}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left"></i></a> Campaign: <span data-th-text="${campaign.getName()}"></span></h1>
         <div class="row">
-            <div class="col-12">
-                <div class="highlight">
-                    <span style="float: right;" onclick="showForm();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="buttonInfoIcon"></i></span>
-                    <div id="infoText"><p><strong>Campaign name: </strong><span data-th-text="${campaign.getName()}"></span></p>
-                    <p><strong>Campaign client: </strong><span data-th-text="${campaign.getClient()}"></span></p></div>
-                <div id="infoForm" style="display: none;">
-                    <form class="form" method="POST" action="" data-th-action="@{/manager/campaignActions}">
-                        <input type="hidden" name="campaignId" data-th-value="${campaign.getId()}"/>
-                        <input type="hidden" name="viewMode" value="grid"/>
-                        <input type="hidden" name="action" value="modifyData"/>
-                        <div class="row">
-                            <div class="col-4">
-                                <label>Campaign name</label>
-                                <input type="text" class="form-control-bg-dark" name="campaignName" data-th-value="${campaign.getName()}" required/>
-                            </div>
-                            <div class="col-4">
-                                <label>Campaign client</label>
-                                <input type="text" class="form-control-bg-dark" name="campaignClient" data-th-value="${campaign.getClient()}" required/>
-                            </div>
-                            <div class="col-4">
-                                <br/>
-                                <input type="submit" class="btn btn-secondary" style="margin: 0 auto;" value="Update"/>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                    <p><strong>Campaign status: </strong><span class="badge badge-warning" data-th-class="${'badge badge-' + campaign.getBadge()}" data-th-text="${campaign.getState().toUpperCase()}"></span></p>
-                </div>
-            </div>
-        </div>
-        <div class="row"><div class="col-12"><div class="alert alert-danger" data-th-class="${'alert alert-' + campaignAlert.getType()}" data-th-if="${campaignAlert.isVisible()}" data-th-utext="${campaignAlert.getContent()}">General error</div></div></div>
-        <div class="row">
-            <div class="col-8">
+            <div class="col-10">
                 <h2>Campaign images</h2>
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">Nothing to show</div>
                 <div class="gallery" data-th-each="image : ${images}">
                     <a onclick="openDetail(0);" data-th-onclick="'openDetail('+${image.getId()}+');'"><img src="../images/test1.jpg" data-th-src="${imagePath + image.getUrl()}" alt=""></a>
                 </div>
-
             </div>
-            <div class="col-4">
+            <div style="padding: 1%; float: left; width: 12%;">
                 <h2>Actions</h2>
-                <a class="btn btn-outline-primary btn-full" id="newImageModalBtn" data-th-if="${campaign.getState().equals('created')}">Add new image</a> <br/>
-                <a class="btn btn-outline-primary btn-full" href="campaignDetailmaps.html" data-th-href="@{/manager/campaign/maps(id=${campaign.getId()})}">Show images in map</a>
-                <hr/>
-                <a href="campaignDetail.html" class="btn btn-outline-success btn-full" data-th-href="@{/manager/campaignActions(campaignId=${campaign.getId()}, action='setStart')}" data-th-if="${campaign.getState().equals('created') && isImageAvailable}">Start campaign</a>
-                <a href="campaignDetail.html" class="btn btn-outline-danger btn-full" data-th-href="@{/manager/campaignActions(campaignId=${campaign.getId()}, action='setClose')}" data-th-if="${campaign.getState().equals('started')}">Close campaign</a><br/>
-                <a href="campaignDetail.html" class="btn btn-outline-info btn-full" data-th-href="@{/manager/campaignReport(campaignId=${campaign.getId()}, viewMode='grid')}" data-th-if="${not campaign.getState().equals('created')}">Show report</a>
+                <a style="width: 94%; margin-bottom: 10px" class="btn btn-outline-primary btn-full" id="newImageModalBtn" data-th-if="${campaign.getState().equals('created')}">Add new image</a>
+                <a style="width: 94%; margin-bottom: 10px" class="btn btn-outline-primary btn-full" href="campaignDetailMaps.html" data-th-href="@{/manager/campaign/maps(id=${campaign.getId()})}">Show images in map</a>
+                <a style="width: 94%" href="campaignDetail.html" class="btn btn-outline-success btn-full" data-th-href="@{/manager/campaignActions(campaignId=${campaign.getId()}, action='setStart')}" data-th-if="${campaign.getState().equals('created') && isImageAvailable}">Start campaign</a>
+                <a style="width: 94%" href="campaignDetail.html" class="btn btn-outline-danger btn-full" data-th-href="@{/manager/campaignActions(campaignId=${campaign.getId()}, action='setClose')}" data-th-if="${campaign.getState().equals('started')}">Close campaign</a><br/>
+                <a style="width: 94%" href="campaignDetail.html" class="btn btn-outline-info btn-full" data-th-href="@{/manager/campaignReport(campaignId=${campaign.getId()},viewMode='maps')}" data-th-if="${not campaign.getState().equals('created')}">Show report</a>
+                <div style="width:94%; margin-top: 6px" class="highlight">
+                    <span style="float: right;" onclick="showForm();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="buttonInfoIcon"></i></span>
+                    <div id="infoText">
+                        <p><strong>Campaign name: </strong></p>
+                        <p><span data-th-text="${campaign.getName()}"></span></p>
+                        <p><strong>Campaign client: </strong></p>
+                        <p><span data-th-text="${campaign.getClient()}"></span></p>
+                    </div>
+                    <div id="infoForm" style="display: none;">
+                        <form class="form" method="POST" action="" data-th-action="@{/manager/campaignActions}">
+                            <input type="hidden" name="campaignId" id="campaignId" data-th-value="${campaign.getId()}"/>
+                            <input type="hidden" name="viewMode" value="maps"/>
+                            <input type="hidden" name="action" value="modifyData"/>
+                            <div class="row">
+                                <label>Campaign name</label>
+                                <input type="text" class="form-control-bg-dark" name="campaignName" data-th-value="${campaign.getName()}" required/>
+                            </div>
+                            <div class="row">
+                                <label>Campaign client</label>
+                                <input type="text" class="form-control-bg-dark" name="campaignClient" data-th-value="${campaign.getClient()}" required/>
+                            </div>
+                            <div class="row">
+                                <br/>
+                                <input type="submit" class="btn btn-secondary" style="margin: 0 auto;" value="Update"/>
+                            </div>
+                        </form>
+                    </div>
+                    <p ><strong>Campaign status: </strong><span class="badge badge-warning" style="margin-top: 15px" data-th-class="${'badge badge-' + campaign.getBadge()}" data-th-text="${campaign.getState().toUpperCase()}"></span></p>
+                </div>
             </div>
+
+
         </div>
     </div>
 
