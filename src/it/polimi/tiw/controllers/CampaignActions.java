@@ -44,9 +44,7 @@ public class CampaignActions extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Campaign campaign;
-        if(!req.getParameterMap().containsKey("campaignId")){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        } else {
+        if(!Utility.paramExists(req,resp, new ArrayList<>(Arrays.asList("campaignId", "viewMode", "action")))) return;
             int campaignId;
             try{
                 campaignId = Integer.parseInt(req.getParameter("campaignId"));
@@ -81,8 +79,14 @@ public class CampaignActions extends HttpServlet {
                 return;
             }
 
-            resp.sendRedirect(getServletContext().getContextPath() + "/manager/campaign?id="+campaignId);
+        String path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
+        if(req.getParameter("viewMode").equals("grid")) {
+            path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
+        }else if(req.getParameter("viewMode").equals("maps")){
+            path = getServletContext().getContextPath() + "/manager/campaign/maps?id="+campaignId;
         }
+        resp.sendRedirect(path);
+
     }
 
     @Override
@@ -102,7 +106,7 @@ public class CampaignActions extends HttpServlet {
             String path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
             if(req.getParameter("viewMode").equals("grid")) {
                 path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
-            }else if(req.getParameter("viewModa").equals("maps")){
+            }else if(req.getParameter("viewMode").equals("maps")){
                 path = getServletContext().getContextPath() + "/manager/campaign/maps?id="+campaignId;
             }
 
