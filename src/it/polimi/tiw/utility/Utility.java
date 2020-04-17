@@ -32,7 +32,7 @@ public class Utility {
     }
     public static boolean paramExists(HttpServletRequest req, HttpServletResponse resp, String param) throws IOException {
             if(!req.getParameterMap().containsKey(param)){
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter " + param + " not found");
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return false;
             }
         return true;
@@ -42,7 +42,7 @@ public class Utility {
     public static boolean paramIsEmpty(HttpServletRequest req, HttpServletResponse resp, List<String> params) throws IOException{
         for(int i=0; i<params.size(); i++){
             if(req.getParameter(params.get(i)).isEmpty()){
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter " + params.get(i) + " is empty");
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return true;
             }
         }
@@ -50,7 +50,7 @@ public class Utility {
     }
     public static boolean paramIsEmpty(HttpServletRequest req, HttpServletResponse resp, String param) throws IOException{
         if(req.getParameter(param).isEmpty()){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter " + param + " is empty");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return true;
         }
         return false;
