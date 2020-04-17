@@ -58,8 +58,7 @@ public class Utility {
     }
 
     public static String createMapGeoJSON(ArrayList<Image> images){
-        String output = "{\n" +
-                "  \"features\": [";
+        String output = "{\"features\": [";
         output = images != null ? images.stream().map(Image::convertToGeoJSON).reduce(output, (old,newPart) -> old + newPart + ",") : null;
         if (output == null) return null;
         output = JsonMapConverter.removeLastCharacter(output);

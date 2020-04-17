@@ -480,7 +480,7 @@
     let geojson = function getGeoJson() {
         $.ajax({
             type: "POST",
-            url: /*[[@{/manager/campaign/maps}]]*/ "test",
+            url: '/manager/campaign/maps',
             data: "id=" + campaignID,
             dataType: "json",
             success: function (jsonContent) {
