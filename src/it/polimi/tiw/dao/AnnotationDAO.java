@@ -4,6 +4,7 @@ import it.polimi.tiw.beans.Annotation;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.beans.User;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.sql.*;
 import java.text.DateFormat;
@@ -27,7 +28,7 @@ public class AnnotationDAO {
             pstatement.setInt(2, imageId);
             pstatement.setInt(3, validity);
             pstatement.setString(4, trust);
-            pstatement.setString(5, note);
+            pstatement.setString(5, StringEscapeUtils.escapeJava(note));
             pstatement.executeUpdate();
         }
         query = "SELECT workerId, campaignId FROM workerCampaign WHERE workerId = ? AND campaignId = ?";
@@ -103,7 +104,7 @@ public class AnnotationDAO {
                     annotation.setDate(result.getDate("date"));
                     annotation.setValidity(result.getInt("validity"));
                     annotation.setTrust(result.getString("trust"));
-                    annotation.setNote(result.getString("note"));
+                    annotation.setNote(StringEscapeUtils.unescapeJava(result.getString("note")));
                     return annotation;
                 }
             }
@@ -126,7 +127,7 @@ public class AnnotationDAO {
                         annotation.setDate(result.getDate("date"));
                         annotation.setValidity(result.getInt("validity"));
                         annotation.setTrust(result.getString("trust"));
-                        annotation.setNote(result.getString("note"));
+                        annotation.setNote(StringEscapeUtils.unescapeJava(result.getString("note")));
                         annotations.add(annotation);
                     }
                     return annotations;

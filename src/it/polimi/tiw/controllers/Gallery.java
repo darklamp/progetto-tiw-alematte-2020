@@ -171,7 +171,6 @@ public class Gallery extends HttpServlet {
 
 
         String note = req.getParameter("annotationText");
-        note = StringEscapeUtils.escapeJava(note);
         int validityToInt = 0;
         if (validity.equals("true")){
             validityToInt = 1;

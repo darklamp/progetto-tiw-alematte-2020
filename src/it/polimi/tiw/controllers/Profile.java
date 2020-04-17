@@ -5,8 +5,6 @@ import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.ImageDAO;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utility.Utility;
-import jdk.jshell.execution.Util;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -118,9 +116,7 @@ public class Profile extends HttpServlet {
             if(action.equals("updateData")){
                 if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("username", "email")))) return;
                 String username = req.getParameter("username");
-                username = StringEscapeUtils.escapeJava(username);
                 String email = req.getParameter("email");
-                email = StringEscapeUtils.escapeJava(email);
                 //Invalid param -> impossible from a webpage
                 if(username.isEmpty() || email.isEmpty()){
                     resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid param");

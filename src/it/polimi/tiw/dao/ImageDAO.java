@@ -2,6 +2,7 @@ package it.polimi.tiw.dao;
 
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.beans.User;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -31,9 +32,9 @@ public class ImageDAO {
                         image.setLatitude(result.getFloat("latitude"));
                         image.setLongitude(result.getFloat("longitude"));
                         image.setResolution(result.getString("resolution"));
-                        image.setSource(result.getString("source"));
-                        image.setRegion(result.getString("region"));
-                        image.setTown(result.getString("town"));
+                        image.setSource(StringEscapeUtils.unescapeJava(result.getString("source")));
+                        image.setRegion(StringEscapeUtils.unescapeJava(result.getString("region")));
+                        image.setTown(StringEscapeUtils.unescapeJava(result.getString("town")));
                         image.setUrl(result.getString("url"));
                         images.add(image);
                     }
@@ -71,9 +72,9 @@ public class ImageDAO {
                     image.setLatitude(result.getFloat("latitude"));
                     image.setLongitude(result.getFloat("longitude"));
                     image.setResolution(result.getString("resolution"));
-                    image.setSource(result.getString("source"));
-                    image.setRegion(result.getString("region"));
-                    image.setTown(result.getString("town"));
+                    image.setSource(StringEscapeUtils.unescapeJava(result.getString("source")));
+                    image.setRegion(StringEscapeUtils.unescapeJava(result.getString("region")));
+                    image.setTown(StringEscapeUtils.unescapeJava(result.getString("town")));
                     image.setUrl(result.getString("url"));
                     return image;
                 }
@@ -89,9 +90,9 @@ public class ImageDAO {
             statement.setFloat(1,image.getLatitude());
             statement.setFloat(2,image.getLongitude());
             statement.setString(3, image.getResolution());
-            statement.setString(4, image.getSource());
-            statement.setString(5, image.getRegion());
-            statement.setString(6, image.getTown());
+            statement.setString(4, StringEscapeUtils.escapeJava(image.getSource()));
+            statement.setString(5, StringEscapeUtils.escapeJava(image.getRegion()));
+            statement.setString(6, StringEscapeUtils.escapeJava(image.getTown()));
             statement.setString(7, image.getUrl());
             statement.executeUpdate();
             ResultSet rs = statement.getGeneratedKeys();
@@ -115,9 +116,9 @@ public class ImageDAO {
             statement.setFloat(1,image.getLatitude());
             statement.setFloat(2,image.getLongitude());
             statement.setString(3, image.getResolution());
-            statement.setString(4, image.getSource());
-            statement.setString(5, image.getRegion());
-            statement.setString(6, image.getTown());
+            statement.setString(4, StringEscapeUtils.escapeJava(image.getSource()));
+            statement.setString(5, StringEscapeUtils.escapeJava(image.getRegion()));
+            statement.setString(6, StringEscapeUtils.escapeJava(image.getTown()));
             statement.setInt(7, image.getId());
             statement.executeUpdate();
         }
