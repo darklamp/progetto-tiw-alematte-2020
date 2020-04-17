@@ -22,7 +22,7 @@
             width: 100%;
         }
         .marker {
-            background-image: url('../images/mapmarker.png');
+            background-image: url('http://localhost:8180/Progetto_TIW_war_exploded/images/mapmarker.png');
             background-size: cover;
             width: 50px;
             height: 50px;
@@ -84,8 +84,7 @@
             <div class="col-8">
                 <h2>Campaign images</h2>
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">No images</div>
-                <!-- Insert map here, use showDetail(imageId) to open modal -->
-                <div id="map"></div>
+                <div id="map" data-th-if="${isImageAvailable}"></div>
             </div>
             <div class="col-4">
                 <h2>Actions</h2>
@@ -222,8 +221,6 @@
         modal.style.display = "none";
     }
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM8iIHDMc3wkFhSFANRr11eRI7ZtRi3U&callback=initMap"
-        type="text/javascript"></script>
 <script data-th-inline="javascript">
 
     var imagesList = /*[[${images}]]*/ [];
@@ -471,17 +468,17 @@
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v10',
-        center: [-96, 37.8],
+        center: [-77.032, 38.913],
         zoom: 3
     });
 
-    var campaignID = document.getElementById("campaignId").getAttribute("value");
+   /* var campaignID = document.getElementById("campaignId").getAttribute("value");
 
     let geojson = function getGeoJson() {
         $.ajax({
             type: "POST",
             url: '/manager/campaign/maps',
-            data: "id=" + campaignID,
+            data: "campaignId=" + campaignID,
             dataType: "json",
             success: function (jsonContent) {
                 return jsonContent;
@@ -491,7 +488,34 @@
             },
             async: true,
         });
-    }
+    }*/
+
+    var geojson = {
+        type: 'FeatureCollection',
+        features: [{
+            type: 'Feature',
+            geometry: {
+                type: 'Point',
+                coordinates: [-77.032, 38.913]
+            },
+            properties: {
+                title: 'Mapbox',
+                description: 'Washington, D.C.'
+            }
+        },
+            {
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: [-122.414, 37.776]
+                },
+                properties: {
+                    title: 'Mapbox',
+                    description: 'San Francisco, California'
+                }
+            }]
+    };
+
 
     geojson.features.forEach(function(marker) {
 
@@ -504,7 +528,6 @@
             .setLngLat(marker.geometry.coordinates)
             .addTo(map);
     });
-
 
 </script>
 

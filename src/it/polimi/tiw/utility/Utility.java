@@ -62,7 +62,7 @@ public class Utility {
         output = images != null ? images.stream().map(Image::convertToGeoJSON).reduce(output, (old,newPart) -> old + newPart + ",") : null;
         if (output == null) return null;
         output = JsonMapConverter.removeLastCharacter(output);
-        output += "],\"type\": \"FeatureCollection\"";
+        output += "],\"type\": \"FeatureCollection\"}";
         return output;
     }
 }
