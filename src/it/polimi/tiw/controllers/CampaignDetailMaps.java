@@ -157,10 +157,10 @@ public class CampaignDetailMaps extends HttpServlet {
         }
 
         Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
-
+        resp.setContentType("application/json");
+        PrintWriter out = resp.getWriter();
         String jsonConvertedMap = Utility.createMapGeoJSON(images);
 
-        PrintWriter out = resp.getWriter();
         out.print(jsonConvertedMap);
     }
 

@@ -6,6 +6,7 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js'></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css' rel='stylesheet' />
     <style>
         body {
@@ -17,7 +18,7 @@
             position: absolute;
             top: 0;
             bottom: 0;
-            max-height: 250px;
+            max-height: 500px;
             max-width: 500px;
             width: 100%;
         }
@@ -472,49 +473,26 @@
         zoom: 3
     });
 
-   /* var campaignID = document.getElementById("campaignId").getAttribute("value");
+    var campaignID = document.getElementById("campaignId").getAttribute("value");
 
-    let geojson = function getGeoJson() {
+    var geojson;
+
+    function getGeoJson() {
         $.ajax({
             type: "POST",
-            url: '/manager/campaign/maps',
+            url: 'http://localhost:8180/Progetto_TIW_war_exploded/manager/campaign/maps',
             data: "campaignId=" + campaignID,
             dataType: "json",
             success: function (jsonContent) {
-                return jsonContent;
+                geojson = jsonContent;
             },
             error: function () {
                 alert("Error");
             },
-            async: true,
+            async: false,
         });
-    }*/
-
-    var geojson = {
-        type: 'FeatureCollection',
-        features: [{
-            type: 'Feature',
-            geometry: {
-                type: 'Point',
-                coordinates: [-77.032, 38.913]
-            },
-            properties: {
-                title: 'Mapbox',
-                description: 'Washington, D.C.'
-            }
-        },
-            {
-                type: 'Feature',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [-122.414, 37.776]
-                },
-                properties: {
-                    title: 'Mapbox',
-                    description: 'San Francisco, California'
-                }
-            }]
-    };
+    }
+    getGeoJson();
 
 
     geojson.features.forEach(function(marker) {

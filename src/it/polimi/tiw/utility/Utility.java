@@ -58,11 +58,11 @@ public class Utility {
     }
 
     public static String createMapGeoJSON(ArrayList<Image> images){
-        String output = "{\"features\": [";
+        String output = "{\"type\": \"FeatureCollection\", \"features\": [";
         output = images != null ? images.stream().map(Image::convertToGeoJSON).reduce(output, (old,newPart) -> old + newPart + ",") : null;
         if (output == null) return null;
         output = JsonMapConverter.removeLastCharacter(output);
-        output += "],\"type\": \"FeatureCollection\"}";
+        output += "]}";
         return output;
     }
 }
