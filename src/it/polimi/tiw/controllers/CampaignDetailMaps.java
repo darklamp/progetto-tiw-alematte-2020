@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -107,11 +109,6 @@ public class CampaignDetailMaps extends HttpServlet {
             ctx.setVariable("isImageAvailable", true);
         }
 
-
-        String jsonConvertedMap = Utility.createMapGeoJSON((ArrayList<Image>) images);
-
-
-
         ctx.setVariable("context", getServletContext().getContextPath());
         ctx.setVariable("campaign", campaign);
         ctx.setVariable("images", images);
@@ -124,14 +121,13 @@ public class CampaignDetailMaps extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ImageDAO imageDAO = new ImageDAO(connection);
-        int campaignId, imageId;
+        int campaignId;
 
         //Get all param
-        if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("campaignId", "imageId")))) return;
+        if(!Utility.paramExists(req, resp, "campaignId")) return;
 
         try {
             campaignId = Integer.parseInt(req.getParameter("campaignId"));
-            imageId = Integer.parseInt(req.getParameter("imageId"));
         } catch (NumberFormatException e){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
@@ -145,68 +141,27 @@ public class CampaignDetailMaps extends HttpServlet {
                 return;
             }
         } catch (SQLException e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         } catch (NoSuchElementException e){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        ArrayList<Image> images = null;
+        try {
+            images = (ArrayList<Image>) imageDAO.getCampaignImages(campaignId);
+        } catch (SQLException e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
 
         Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
-        Image image = new Image();
-        String path = getServletContext().getContextPath() + "/manager/campaign/maps?id="+campaignId;
-        String latitudeStr = req.getParameter("latitude").replace(',', '.');
-        String longitudeStr = req.getParameter("longitude").replace(',','.');
-        String resolution = req.getParameter("resolution");
-        String source = req.getParameter("source");
-        String region = req.getParameter("region");
-        String town = req.getParameter("town");
-        if (!resolution.equals("high") && !resolution.equals("medium") && !resolution.equals("low")){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-        if(latitudeStr.isEmpty() || longitudeStr.isEmpty() || source.isEmpty() || region.isEmpty() || town.isEmpty()){
-            alert.setContent("Please fill all form data");
-            alert.setType(Alert.DANGER);
-            alert.show();
-            alert.dismiss();
-            resp.sendRedirect(path);
-            return;
-        }
-        //try parsing strings in float
-        float latitude;
-        float longitude;
-        try {
-            latitude = Float.parseFloat(latitudeStr);
-            longitude = Float.parseFloat(longitudeStr);
-        } catch (NumberFormatException e){
-            alert.setContent("NumberFormatException in latitude or longitude");
-            alert.setType(Alert.DANGER);
-            alert.show();
-            alert.dismiss();
-            resp.sendRedirect(path);
-            return;
-        }
-        image.setId(imageId);
-        image.setTown(town);
-        image.setRegion(region);
-        image.setSource(source);
-        image.setResolution(resolution);
-        image.setLongitude(longitude);
-        image.setLatitude(latitude);
-        try{
-            imageDAO.updateImageMetadata(image);
-        } catch (SQLException e){
-            alert.setContent("An error occurred while saving image");
-            alert.setType(Alert.DANGER);
-            alert.show();
-            alert.dismiss();
-            resp.sendRedirect(path);
-            return;
-        }
 
+        String jsonConvertedMap = Utility.createMapGeoJSON(images);
 
-        resp.sendRedirect(path);
+        PrintWriter out = resp.getWriter();
+        out.print(jsonConvertedMap);
     }
 
     @Override
