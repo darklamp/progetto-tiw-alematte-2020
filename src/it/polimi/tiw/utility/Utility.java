@@ -1,6 +1,7 @@
 package it.polimi.tiw.utility;
 
 import it.polimi.tiw.beans.Image;
+import it.polimi.tiw.dao.AnnotationDAO;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,9 +58,9 @@ public class Utility {
         return false;
     }
 
-    public static String createMapGeoJSON(ArrayList<Image> images){
+    public static String createMapGeoJSON(ArrayList<Image> images, ArrayList<Integer> annotatedImages){
         String output = "{\"type\": \"FeatureCollection\", \"features\": [";
-        output = images != null ? images.stream().map(Image::convertToGeoJSON).reduce(output, (old,newPart) -> old + newPart + ",") : null;
+        output = images != null ? images.stream().map(img -> img.convertToGeoJSON(annotatedImages)).reduce(output, (old,newPart) -> old + newPart + ",") : null;
         if (output == null) return null;
         output = JsonMapConverter.removeLastCharacter(output);
         output += "]}";
