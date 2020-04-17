@@ -1,16 +1,13 @@
 package it.polimi.tiw.dao;
 
 import it.polimi.tiw.beans.Annotation;
-import it.polimi.tiw.beans.Campaign;
-import it.polimi.tiw.beans.Image;
-import it.polimi.tiw.beans.User;
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import java.sql.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 

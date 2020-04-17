@@ -4,10 +4,8 @@ import de.mkammerer.argon2.Argon2Advanced;
 import de.mkammerer.argon2.Argon2Factory;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-import java.util.Random;
 
 
 public class Crypto {

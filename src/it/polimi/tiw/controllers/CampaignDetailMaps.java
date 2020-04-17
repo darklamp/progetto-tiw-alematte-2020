@@ -1,13 +1,11 @@
 package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Alert;
-import it.polimi.tiw.beans.Annotation;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.AnnotationDAO;
 import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
-import it.polimi.tiw.utility.JsonMapConverter;
 import it.polimi.tiw.utility.Utility;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -24,11 +22,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @WebServlet("/manager/campaign/maps")
 public class CampaignDetailMaps extends HttpServlet {

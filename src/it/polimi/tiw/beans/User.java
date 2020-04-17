@@ -2,8 +2,6 @@ package it.polimi.tiw.beans;
 
 import it.polimi.tiw.utility.JsonSupport;
 
-import java.util.HashMap;
-
 public class User implements JsonSupport {
     private int id;
     private String username;
