@@ -1,8 +1,10 @@
 package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Alert;
+import it.polimi.tiw.beans.Annotation;
 import it.polimi.tiw.beans.Campaign;
 import it.polimi.tiw.beans.Image;
+import it.polimi.tiw.dao.AnnotationDAO;
 import it.polimi.tiw.dao.CampaignDAO;
 import it.polimi.tiw.dao.ImageDAO;
 import it.polimi.tiw.utility.JsonMapConverter;
@@ -129,7 +131,7 @@ public class CampaignDetailMaps extends HttpServlet {
         try {
             campaignId = Integer.parseInt(req.getParameter("campaignId"));
         } catch (NumberFormatException e){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
@@ -153,10 +155,18 @@ public class CampaignDetailMaps extends HttpServlet {
             return;
         }
 
+        AnnotationDAO annotationDAO = new AnnotationDAO(connection);
+        ArrayList<Integer> annotatedImages = new ArrayList<>();
+        try {
+            annotatedImages = annotationDAO.getAnnotatedImages(campaignId);
+        } catch (SQLException throwables) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
         Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
         resp.setContentType("application/json");
         PrintWriter out = resp.getWriter();
-        String jsonConvertedMap = Utility.createMapGeoJSON(images);
+        String jsonConvertedMap = Utility.createMapGeoJSON(images,annotatedImages);
 
         out.print(jsonConvertedMap);
     }

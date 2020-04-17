@@ -2,6 +2,7 @@ package it.polimi.tiw.beans;
 
 import it.polimi.tiw.utility.JsonSupport;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Image implements JsonSupport {
@@ -105,9 +106,12 @@ public class Image implements JsonSupport {
         return result;
     }
 
-    public String convertToGeoJSON() {
+    public String convertToGeoJSON(ArrayList<Integer> annotatedImages) {
+        String hasNotes ="true";
+        if (annotatedImages == null || !annotatedImages.contains(this.id)) hasNotes = "false";
         String result = "{";
         result += "\"type\": \"Feature\",\"properties\": {";
+        result += "\"description\": " + hasNotes + ",";
         result += "\"title\": " + id + "},";
         result += "\"geometry\": {";
         result += "\"coordinates\": [" + longitude + ", " + latitude + "],";

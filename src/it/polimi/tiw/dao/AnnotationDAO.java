@@ -68,6 +68,25 @@ public class AnnotationDAO {
         return result;
     }
 
+    public ArrayList<Integer> getAnnotatedImages(int campaignId) throws SQLException{
+        String query = "SELECT imageId FROM annotation natural join imageCampaign WHERE campaignId = ?";
+        ArrayList<Integer> result = new ArrayList<>();
+        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+            pstatement.setInt(1, campaignId);
+            try (ResultSet resultSet = pstatement.executeQuery();) {
+                if (!resultSet.isBeforeFirst()) {
+                    return null;
+                }
+                else {
+                    while(resultSet.next()) {
+                        result.add(resultSet.getInt("imageId"));
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     public Annotation getAnnotation(int workerId, int imageId) throws SQLException {
         String query = "SELECT * FROM annotation WHERE workerId = ? AND imageId = ?";
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
