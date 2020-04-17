@@ -3,6 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Campaign detail</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            max-height: 250px;
+            max-width: 500px;
+            width: 100%;
+        }
+        .marker {
+            background-image: url('../images/mapmarker.png');
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+    </style>
     <link rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}">
     <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
 
@@ -28,7 +56,7 @@
                         <p><strong>Campaign client: </strong><span data-th-text="${campaign.getClient()}"></span></p></div>
                     <div id="infoForm" style="display: none;">
                         <form class="form" method="POST" action="" data-th-action="@{/manager/campaignActions}">
-                            <input type="hidden" name="campaignId" data-th-value="${campaign.getId()}"/>
+                            <input type="hidden" name="campaignId" id="campaignId" data-th-value="${campaign.getId()}"/>
                             <input type="hidden" name="viewMode" value="maps"/>
                             <input type="hidden" name="action" value="modifyData"/>
                             <div class="row">
@@ -57,7 +85,7 @@
                 <h2>Campaign images</h2>
                 <div class="alert alert-primary" data-th-if="${not isImageAvailable}">No images</div>
                 <!-- Insert map here, use showDetail(imageId) to open modal -->
-                <div id="mapsContainer" class="map-container"></div>
+                <div id="map"></div>
             </div>
             <div class="col-4">
                 <h2>Actions</h2>
@@ -436,5 +464,49 @@
     AutoCenter();*/
 
 </script>
+<script>
+
+    mapboxgl.accessToken = '***REMOVED***';
+
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: [-96, 37.8],
+        zoom: 3
+    });
+
+    var campaignID = document.getElementById("campaignId").getAttribute("value");
+
+    let geojson = function getGeoJson() {
+        $.ajax({
+            type: "POST",
+            url: /*[[@{/manager/campaign/maps}]]*/ "test",
+            data: "id=" + campaignID,
+            dataType: "json",
+            success: function (jsonContent) {
+                return jsonContent;
+            },
+            error: function () {
+                alert("Error");
+            },
+            async: true,
+        });
+    }
+
+    geojson.features.forEach(function(marker) {
+
+        // create a HTML element for each feature
+        var el = document.createElement('div');
+        el.className = 'marker';
+
+        // make a marker for each feature and add to the map
+        new mapboxgl.Marker(el)
+            .setLngLat(marker.geometry.coordinates)
+            .addTo(map);
+    });
+
+
+</script>
+
 </body>
 </html>
