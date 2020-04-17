@@ -104,7 +104,7 @@ public class ImageUploader extends HttpServlet {
         String path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
         if(req.getParameter("viewMode").equals("grid")) {
             path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
-        }else if(req.getParameter("viewModa").equals("maps")){
+        }else if(req.getParameter("viewMode").equals("maps")){
             path = getServletContext().getContextPath() + "/manager/campaign/maps?id="+campaignId;
         }
 
