@@ -23,7 +23,7 @@ public class UserDAO {
     private String getUserSalt(String username) throws SQLException, NoSuchElementException {
         String query = "SELECT salt FROM user WHERE username = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
-            pstatement.setString(1, username);
+            pstatement.setString(1, StringEscapeUtils.escapeJava(username));
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst()) throw new NoSuchElementException();
                 else {
@@ -94,7 +94,7 @@ public class UserDAO {
                     }
                     User user = new User();
                     if(result.getString("role").equals("worker")){
-                        user.setImageURL(result.getString("photo"));
+                        user.setImageURL(StringEscapeUtils.unescapeJava(result.getString("photo")));
                         user.setLevel(result.getString("level"));
                     }
                     user.setId(result.getInt("id"));
@@ -122,7 +122,7 @@ public class UserDAO {
                     result.next();
                     User user = new User();
                     if(result.getString("role").equals("worker")){
-                        user.setImageURL(result.getString("photo"));
+                        user.setImageURL(StringEscapeUtils.unescapeJava(result.getString("photo")));
                         user.setLevel(result.getString("level"));
                     }
                     user.setId(result.getInt("id"));
@@ -146,7 +146,7 @@ public class UserDAO {
                     result.next();
                     User user = new User();
                     if(result.getString("role").equals("worker")){
-                        user.setImageURL(result.getString("photo"));
+                        user.setImageURL(StringEscapeUtils.unescapeJava(result.getString("photo")));
                         user.setLevel(result.getString("level"));
                     }
                     user.setId(result.getInt("id"));
@@ -184,7 +184,7 @@ public class UserDAO {
 
 
     public void addManagerUser(String username, String email, String password, String role) throws SQLException{
-        String query = "INSERT INTO user (username, email, password, role, level, photo, salt) VALUES (?, ?, ?, ?, null, null, ?)";
+        String query = "INSERT INTO user (username, email, password, role, level, photo, salt, authcookie, cookietime) VALUES (?, ?, ?, ?, null, null, ?, null, null)";
         String salt = Crypto.createSalt();
         String hash = Crypto.pwHash(password,salt.getBytes(StandardCharsets.UTF_8));
         try (PreparedStatement statement = con.prepareStatement(query);){
@@ -198,7 +198,7 @@ public class UserDAO {
     }
 
     public void addWorkerUser(String username, String email, String password, String role, String experience, String photo) throws SQLException{
-        String query = "INSERT INTO user (username, email, password, role, level, photo, salt) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO user (username, email, password, role, level, photo, salt, authcookie, cookietime) VALUES (?, ?, ?, ?, ?, ?, ?, null, null)";
         String salt = Crypto.createSalt();
         String hash = Crypto.pwHash(password,salt.getBytes(StandardCharsets.UTF_8));
         try (PreparedStatement statement = con.prepareStatement(query);){
@@ -207,7 +207,7 @@ public class UserDAO {
             statement.setString(3, hash);
             statement.setString(4, role);
             statement.setString(5, experience);
-            statement.setString(6, photo);
+            statement.setString(6, StringEscapeUtils.escapeJava(photo));
             statement.setString(7, salt);
             statement.executeUpdate();
         }
