@@ -291,6 +291,7 @@
     function generateMetadataForm(imageObject, campaignId){
         const servletPath = /*[[@{/manager/campaign}]]*/ "";
         var modalModifyContent = "<form class=\"form\" method=\"POST\" action=\""+servletPath +"\">" +
+            "                       <input type=\"hidden\" name=\"viewMode\" value=\"grid\"/>"+
             "                    <input type=\"hidden\" name=\"campaignId\" value=\""+campaignId+"\" />" +
             "                    <input type=\"hidden\" name=\"imageId\" value=\""+imageObject.id+"\" />" +
             "                    <div class=\"form-group\">" +

@@ -124,7 +124,8 @@ public class CampaignDetail extends HttpServlet {
         ImageDAO imageDAO = new ImageDAO(connection);
         int campaignId, imageId;
 
-        if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("campaignId", "imageId")))) return;
+        List<String> params = new ArrayList<>(Arrays.asList("campaignId", "imageId", "viewMode", "latitude", "longitude", "resolution", "source", "region", "town"));
+        if(!Utility.paramExists(req, resp, params) || Utility.paramIsEmpty(req, resp, params)) return;
 
         try {
             campaignId = Integer.parseInt(req.getParameter("campaignId"));
@@ -151,7 +152,14 @@ public class CampaignDetail extends HttpServlet {
 
         Alert alert = (Alert)req.getSession().getAttribute("campaignAlert");
         Image image = new Image();
+
         String path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
+        if(req.getParameter("viewMode").equals("grid")) {
+            path = getServletContext().getContextPath() + "/manager/campaign?id="+campaignId;
+        }else if(req.getParameter("viewMode").equals("maps")){
+            path = getServletContext().getContextPath() + "/manager/campaign/maps?id="+campaignId;
+        }
+
         String latitudeStr = req.getParameter("latitude").replace(',', '.');
         String longitudeStr = req.getParameter("longitude").replace(',','.');
         String resolution = req.getParameter("resolution");

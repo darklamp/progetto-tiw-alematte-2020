@@ -23,6 +23,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @WebServlet("/imageUploader")
@@ -73,7 +74,8 @@ public class ImageUploader extends HttpServlet {
             uploadFolder.mkdirs();
         }
         Part part = req.getPart("image");
-        if(!Utility.paramExists(req, resp, new ArrayList<>(Arrays.asList("campaignId", "viewMode", "latitude", "longitude", "resolution", "source", "region", "town")))) return;
+        List<String> params = new ArrayList<>(Arrays.asList("campaignId", "viewMode", "latitude", "longitude", "resolution", "source", "region", "town"));
+        if(!Utility.paramExists(req, resp, params) || Utility.paramIsEmpty(req, resp, params)) return;
 
         int campaignId;
         try {
