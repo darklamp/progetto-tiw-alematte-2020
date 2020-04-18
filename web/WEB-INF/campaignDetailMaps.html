@@ -8,7 +8,7 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js'></script>
     <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css' rel='stylesheet' />
-    <style>
+    <style data-th-inline="text">
         body {
             margin: 0;
             padding: 0;
@@ -22,7 +22,7 @@
             scroll-behavior: auto;
         }
         .marker {
-            background-image: url('http://localhost:8180/Progetto_TIW_war_exploded/images/mapmarker.png');
+            background-image: url("[[@{/images/mapmarker.png}]]");
             background-size: cover;
             width: 40px;
             height: 40px;
@@ -30,7 +30,7 @@
             cursor: pointer;
         }
         .marker-green {
-            background-image: url('http://localhost:8180/Progetto_TIW_war_exploded/images/mapmarkergreen.png');
+            background-image: url("[[@{/images/mapmarkergreen.png}]]");
             background-size: cover;
             width: 40px;
             height: 40px;
@@ -398,11 +398,11 @@
     var campaignID = document.getElementById("campaignId").getAttribute("value");
 
     var geojson;
-
+    var geoGesonPath = /*[[@{/manager/campaign/maps}]]*/ "";
     function getGeoJson() {
         $.ajax({
             type: "POST",
-            url: 'http://localhost:8180/Progetto_TIW_war_exploded/manager/campaign/maps',
+            url: geoGesonPath,
             data: "campaignId=" + campaignID,
             dataType: "json",
             success: function (jsonContent) {
