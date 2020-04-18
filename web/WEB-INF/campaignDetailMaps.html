@@ -229,8 +229,7 @@
     }
 </script>
 <script data-th-inline="javascript">
-
-    var imagesList = /*[[${images}]]*/ [];
+    const campaignId = /*[[${campaign.getId()}]]*/ "0";
     var detailModal = document.getElementById("imageDetailModal");
     var closeDetail = document.getElementById("closeDetail");
     closeDetail.onclick = function(){
@@ -384,7 +383,7 @@
 
 
 </script>
-<script>
+<script data-th-inline="javascript">
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiZGFya2xhbXAiLCJhIjoiY2s5NDh5MjYyMDJsZDNlb2JnM2RzeXU3YyJ9.5mYqkLUrk3y9m4MLUs_uzQ';
 
@@ -395,7 +394,6 @@
         zoom: 2
     });
 
-    var campaignID = document.getElementById("campaignId").getAttribute("value");
 
     var geojson;
     var geoGesonPath = /*[[@{/manager/campaign/maps}]]*/ "";
