@@ -229,8 +229,7 @@
     }
 </script>
 <script data-th-inline="javascript">
-
-    var imagesList = /*[[${images}]]*/ [];
+    const campaignId = /*[[${campaign.getId()}]]*/ "0";
     var detailModal = document.getElementById("imageDetailModal");
     var closeDetail = document.getElementById("closeDetail");
     closeDetail.onclick = function(){
@@ -384,7 +383,7 @@
 
 
 </script>
-<script>
+<script data-th-inline="javascript">
 
     mapboxgl.accessToken = '***REMOVED***';
 
@@ -395,7 +394,6 @@
         zoom: 2
     });
 
-    var campaignID = document.getElementById("campaignId").getAttribute("value");
 
     var geojson;
     var geoGesonPath = /*[[@{/manager/campaign/maps}]]*/ "";
