@@ -19,6 +19,7 @@
     </div>
     <div class="page-content">
         <h1><a href="managerHome.html" data-th-href="@{/manager}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left"></i></a> Campaign: <span data-th-text="${campaign.getName()}"></span></h1>
+        <div class="row"><div class="col-12"><div class="alert alert-danger" data-th-class="${'alert alert-' + campaignAlert.getType()}" data-th-if="${campaignAlert.isVisible()}" data-th-utext="${campaignAlert.getContent()}">General error</div></div></div>
         <div class="row">
             <div class="col-10">
                 <h2>Campaign images</h2>
@@ -146,7 +147,7 @@
                 <div class="row" id="imageModalContentForm" style="display: none"></div>
                 <div class="row" id="imageModalContent">
                     <div class="col-6-alt">
-                                <img src="../images/test1.jpg" id="modalImage" style="max-width: 100%; width: auto; height: auto; max-height: 400px; "/>
+                                <img src="../images/test1.jpg" id="modalImage" style="max-width: 100%; width: auto; height: auto; max-height: 350px; "/>
                                 <div class="row">
                                     <span style="float: right;" onclick="modifyMetadata();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="modifyImageMetadataBtnIcon"></i></span>
                                     <div class="newspaper-2">
