@@ -380,7 +380,15 @@
     }
 
 
+    function modifyMetadata(){
+        document.getElementById("imageModalContent").style.display = "none";
+        document.getElementById("imageModalContentForm").style.display = "block";
+    }
 
+    function endModifyMetadata(){
+        document.getElementById("imageModalContent").style.display = "block";
+        document.getElementById("imageModalContentForm").style.display = "none";
+    }
 
 </script>
 <script data-th-inline="javascript">
@@ -401,7 +409,7 @@
         $.ajax({
             type: "POST",
             url: geoGesonPath,
-            data: "campaignId=" + campaignID,
+            data: "campaignId=" + campaignId,
             dataType: "json",
             success: function (jsonContent) {
                 geojson = jsonContent;
