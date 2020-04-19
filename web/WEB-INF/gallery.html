@@ -114,6 +114,7 @@
         curImageFrame = document.getElementById("galleryImageID" + imageId);
         if (isHidden(curImageFrame)) return;
         detailModal.style.display = "block";
+        document.getElementById("annotationText").value="";
         $.ajax({
             type: "POST",
             url: /*[[@{/worker/getGalleryImage}]]*/ "test",

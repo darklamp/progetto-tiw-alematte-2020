@@ -274,7 +274,7 @@
                 document.getElementById("imgTown").innerText = imageObject.town;
                 generateMetadataForm(imageObject, campaignId);
                 var annotationsObject = jsonObject.annotations;
-                if(annotationsObject === 0){
+                if(annotationsObject === '0'){
                     document.getElementById("annotationsEmptyAlert").style.display="block";
                     document.getElementById("annotationContainer").innerHTML = "";
                     return;
@@ -284,9 +284,9 @@
                 var annotations = "";
                 for(var i=0; i<annotationsObject.length; i++){
                     var userObject = annotationsObject[i].user;
-                    var annotationObjet = annotationsObject[i].annotation;
+                    var annotationObject = annotationsObject[i].annotation;
                     annotations += "<div class='card mx-auto'><div class='card-header'>";
-                    if(annotationObjet.validity === '1'){
+                    if(annotationObject.validity === '1'){
                         annotations += "<span class='icon icon-success'><i class='fas fa-thumbs-up'></i></span>";
                     } else {
                         annotations += "<span class='icon icon-danger'><i class='fas fa-thumbs-down'></i></span>";
@@ -300,15 +300,15 @@
                     } else{
                         annotations += "<p><strong>Experience: </strong><span class='text-danger text-uppercase text-bold'>Low</span></p>";
                     }
-                    annotations += "</div><div class='card-body'><p><strong>Data: </strong>"+ annotationObjet.date +"</p>";
-                    if(annotationObjet.trust ==="high"){
+                    annotations += "</div><div class='card-body'><p><strong>Data: </strong>"+ annotationObject.date +"</p>";
+                    if(annotationObject.trust ==="high"){
                         annotations += "<p><strong>Trust: </strong><span class='text-success text-uppercase text-bold'>high</span></p>";
-                    } else if(annotationObjet.trust ==="medium"){
+                    } else if(annotationObject.trust ==="medium"){
                         annotations += "<p><strong>Trust: </strong><span class='text-warning text-uppercase text-bold'>medium</span></p>";
                     } else {
                         annotations += "<p><strong>Trust: </strong><span class='text-danger text-uppercase text-bold'>low</span></p>";
                     }
-                    annotations += "<p><strong>Nota: </strong>"+annotationObjet.note+"</p></div></div>";
+                    annotations += "<p><strong>Nota: </strong>"+annotationObject.note+"</p></div></div>";
 
                 }
                 document.getElementById("annotationContainer").innerHTML = annotations;
