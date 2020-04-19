@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="b885f474-5211-486a-a461-1f19221ed353" name="Server" url="http://localhost">
+        <fileTransfer mountedRoot="$USER_HOME$/Desktop/ProjectTIW" accessType="MOUNT" port="0" />
+      </webServer>
+    </option>
+  </component>
+</project>
