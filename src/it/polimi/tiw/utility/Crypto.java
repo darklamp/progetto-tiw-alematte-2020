@@ -14,7 +14,7 @@ public class Crypto {
         return  Argon2Factory.createAdvanced(Argon2Factory.Argon2Types.ARGON2id);
     }
     public static String createSalt(){
-        return RandomStringUtils.random(100);
+        return RandomStringUtils.randomAlphanumeric(100);
     }
     public static String createCookie(){
         return RandomStringUtils.randomAlphanumeric(1024);
