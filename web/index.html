@@ -1,11 +1,16 @@
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js" data-th-src="@{https://code.jquery.com/jquery-3.5.0.min.js}"></script>
+    <link id="mainCssLink" rel="stylesheet" type="text/css" href="css/style.css" data-th-href="@{/css/style.css}"/>
+    <script data-th-src="@{/js/style.js}" src="js/style.js" crossorigin="anonymous"></script>
     <title>Project TIW</title>
 </head>
 <body>
 <div class="container">
     <div class="navbar">
+        <div class="navbar-dark">
+            <a id="darkModeSwitch" class="inner-switch" onclick="switchStyle()">&#x1F312</a>
+        </div>
         <div class="navbar-right">
             <a href="login">Login</a>
             <a href="register">Register</a>

@@ -6,7 +6,9 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js'></script>
-    <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js" data-th-src="@{https://code.jquery.com/jquery-3.5.0.min.js}"></script>
+    <link id="mainCssLink" rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}"/>
+    <script data-th-src="@{/js/style.js}" src="../js/style.js" crossorigin="anonymous"></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css' rel='stylesheet' />
     <style data-th-inline="text">
         body {
@@ -41,17 +43,18 @@
 
 
     </style>
-    <link rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}">
     <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.5.0.min.js" data-th-src="@{https://code.jquery.com/jquery-3.5.0.min.js}"></script>
 <div class="container">
     <div class="navbar">
         <!--<a href="" class="disabled">Manager</a>-->
         <a href="managerHome.html" data-th-href="@{/manager}">Home</a>
         <a href="managerAccount.html" data-th-href="@{/profile}">Account</a>
+        <div class="navbar-dark">
+            <a id="darkModeSwitch" class="inner-switch" onclick="switchStyle()">&#x1F312</a>
+        </div>
         <div class="navbar-right">
             <a href="../index.html" data-th-href="@{/logout}">Logout</a>
         </div>
@@ -182,7 +185,7 @@
                 <div class="row" id="imageModalContentForm" style="display: none"></div>
                 <div class="row" id="imageModalContent">
                     <div class="col-6-alt">
-                        <img src="../images/test1.jpg" id="modalImage" style="max-width: 100%; width: auto; height: auto; max-height: 400px; "/>
+                        <img src="../images/test1.jpg" id="modalImage" style="max-width: 100%; width: auto; height: auto; max-height: 400px;" alt="Image" />
                         <div class="row">
                         <span style="float: right;" onclick="modifyMetadata();" data-th-if="${campaign.getState().equals('created')}"><i class="fas fa-pencil-alt" id="modifyImageMetadataBtnIcon"></i></span>
                         <div class="newspaper-2">
@@ -228,6 +231,7 @@
         modal.style.display = "none";
     }
 </script>
+
 <script data-th-inline="javascript">
     const campaignId = /*[[${campaign.getId()}]]*/ "0";
     var detailModal = document.getElementById("imageDetailModal");
@@ -391,13 +395,14 @@
     }
 
 </script>
+
 <script data-th-inline="javascript">
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiZGFya2xhbXAiLCJhIjoiY2s5NDh5MjYyMDJsZDNlb2JnM2RzeXU3YyJ9.5mYqkLUrk3y9m4MLUs_uzQ';
 
     var map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/darklamp/ck94eyqp01woc1iq7nbshmvmc/draft',
+        style: mapStyle,
         center: [0.0,0.0],
         zoom: 2
     });
@@ -441,7 +446,9 @@
 
 
 
+
 </script>
+
 
 </body>
 </html>
