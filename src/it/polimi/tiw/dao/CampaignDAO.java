@@ -97,8 +97,8 @@ public class CampaignDAO {
                     while(resultSet.next()) {
                         Campaign campaign = new Campaign();
                         campaign.setId(resultSet.getInt("id"));
-                        campaign.setName(StringEscapeUtils.escapeJava(resultSet.getString("name")));
-                        campaign.setClient(StringEscapeUtils.escapeJava(resultSet.getString("client")));
+                        campaign.setName(StringEscapeUtils.unescapeJava(resultSet.getString("name")));
+                        campaign.setClient(StringEscapeUtils.unescapeJava(resultSet.getString("client")));
                         campaign.setState(resultSet.getString("state"));
                         result.add(campaign);
                     }

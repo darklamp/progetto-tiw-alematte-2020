@@ -1,0 +1,121 @@
+html { background-color: rgb(24, 26, 27) !important; }
+html, body, input, textarea, select, button { background-color: rgb(24, 26, 27); }
+html, body, input, textarea, select, button { border-color: rgb(87, 87, 87); color: rgb(232, 230, 227); }
+a { color: rgb(51, 145, 255); }
+table { border-color: rgb(76, 76, 76); }
+::placeholder { color: rgb(186, 181, 171); }
+::selection { background-color: rgb(0, 92, 204); color: rgb(255, 255, 255); }
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill { background-color: rgb(84, 91, 0) !important; color: rgb(232, 230, 227) !important; }
+::-webkit-scrollbar { background-color: rgb(28, 30, 31); color: rgb(197, 193, 185); }
+::-webkit-scrollbar-thumb { background-color: rgb(42, 44, 46); }
+::-webkit-scrollbar-thumb:hover { background-color: rgb(50, 53, 55); }
+::-webkit-scrollbar-thumb:active { background-color: rgb(61, 64, 67); }
+::-webkit-scrollbar-corner { background-color: rgb(24, 26, 27); }
+* { }
+body { background-color: rgb(35, 37, 39); }
+a { text-decoration-color: initial; color: rgb(232, 230, 227); }
+.page-content { background-image: initial; background-color: rgb(24, 26, 27); }
+.bg-dark { background-image: initial; background-color: rgb(61, 64, 67); color: rgb(255, 255, 255); }
+.navbar { background-color: rgb(53, 56, 59); }
+.navbar a { border-color: initial; color: rgb(255, 255, 255); text-decoration-color: initial; }
+.navbar a:hover { background-image: linear-gradient(rgb(12, 93, 154) 0%, rgb(14, 108, 178) 100%); background-color: initial; }
+.navbar a.active { background-image: linear-gradient(rgb(12, 93, 154) 0%, rgb(14, 108, 178) 100%); background-color: initial; }
+.navbar a.disabled:hover { border-color: initial; color: rgb(255, 255, 255); text-decoration-color: initial; }
+.footer { background-color: rgb(53, 56, 59); }
+.footer-content { color: rgb(255, 255, 255); }
+.footer-content a { color: rgb(255, 255, 255); }
+.form label { color: rgb(198, 194, 186); }
+.form-control { outline-color: initial; border-top-color: initial; border-right-color: initial; border-left-color: initial; border-bottom-color: rgb(58, 58, 58); background-image: initial; background-color: transparent; }
+.form-control option{
+    background-color: #383838;
+}
+.form-control:focus{
+    border-radius: 5px;
+    background-color: #212121;
+}
+.form-control-bg-dark { outline-color: initial; border-color: initial; background-image: initial; background-color: rgba(61, 64, 67, 0.2); }
+.login-form-container { background-image: initial; background-color: rgb(24, 26, 27); box-shadow: rgba(0, 0, 0, 0.22) 0px 0px 15px; }
+.login-form-container h2 { background-image: initial; background-color: rgb(61, 64, 67); color: rgb(255, 255, 255); }
+.login-link { color: rgb(78, 173, 241); text-decoration-color: initial; }
+.register-form-container { background-image: initial; background-color: rgb(24, 26, 27); box-shadow: rgba(0, 0, 0, 0.22) 0px 0px 15px; }
+.register-form-container h2 { background-image: initial; background-color: rgb(61, 64, 67); color: rgb(255, 255, 255); }
+.register-link { color: rgb(78, 173, 241); text-decoration-color: initial; }
+.text-primary { color: rgb(51, 162, 255); }
+.text-secondary { color: rgb(198, 194, 186); }
+.text-success { color: rgb(107, 255, 132); }
+.text-warning { color: rgb(255, 204, 51); }
+.text-danger { color: rgb(255, 65, 65); }
+.text-white { color: rgb(255, 255, 255); }
+.text-black { color: rgb(232, 230, 227); }
+.btn { text-decoration-color: initial; }
+.btn-primary { background-image: initial; background-color: rgb(0, 98, 204); border-color: rgb(0, 98, 204); color: rgb(255, 255, 255); }
+.btn-primary:hover { background-image: initial; background-color: rgb(24, 26, 27); color: rgb(51, 162, 255); border-color: rgb(0, 98, 204); }
+.btn-outline-primary { background-image: initial; background-color: rgb(24, 26, 27); color: rgb(51, 162, 255); border-color: rgb(0, 98, 204); }
+.btn-outline-primary:hover { background-image: initial; background-color: rgb(0, 98, 204); border-color: rgb(0, 98, 204); color: rgb(255, 255, 255); }
+.btn-success { background-image: initial; background-color: rgb(0, 161, 27); border-color: rgb(0, 223, 37); color: rgb(255, 255, 255); }
+.btn-success:hover { background-image: initial; background-color: rgb(24, 26, 27); color: rgb(107, 255, 132); border-color: rgb(0, 223, 37); }
+.btn-outline-success { background-image: initial; background-color: rgb(24, 26, 27); color: rgb(107, 255, 132); border-color: rgb(0, 223, 37); }
+.btn-outline-success:hover { background-image: initial; background-color: rgb(0, 161, 27); border-color: rgb(0, 223, 37); color: rgb(255, 255, 255); }
+.btn-danger { background-image: initial; background-color: rgb(204, 0, 0); border-color: rgb(209, 0, 0); color: rgb(255, 255, 255); }
+.btn-danger:hover { background-image: initial; background-color: rgb(24, 26, 27); color: rgb(255, 65, 65); border-color: rgb(209, 0, 0); }
+.btn-outline-danger { background-image: initial; background-color: rgb(24, 26, 27); color: rgb(255, 65, 65); border-color: rgb(209, 0, 0); }
+.btn-outline-danger:hover { background-image: initial; background-color: rgb(204, 0, 0); border-color: rgb(209, 0, 0); color: rgb(255, 255, 255); }
+.btn-warning { background-image: initial; background-color: rgb(204, 153, 0); border-color: rgb(204, 153, 0); color: rgb(255, 255, 255); }
+.btn-warning:hover { background-image: initial; background-color: rgb(24, 26, 27); color: rgb(255, 204, 51); border-color: rgb(204, 153, 0); }
+.btn-outline-warning { background-image: initial; background-color: rgb(24, 26, 27); color: rgb(255, 204, 51); border-color: rgb(204, 153, 0); }
+.btn-outline-warning:hover { background-image: initial; background-color: rgb(204, 153, 0); border-color: rgb(204, 153, 0); color: rgb(255, 255, 255); }
+.btn-secondary { background-image: initial; background-color: rgb(61, 64, 67); border-color: rgb(83, 83, 83); color: rgb(255, 255, 255); }
+.btn-secondary:hover { background-image: initial; background-color: rgb(24, 26, 27); color: rgb(198, 194, 186); border-color: rgb(83, 83, 83); }
+.btn-outline-secondary { background-image: initial; background-color: rgb(24, 26, 27); color: rgb(198, 194, 186); border-color: rgb(83, 83, 83); }
+.btn-outline-secondary:hover { background-image: initial; background-color: rgb(61, 64, 67); border-color: rgb(83, 83, 83); color: rgb(255, 255, 255); }
+.btn-info { background-image: initial; background-color: rgb(21, 146, 166); border-color: rgb(22, 158, 180); color: rgb(255, 255, 255); }
+.btn-info:hover { background-image: initial; background-color: rgb(24, 26, 27); color: rgb(107, 219, 237); border-color: rgb(22, 158, 180); }
+.btn-outline-info { background-image: initial; background-color: rgb(24, 26, 27); color: rgb(107, 219, 237); border-color: rgb(22, 158, 180); }
+.btn-outline-info:hover { background-image: initial; background-color: rgb(21, 146, 166); border-color: rgb(22, 158, 180); color: rgb(255, 255, 255); }
+.alert { border-color: initial; }
+.alert-primary { border-color: rgb(0, 98, 204); color: rgb(51, 162, 255); background-image: initial; background-color: rgba(14, 109, 179, 0.2); }
+.alert-secondary { border-color: rgb(83, 83, 83); color: rgb(198, 194, 186); background-image: initial; background-color: rgba(61, 64, 67, 0.2); }
+.alert-success { border-color: rgb(0, 223, 37); color: rgb(107, 255, 132); background-image: initial; background-color: rgba(0, 161, 27, 0.2); }
+.alert-warning { border-color: rgb(204, 153, 0); color: rgb(255, 204, 51); background-image: initial; background-color: rgba(204, 153, 0, 0.2); }
+.alert-danger { border-color: rgb(209, 0, 0); color: rgb(255, 65, 65); background-image: initial; background-color: rgba(204, 0, 0, 0.2); }
+.highlight { background-image: initial; background-color: rgb(36, 39, 40); color: rgb(204, 201, 193); }
+.badge { background-image: initial; background-color: rgb(24, 26, 27); border-color: initial; box-shadow: rgba(0, 0, 0, 0.4) 2px 4px 5px -1px; }
+.badge-primary { color: rgb(51, 162, 255); border-color: rgb(0, 98, 204); }
+.badge-secondary { color: rgb(198, 194, 186); border-color: rgb(83, 83, 83); }
+.badge-success { color: rgb(107, 255, 132); border-color: rgb(0, 223, 37); }
+.badge-warning { color: rgb(255, 204, 51); border-color: rgb(204, 153, 0); }
+.badge-danger { color: rgb(255, 65, 65); border-color: rgb(209, 0, 0); }
+table.table { background-color: rgb(24, 26, 27); }
+table.table td { border-color: rgb(60, 60, 60); }
+table.table-blue thead th { color: rgb(51, 162, 255); border-left-color: rgb(60, 60, 60); border-right-color: rgb(60, 60, 60); }
+table.table thead { background-image: initial; background-color: rgb(27, 28, 29); border-bottom-color: rgb(60, 60, 60); }
+table.table thead th:last-child { border-right-color: initial; }
+table.table thead th:first-child { border-left-color: initial; }
+table.table-blue tr:nth-child(2n) { background-image: initial; background-color: rgba(14, 109, 179, 0.2); }
+table.table tfoot { border-color: initial; color: rgb(255, 255, 255); }
+table.table tfoot td { border-color: initial; }
+table.table-blue tfoot .links a { background-image: initial; background-color: rgb(27, 28, 29); color: rgb(51, 162, 255); }
+table.table-green thead th { color: rgb(107, 255, 132); border-left-color: rgb(60, 60, 60); border-right-color: rgb(60, 60, 60); }
+table.table-green tr:nth-child(2n) { background-image: initial; background-color: rgba(0, 161, 27, 0.2); }
+table.table-green tfoot .links a { background-image: initial; background-color: rgb(27, 28, 29); color: rgb(107, 255, 132); }
+table.table-gray thead th { color: rgb(198, 194, 186); border-left-color: rgb(60, 60, 60); border-right-color: rgb(60, 60, 60); }
+table.table-gray tfoot .links a { background-image: initial; background-color: rgb(27, 28, 29); color: rgb(198, 194, 186); }
+.modal { background-color: rgba(0, 0, 0, 0.4); }
+.modal-content { background-color: rgb(24, 26, 27); border-color: rgb(75, 75, 75); box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 8px 0px, rgba(0, 0, 0, 0.19) 0px 6px 20px 0px; }
+.close { color: rgb(198, 194, 186); }
+.close:hover, .close:focus { color: rgb(255, 65, 65); text-decoration-color: initial; }
+.modal-header { background-color: rgb(27, 28, 29); color: rgb(198, 194, 186); }
+.modal-footer { background-color: rgb(27, 28, 29); color: rgb(198, 194, 186); }
+div.gallery { border-color: rgb(61, 61, 61); }
+div.gallery:hover { border-color: rgb(78, 78, 78); }
+.icon-success { color: rgb(255, 255, 255); background-image: initial; background-color: rgb(0, 161, 27); }
+.icon-danger { color: rgb(255, 255, 255); background-image: initial; background-color: rgb(204, 0, 0); }
+.icon-warning { color: rgb(255, 255, 255); background-image: initial; background-color: rgb(204, 153, 0); }
+.icon-primary { color: rgb(255, 255, 255); background-image: initial; background-color: rgb(0, 98, 204); }
+.icon-secondary { color: rgb(255, 255, 255); background-image: initial; background-color: rgb(61, 64, 67); }
+.icon-info { color: rgb(255, 255, 255); background-image: initial; background-color: rgb(21, 146, 166); }
+.card { border-color: rgb(60, 60, 60); }
+.card-header { background-color: rgb(27, 28, 29); color: rgb(198, 194, 186); }
+.card-body { background-color: rgb(24, 26, 27); }
+.card-footer { background-color: rgb(27, 28, 29); color: rgb(198, 194, 186); }
+.inner-switch { border-color: rgb(85, 85, 85); }

@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Campaign report</title>
-    <link rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}">
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js" data-th-src="@{https://code.jquery.com/jquery-3.5.0.min.js}"></script>
+    <link id="mainCssLink" rel="stylesheet" type="text/css" href="../css/style.css" data-th-href="@{/css/style.css}"/>
+    <script data-th-src="@{/js/style.js}" src="../js/style.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -13,6 +15,9 @@
         <!--<a href="" class="disabled">Manager</a>-->
         <a href="managerHome.html" data-th-href="@{/manager}">Home</a>
         <a href="managerAccount.html" data-th-href="@{/profile}">Account</a>
+        <div class="navbar-dark">
+            <a id="darkModeSwitch" class="inner-switch" onclick="switchStyle()">&#x1F312</a>
+        </div>
         <div class="navbar-right">
             <a href="../index.html" data-th-href="@{/logout}">Logout</a>
         </div>
