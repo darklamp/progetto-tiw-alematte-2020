@@ -21,12 +21,13 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.thymeleaf:thymeleaf:Release" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Tomcat 9.0.31" level="application_server_libraries" />
-    <orderEntry type="library" name="mysql-connector-java-8.0.19" level="project" />
     <orderEntry type="library" name="de.mkammerer:argon2-jvm:2.6" level="project" />
     <orderEntry type="library" name="org.apache.commons:commons-lang3:3.3.2" level="project" />
     <orderEntry type="library" name="commons-validator:commons-validator:1.6" level="project" />
     <orderEntry type="library" name="jquery-3.5.0" level="application" />
     <orderEntry type="library" name="mapbox-gl" level="application" />
     <orderEntry type="library" name="4a39771299" level="application" />
+    <orderEntry type="library" name="mysql:mysql-connector-java:8.0.19" level="project" />
+    <orderEntry type="library" name="com.heroku:webapp-runner:9.0.30.0" level="project" />
   </component>
 </module>

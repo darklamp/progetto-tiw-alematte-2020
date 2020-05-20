@@ -9,10 +9,10 @@
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: org.thymeleaf:thymeleaf:Release" />
-          <element id="library" level="project" name="mysql-connector-java-8.0.19" />
           <element id="library" level="project" name="de.mkammerer:argon2-jvm:2.6" />
           <element id="library" level="project" name="org.apache.commons:commons-lang3:3.3.2" />
           <element id="library" level="project" name="commons-validator:commons-validator:1.6" />
+          <element id="library" level="project" name="mysql:mysql-connector-java:8.0.19" />
         </element>
       </element>
     </root>

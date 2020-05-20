@@ -3,6 +3,11 @@
     <output-path>$PROJECT_DIR$/out/artifacts/Progetto_TIW_war</output-path>
     <root id="archive" name="Progetto TIW_war.war">
       <element id="artifact" artifact-name="Progetto TIW:war exploded" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="mysql:mysql-connector-java:8.0.19" />
+        </element>
+      </element>
     </root>
   </artifact>
 </component>

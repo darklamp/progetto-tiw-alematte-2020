@@ -39,9 +39,6 @@
             border-radius: 50%;
             cursor: pointer;
         }
-
-
-
     </style>
     <script src="https://kit.fontawesome.com/4a39771299.js" crossorigin="anonymous"></script>
 
@@ -51,7 +48,7 @@
     <div class="navbar">
         <!--<a href="" class="disabled">Manager</a>-->
         <a href="managerHome.html" data-th-href="@{/manager}">Home</a>
-        <a href="managerAccount.html" data-th-href="@{/profile}">Account</a>
+        <a href="profile/managerProfile.html" data-th-href="@{/profile}">Account</a>
         <div class="navbar-dark">
             <a id="darkModeSwitch" class="inner-switch" onclick="switchStyle()">&#x1F312</a>
         </div>
@@ -396,59 +393,7 @@
 
 </script>
 
-<script data-th-inline="javascript">
-
-    mapboxgl.accessToken = '***REMOVED***';
-
-    var map = new mapboxgl.Map({
-        container: 'map',
-        style: mapStyle,
-        center: [0.0,0.0],
-        zoom: 2
-    });
-
-
-    var geojson;
-    var geoGesonPath = /*[[@{/manager/campaign/maps}]]*/ "";
-    function getGeoJson() {
-        $.ajax({
-            type: "POST",
-            url: geoGesonPath,
-            data: "campaignId=" + campaignId,
-            dataType: "json",
-            success: function (jsonContent) {
-                geojson = jsonContent;
-            },
-            error: function () {
-                alert("Error");
-            },
-            async: false,
-        });
-    }
-    getGeoJson();
-
-    geojson.features.forEach(function(marker) {
-
-        // create a HTML element for each feature
-        var el = document.createElement('div');
-        el.setAttribute("onclick","openDetail("+marker.properties.title+")");
-        if (marker.properties.description){
-            el.className = "marker-green";
-        }
-        else el.className = 'marker';
-
-        // make a marker for each feature and add to the map
-        var asd = new mapboxgl.Marker(el)
-            .setLngLat(marker.geometry.coordinates)
-            .addTo(map);
-
-    });
-
-
-
-
-</script>
-
+<script src="../js/mapbox.js" data-th-src="@{/js/mapbox.js}" crossorigin="anonymous"></script>
 
 </body>
 </html>
