@@ -75,7 +75,7 @@
                 </div>
             </div>
         </div>
-        <input type="submit" class="btn btn-primary btn-register" value="Register" />
+        <input type="submit" id="submitButton" class="btn btn-primary btn-register" value="Register" />
 
     </form>
     <a href="login.html" data-th-href="@{/login}" class="register-link">Login here</a>
@@ -83,5 +83,13 @@
     <a href="../index.html" class="register-link">Back</a>
 
 </div>
+<script type="text/javascript">
+    document.getElementById("submitButton").addEventListener("click", (e) => {
+        if (document.getElementsByName("password")[0].value !== document.getElementsByName("password_cnf")[0].value) {
+            e.preventDefault();
+            window.alert("Passwords do not match.");
+        }
+    });
+</script>
 </body>
 </html>
