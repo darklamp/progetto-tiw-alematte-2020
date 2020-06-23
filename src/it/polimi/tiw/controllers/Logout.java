@@ -70,4 +70,15 @@ public class Logout extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException ignored) {
+        }
+    }
 }

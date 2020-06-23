@@ -202,4 +202,15 @@ public class Gallery extends HttpServlet {
         }
         resp.setStatus(204);
     }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException ignored) {
+        }
+    }
 }
