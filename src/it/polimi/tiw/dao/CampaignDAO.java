@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class CampaignDAO {
-    private Connection connection;
+    private final Connection connection;
 
     public CampaignDAO(Connection connection){this.connection=connection;}
 
@@ -142,9 +142,8 @@ public class CampaignDAO {
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
             pstatement.setString(1, StringEscapeUtils.escapeJava(name));
             try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst()) // no results, credential check failed
-                    return true;
-                return false;
+                // no results, credential check failed
+                return !result.isBeforeFirst();
             }
         }
     }

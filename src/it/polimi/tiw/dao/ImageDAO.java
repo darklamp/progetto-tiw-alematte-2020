@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class ImageDAO {
-    private Connection connection;
+    private final Connection connection;
 
     public ImageDAO(Connection connection){
         this.connection = connection;
@@ -82,6 +82,7 @@ public class ImageDAO {
     }
 
     public void insertNewImage(int campaignId, Image image) throws SQLException{
+        connection.setAutoCommit(false);
         String query = "INSERT INTO image (date, latitude, longitude, resolution, source, region, town, url) values (NOW(),?,?,?,?,?,?,?)";
         String secondQuery = "INSERT INTO imageCampaign (campaignId, imageId) VALUES (?,?)";
         int imageId = 0;
@@ -106,6 +107,8 @@ public class ImageDAO {
             stmt.setInt(2, imageId);
             stmt.executeUpdate();
         }
+        connection.commit();
+        connection.setAutoCommit(true);
 
     }
 

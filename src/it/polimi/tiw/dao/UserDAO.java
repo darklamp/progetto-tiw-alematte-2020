@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.NoSuchElementException;
 
 public class UserDAO {
-    private Connection con;
+    private final Connection con;
 
     /* TODO: fare sanitization di molti input */
 
@@ -218,9 +218,8 @@ public class UserDAO {
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, StringEscapeUtils.escapeJava(username));
             try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst()) // no results, credential check failed
-                    return true;
-                return false;
+                // no results, credential check failed
+                return !result.isBeforeFirst();
             }
         }
     }
@@ -230,9 +229,8 @@ public class UserDAO {
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, StringEscapeUtils.escapeJava(email));
             try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst()) // no results, credential check failed
-                    return true;
-                return false;
+                // no results, credential check failed
+                return !result.isBeforeFirst();
             }
         }
     }
@@ -243,9 +241,8 @@ public class UserDAO {
             pstatement.setString(1, StringEscapeUtils.escapeJava(username));
             pstatement.setString(2, StringEscapeUtils.escapeJava(email));
             try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst()) // no results, credential check failed
-                    return false;
-                return true;
+                // no results, credential check failed
+                return result.isBeforeFirst();
             }
         }
     }

@@ -12,13 +12,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class AnnotationDAO {
-    private Connection connection;
+    private final Connection connection;
 
     public AnnotationDAO(Connection connection){
         this.connection = connection;
     }
 
     public void createAnnotation(int workerId, int imageId, int campaignId, int validity, String trust, String note) throws SQLException {
+        connection.setAutoCommit(false);
         String query = "INSERT INTO annotation (workerId, imageId, date, validity, trust, note) values (?,?,NOW(),?,?,?)";
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
             pstatement.setInt(1, workerId);
@@ -44,6 +45,8 @@ public class AnnotationDAO {
             pstatement.setInt(2, campaignId);
             pstatement.executeUpdate();
         }
+        connection.commit();
+        connection.setAutoCommit(true);
     }
 
     public ArrayList<Integer> getAnnotatedImages(int campaignId, int userId) throws SQLException{
