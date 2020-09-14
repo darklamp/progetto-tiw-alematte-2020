@@ -1,4 +1,4 @@
-mapboxgl.accessToken = '***REMOVED***';
+mapboxgl.accessToken = '';
 
 const map = new mapboxgl.Map({
     container: 'map',
